@@ -1,1 +1,5 @@
+/* AGL_Portals/src/index.css */
 @import "tailwindcss";
+
+/* This is the new v4 directive to enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
