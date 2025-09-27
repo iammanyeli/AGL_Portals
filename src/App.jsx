@@ -291,18 +291,12 @@ const AuthPage = ({ onLogin, onSignup }) => {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
              <div className="relative w-full max-w-6xl mx-auto flex flex-col lg:flex-row bg-white dark:bg-[#1B365F]/80 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden">
-                <div className="relative w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-center items-center text-center bg-[#1B365F] dark:bg-black/20 text-white">
+                <div className="relative w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-center items-center text-center bg-[#1B365F] dark:bg-black/20">
                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1B365F] to-[#122442] opacity-50 z-0"></div>
                      <div className="relative z-10">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-4 text-[#EED58E]">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        <h1 className="text-3xl font-bold tracking-wider mb-3">OPERATIONS</h1>
-                        <p className="text-lg text-slate-300 leading-relaxed">
-                            Streamlining global logistics with precision and power. Your operations, unified and optimized.
-                        </p>
+                        <img src="/agl_white_logo.svg" alt="AGL Logo" className="max-w-xs w-full mx-auto mb-4" />
+
+                        <h1 className="text-3xl font-bold tracking-wider mb-3 text-[#EED58E]">Portal System</h1>
                     </div>
                 </div>
                 <div className="w-full lg:w-7/12 p-8 lg:p-16 flex items-center justify-center">
@@ -327,16 +321,16 @@ const AuthPage = ({ onLogin, onSignup }) => {
 
 
 // --- AppBar Component ---
-const AppBar = ({ user }) => (
+const AppBar = ({ user, theme }) => (
   <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#1B365F]/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
     <div className="mx-auto px-6 py-3 flex justify-between items-center">
       <div className="flex items-center space-x-3">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1B365F] dark:text-[#EED58E]">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        <span className="text-xl font-bold text-[#1B365F] dark:text-white tracking-wider">OPERATIONS</span>
+        <img 
+          src={theme === 'dark' ? '/agl_white_logo.svg' : '/agl_blue_logo.svg'} 
+          alt="AGL Logo" 
+          className="h-8 w-auto"
+        />
+        <span className="text-xl font-bold text-[#1B365F] dark:text-white tracking-wider">PORTAL SYSTEM</span>
       </div>
       <div className="flex items-center space-x-4">
         <span className="text-gray-600 dark:text-slate-300 font-medium hidden sm:block">{user?.fullName || 'User'}</span>
@@ -946,7 +940,7 @@ export default function App() {
     <>
       <GlobalStyles />
       <div className="bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white">
-        <AppBar user={user} />
+        <AppBar user={user} theme={theme} />
         <main className="pt-24 pb-24">
             <AnimatePresence mode="wait">
                  {renderPage()}
@@ -963,4 +957,3 @@ export default function App() {
     </>
   );
 }
-
