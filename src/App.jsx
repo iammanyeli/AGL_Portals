@@ -168,6 +168,17 @@ const Download = ({ className }) => (
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
   </svg>
 );
+const LogOut = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+const Mail = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+);
+const Lock = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+);
 
 
 // --- Simple UI Component Mocks for shadcn/ui ---
@@ -202,9 +213,121 @@ const Switch = ({ checked, onChange }) => (
     </button>
 );
 
+// --- Auth Components ---
+const LoginPage = ({ setAuthView, onLogin }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        onLogin(email, password);
+    };
+
+    return (
+        <div>
+            <h2 className="text-3xl font-bold text-[#1B365F] dark:text-white mb-2">Welcome Back!</h2>
+            <p className="text-slate-500 dark:text-slate-400 mb-8">Log in to continue your work.</p>
+            <form onSubmit={handleLogin} className="space-y-6">
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Mail className="h-5 w-5 text-slate-400" /></div>
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-10 pr-3 py-3 text-sm bg-slate-100 dark:bg-white/5 dark:text-white border border-slate-300 dark:border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:border-transparent placeholder-slate-400" type="email" placeholder="Email Address"/>
+                </div>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Lock className="h-5 w-5 text-slate-400" /></div>
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full pl-10 pr-3 py-3 text-sm bg-slate-100 dark:bg-white/5 dark:text-white border border-slate-300 dark:border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:border-transparent placeholder-slate-400" type="password" placeholder="Password"/>
+                </div>
+                <button type="submit" className="w-full inline-flex items-center justify-center rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#1B365F] dark:bg-[#EED58E] dark:hover:bg-[#EED58E]/90 text-white dark:text-[#1B365F] hover:bg-[#1B365F]/90 px-4 py-3 text-base">Log In</button>
+            </form>
+            <div className="mt-8 text-center">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Don't have an account? 
+                    <button onClick={() => setAuthView('signup')} className="font-semibold text-[#1B365F] dark:text-[#EED58E] hover:underline focus:outline-none ml-1">Sign up</button>
+                </p>
+            </div>
+        </div>
+    );
+};
+
+const SignupPage = ({ setAuthView, onSignup }) => {
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignup = (e) => {
+        e.preventDefault();
+        onSignup(fullName, email, password);
+    };
+
+    return (
+        <div>
+            <h2 className="text-3xl font-bold text-[#1B365F] dark:text-white mb-2">Create an Account</h2>
+            <p className="text-slate-500 dark:text-slate-400 mb-8">Join us to start managing your operations.</p>
+            <form onSubmit={handleSignup} className="space-y-6">
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><User className="h-5 w-5 text-slate-400" /></div>
+                    <input value={fullName} onChange={(e) => setFullName(e.target.value)} required className="w-full pl-10 pr-3 py-3 text-sm bg-slate-100 dark:bg-white/5 dark:text-white border border-slate-300 dark:border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:border-transparent placeholder-slate-400" type="text" placeholder="Full Name"/>
+                </div>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Mail className="h-5 w-5 text-slate-400" /></div>
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-10 pr-3 py-3 text-sm bg-slate-100 dark:bg-white/5 dark:text-white border border-slate-300 dark:border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:border-transparent placeholder-slate-400" type="email" placeholder="Email Address"/>
+                </div>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Lock className="h-5 w-5 text-slate-400" /></div>
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full pl-10 pr-3 py-3 text-sm bg-slate-100 dark:bg-white/5 dark:text-white border border-slate-300 dark:border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:border-transparent placeholder-slate-400" type="password" placeholder="Password"/>
+                </div>
+                <button type="submit" className="w-full inline-flex items-center justify-center rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#1B365F] dark:bg-[#EED58E] dark:hover:bg-[#EED58E]/90 text-white dark:text-[#1B365F] hover:bg-[#1B365F]/90 px-4 py-3 text-base">Sign Up</button>
+            </form>
+            <div className="mt-8 text-center">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Already have an account?
+                    <button onClick={() => setAuthView('login')} className="font-semibold text-[#1B365F] dark:text-[#EED58E] hover:underline focus:outline-none ml-1">Log in</button>
+                </p>
+            </div>
+        </div>
+    );
+};
+
+const AuthPage = ({ onLogin, onSignup }) => {
+    const [authView, setAuthView] = useState('login'); // 'login' or 'signup'
+
+    return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+             <div className="relative w-full max-w-6xl mx-auto flex flex-col lg:flex-row bg-white dark:bg-[#1B365F]/80 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden">
+                <div className="relative w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-center items-center text-center bg-[#1B365F] dark:bg-black/20 text-white">
+                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1B365F] to-[#122442] opacity-50 z-0"></div>
+                     <div className="relative z-10">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-4 text-[#EED58E]">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <h1 className="text-3xl font-bold tracking-wider mb-3">OPERATIONS</h1>
+                        <p className="text-lg text-slate-300 leading-relaxed">
+                            Streamlining global logistics with precision and power. Your operations, unified and optimized.
+                        </p>
+                    </div>
+                </div>
+                <div className="w-full lg:w-7/12 p-8 lg:p-16 flex items-center justify-center">
+                    <div className="w-full max-w-md mx-auto">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={authView}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {authView === 'login' ? <LoginPage setAuthView={setAuthView} onLogin={onLogin} /> : <SignupPage setAuthView={setAuthView} onSignup={onSignup} />}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 // --- AppBar Component ---
-const AppBar = () => (
+const AppBar = ({ user }) => (
   <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#1B365F]/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
     <div className="mx-auto px-6 py-3 flex justify-between items-center">
       <div className="flex items-center space-x-3">
@@ -216,8 +339,8 @@ const AppBar = () => (
         <span className="text-xl font-bold text-[#1B365F] dark:text-white tracking-wider">OPERATIONS</span>
       </div>
       <div className="flex items-center space-x-4">
-        <span className="text-gray-600 dark:text-slate-300 font-medium hidden sm:block">Jane Doe</span>
-        <img src="https://placehold.co/40x40/d1d5db/4b5563?text=JD" alt="Profile Thumbnail" className="w-10 h-10 rounded-full border-2 border-[#EED58E] object-cover"/>
+        <span className="text-gray-600 dark:text-slate-300 font-medium hidden sm:block">{user?.fullName || 'User'}</span>
+        <img src={user?.photoURL || "https://placehold.co/40x40/d1d5db/4b5563?text=U"} alt="Profile Thumbnail" className="w-10 h-10 rounded-full border-2 border-[#EED58E] object-cover"/>
       </div>
     </div>
   </header>
@@ -574,7 +697,7 @@ const PortalPage = ({ section, setPage, portalSubPage }) => {
 };
 
 // --- Settings Page Component ---
-const SettingsPage = ({ theme, setTheme, defaultView, setDefaultView, setPage }) => {
+const SettingsPage = ({ theme, setTheme, defaultView, setDefaultView, setPage, handleLogout }) => {
     return (
          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
             <Card className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl">
@@ -621,6 +744,16 @@ const SettingsPage = ({ theme, setTheme, defaultView, setDefaultView, setPage })
                         <Button className="flex items-center gap-2">
                             <User className="w-5 h-5"/>
                             Edit Profile
+                        </Button>
+                    </div>
+                    <div className="p-6 flex items-center justify-between">
+                         <div>
+                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Account</h4>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">Sign out of your current session.</p>
+                        </div>
+                        <Button onClick={handleLogout} className="flex items-center gap-2 !bg-red-500/10 hover:!bg-red-500/20 !text-red-500 dark:!bg-red-500/10 dark:hover:!bg-red-500/20 dark:!text-red-400">
+                            <LogOut className="w-5 h-5"/>
+                            Logout
                         </Button>
                     </div>
                 </CardContent>
@@ -728,6 +861,10 @@ export default function App() {
   const [portalSubPage, setPortalSubPage] = useState('portal-dashboard'); // 'portal-dashboard', 'table', 'import', etc.
   const [theme, setTheme] = useState('dark');
   const [defaultView, setDefaultView] = useState('grid');
+  
+  // --- New Authentication State ---
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -737,6 +874,36 @@ export default function App() {
     }
   }, [theme]);
   
+  // --- Mock Authentication Handlers ---
+  const handleLogin = (email, password) => {
+    // This is a mock login. In a real app, you'd verify credentials.
+    const userName = email.split('@')[0].replace(/[._]/g, ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+    const initials = userName.split(' ').map(n=>n[0]).join('').substring(0,2);
+    setUser({ 
+        fullName: userName, 
+        email: email, 
+        photoURL: `https://placehold.co/40x40/d1d5db/4b5563?text=${initials}`
+    });
+    setIsAuthenticated(true);
+  };
+
+  const handleSignup = (fullName, email, password) => {
+    // This is a mock signup.
+    const initials = fullName.split(' ').map(n=>n[0]).join('').substring(0,2);
+    setUser({ 
+        fullName: fullName, 
+        email: email,
+        photoURL: `https://placehold.co/40x40/d1d5db/4b5563?text=${initials}`
+    });
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    setPage('dashboard'); // Reset to default page on logout
+  };
+
   const sections = [
     { id: "training", title: "Training", accent: "from-indigo-500 to-violet-500", Icon: BookOpen, metrics: [{ label: "Courses", value: 320 }, { label: "Active", value: 124 }, { label: "Avg Score", value: "87%" }, { label: "Completion", value: "72%" }], charts: [{ type: "line", data: trainingLine, title: "Weekly Score Improvement" }, { type: "pie", data: defectsPie, title: "Overall Defect Status" }], updates: [{ user: "Alex Doe", action: "completed the 'Advanced Safety' module.", time: "3h ago" }, { user: "Samantha Bee", action: "achieved a 95% score on the final exam.", time: "Yesterday" }, { user: "John Carter", action: "enrolled in 2 new courses.", time: "2 days ago" }, { user: "Maria Garcia", action: "updated the training manual.", time: "3 days ago" }] },
     { id: "defects", title: "Defects", accent: "from-rose-500 to-red-500", Icon: Bug, metrics: [{ label: "Open", value: 58 }, { label: "Critical", value: 12 }, { label: "MTTR", value: "48h" }, { label: "Total", value: 400 }], charts: [{ type: "bar", data: defectsBar, title: "Daily Bug Reports" }, { type: "pie", data: defectsPie, title: "Open vs. Resolved" }], updates: [{ user: "Maria Garcia", action: "resolved critical bug #7812.", time: "5m ago" }, { user: "Ken Watanabe", action: "reported a new UI issue.", time: "1h ago" }, { user: "Alex Doe", action: "commented on bug #7801.", time: "4h ago" }] },
@@ -756,18 +923,30 @@ export default function App() {
       }
       switch (page) {
           case 'settings':
-              return <SettingsPage theme={theme} setTheme={setTheme} defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} />;
+              return <SettingsPage theme={theme} setTheme={setTheme} defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} handleLogout={handleLogout} />;
           case 'dashboard':
           default:
               return <Dashboard sections={sections} goToPortal={goToPortal} defaultView={defaultView} />;
       }
   };
 
+  // --- Main render logic with authentication ---
+  if (!isAuthenticated) {
+    return (
+      <>
+        <GlobalStyles />
+        <div className="bg-slate-50 dark:bg-[#122442] transition-colors duration-500">
+           <AuthPage onLogin={handleLogin} onSignup={handleSignup} />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <GlobalStyles />
       <div className="bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white">
-        <AppBar />
+        <AppBar user={user} />
         <main className="pt-24 pb-24">
             <AnimatePresence mode="wait">
                  {renderPage()}
@@ -784,3 +963,4 @@ export default function App() {
     </>
   );
 }
+
