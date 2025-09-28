@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpen, 
   Bug, 
@@ -43,7 +44,17 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Card, 
+  CardHeader, 
+  CardContent, 
+  CardTitle 
+} from './components/ui/Card';
+import Button from './components/ui/Button';
+import Switch from './components/ui/Switch';
+import ViewSwitcher from './components/ui/ViewSwitcher';
+
+
 
 // --- Mock Data ---
 const trainingLine = [
@@ -94,36 +105,7 @@ const PIE_COLORS = {
 // {done and moved}
 
 // --- Simple UI Component Mocks for shadcn/ui ---
-const Card = ({ className, children }) => <div className={`bg-white dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/10 ${className}`}>{children}</div>;
-const CardHeader = ({ className, children }) => <div className={`p-6 border-b border-slate-200 dark:border-white/10 ${className}`}>{children}</div>;
-const CardContent = ({ className, children }) => <div className={`${className}`}>{children}</div>;
-const CardTitle = ({ className, children }) => <h3 className={`text-lg font-semibold leading-none tracking-tight text-[#1B365F] dark:text-slate-100 ${className}`}>{children}</h3>;
-const Button = ({ className, size, children, ...props }) => {
-  const sizeClasses = size === 'lg' ? 'px-8 py-3 text-base' : 'px-4 py-2 text-sm';
-  return (
-    <button className={`inline-flex items-center justify-center rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#1B365F] dark:bg-[#EED58E] dark:hover:bg-[#EED58E]/90 text-white dark:text-[#1B365F] hover:bg-[#1B365F]/90 ${sizeClasses} ${className}`} {...props}>
-      {children}
-    </button>
-  );
-};
-const Switch = ({ checked, onChange }) => (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      className={`${
-        checked ? 'bg-[#EED58E]' : 'bg-slate-300 dark:bg-white/20'
-      } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:ring-offset-2`}
-    >
-      <span
-        aria-hidden="true"
-        className={`${
-          checked ? 'translate-x-5' : 'translate-x-0'
-        } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
-      ></span>
-    </button>
-);
+// {done and moved}
 
 // --- Auth Components ---
 const LoginPage = ({ setAuthView, onLogin }) => {
@@ -436,26 +418,7 @@ const GlobalStyles = () => (
 );
 
 // --- ViewSwitcher Component ---
-const ViewSwitcher = ({ view, setView }) => (
-  <div className="px-2 sm:px-4 md:px-6 mb-6 flex justify-center">
-    <div className="p-1 bg-slate-200 dark:bg-white/5 rounded-xl flex items-center space-x-1">
-      <button
-        onClick={() => setView('list')}
-        className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${view === 'list' ? 'bg-white dark:bg-[#EED58E] shadow text-[#1B365F] dark:text-[#1B365F]' : 'text-slate-500 dark:text-slate-400 hover:text-[#1B365F] dark:hover:text-white'}`}
-      >
-        <List className="h-4 w-4" />
-        Detailed List
-      </button>
-      <button
-        onClick={() => setView('grid')}
-        className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${view === 'grid' ? 'bg-white dark:bg-[#EED58E] shadow text-[#1B365F] dark:text-[#1B365F]' : 'text-slate-500 dark:text-slate-400 hover:text-[#1B365F] dark:hover:text-white'}`}
-      >
-        <LayoutGrid className="h-4 w-4" />
-        Grid View
-      </button>
-    </div>
-  </div>
-);
+// {done and moved}
 
 
 // --- Grid View Components ---
