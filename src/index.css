@@ -3,3 +3,111 @@
 
 /* This is the new v4 directive to enable class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* --- Global Nav Styles from GlobalStyles.jsx --- */
+html {
+    scroll-behavior: smooth;
+}
+.glass-nav {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+.dark .glass-nav {
+    background: rgba(27, 54, 95, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.nav-item .tooltip {
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    background-color: #1f2937;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+.nav-item:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+.nav-item:hover {
+    background-color: rgba(238, 213, 142, 0.15);
+}
+.dark .nav-item:hover {
+    background-color: rgba(238, 213, 142, 0.2);
+}
+.nav-item.active {
+    background-color: rgba(238, 213, 142, 0.25);
+}
+.dark .nav-item.active {
+     background-color: rgba(238, 213, 142, 0.3);
+}
+.nav-icon {
+    transition: all 0.3s ease;
+}
+.nav-item:hover .nav-icon {
+    transform: scale(1.1);
+    color: #1B365F;
+}
+.dark .nav-item:hover .nav-icon {
+    color: #EED58E;
+}
+#peelContent {
+    width: 64px;
+    border-radius: 9999px;
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+#peelContent.collapsed {
+    height: 64px;
+    cursor: pointer;
+}
+#peelContent:not(.collapsed) {
+    height: 344px; /* Adjusted for 6 items */
+}
+#peelContent .nav-item {
+    position: absolute;
+    left: 50%;
+    flex-shrink: 0;
+    transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
+}
+#peelContent:not(.collapsed) .nav-item {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+    pointer-events: all;
+}
+#peelContent:not(.collapsed) button.nav-item:nth-of-type(1) { top: 8px; }
+#peelContent:not(.collapsed) button.nav-item:nth-of-type(2) { top: 64px; }
+#peelContent:not(.collapsed) button.nav-item:nth-of-type(3) { top: 120px; }
+#peelContent:not(.collapsed) button.nav-item:nth-of-type(4) { top: 176px; }
+#peelContent:not(.collapsed) button.nav-item:nth-of-type(5) { top: 232px; }
+#peelContent:not(.collapsed) button.nav-item:nth-of-type(6) { top: 288px; }
+
+#peelContent.collapsed .nav-item {
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+#peelContent.collapsed .nav-item.active {
+    transform: translateX(-50%) translateY(-50%) scale(1);
+    opacity: 1;
+    pointer-events: all;
+}

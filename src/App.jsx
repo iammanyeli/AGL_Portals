@@ -44,6 +44,8 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
+
+// UI Components
 import { 
   Card, 
   CardHeader, 
@@ -53,6 +55,10 @@ import {
 import Button from './components/ui/Button';
 import Switch from './components/ui/Switch';
 import ViewSwitcher from './components/ui/ViewSwitcher';
+
+// Layout Components
+import AppBar from './components/layout/AppBar';
+import FloatingNav from './components/layout/FloatingNav';
 
 
 
@@ -215,207 +221,13 @@ const AuthPage = ({ onLogin, onSignup }) => {
 
 
 // --- AppBar Component ---
-const AppBar = ({ user, theme }) => (
-  <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#1B365F]/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
-    <div className="mx-auto px-6 py-3 flex justify-between items-center">
-      <div className="flex items-center space-x-3">
-        <img 
-          src={theme === 'dark' ? '/agl_white_logo.svg' : '/agl_blue_logo.svg'} 
-          alt="AGL Logo" 
-          className="h-8 w-auto"
-        />
-        <span className="text-xl font-bold text-[#1B365F] dark:text-white tracking-wider">PORTAL SYSTEM</span>
-      </div>
-      <div className="flex items-center space-x-4">
-        <span className="text-gray-600 dark:text-slate-300 font-medium hidden sm:block">{user?.fullName || 'User'}</span>
-        <img src={user?.photoURL || "https://placehold.co/40x40/d1d5db/4b5563?text=U"} alt="Profile Thumbnail" className="w-10 h-10 rounded-full border-2 border-[#EED58E] object-cover"/>
-      </div>
-    </div>
-  </header>
-);
+// {done and moved}
 
 // --- FloatingNav Component ---
-const FloatingNav = ({ currentPage, setPage, portalSubPage, setPortalSubPage, goToPortal }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const isPortalView = currentPage !== 'dashboard' && currentPage !== 'settings';
-
-  const mainNavLinks = [
-    { id: 'dashboard', tooltip: 'Dashboard', Icon: LayoutDashboard, action: () => setPage('dashboard') },
-    { id: 'training', tooltip: 'Training', Icon: BookOpen, action: () => goToPortal('training') },
-    { id: 'defects', tooltip: 'Defects', Icon: Bug, action: () => goToPortal('defects') },
-    { id: 'maintenance', tooltip: 'Maintenance', Icon: Wrench, action: () => goToPortal('maintenance') },
-    { id: 'inspections', tooltip: 'Inspections', Icon: CheckSquare, action: () => goToPortal('inspections') },
-    { id: 'settings', tooltip: 'Settings', Icon: Settings, action: () => setPage('settings') },
-  ];
-
-  const portalNavLinks = [
-    { id: 'home', tooltip: 'Main Dashboard', Icon: Home, action: () => setPage('dashboard') },
-    { id: 'portal-dashboard', tooltip: 'Portal Dashboard', Icon: LayoutDashboard, action: () => setPortalSubPage('portal-dashboard') },
-    { id: 'table', tooltip: 'Table View', Icon: Table2, action: () => setPortalSubPage('table') },
-    { id: 'import', tooltip: 'Import Data', Icon: Upload, action: () => setPortalSubPage('import') },
-    { id: 'export', tooltip: 'Export Data', Icon: Download, action: () => setPortalSubPage('export') },
-    { id: 'portal-settings', tooltip: 'Portal Settings', Icon: Settings, action: () => setPortalSubPage('portal-settings') },
-  ];
-
-  const navLinks = isPortalView ? portalNavLinks : mainNavLinks;
-  const activeItem = isPortalView ? portalSubPage : currentPage;
-  
-  const handlePeelClick = () => {
-      if (!isExpanded) {
-          setIsExpanded(true);
-      }
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-        const peel = document.getElementById('peelContent');
-        if (peel && !peel.contains(event.target)) {
-            setIsExpanded(false);
-        }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-
-  return (
-    <nav className="fixed bottom-6 right-6 z-50">
-      <div 
-        id="peelContent"
-        onClick={handlePeelClick}
-        className={`p-2 glass-nav ${!isExpanded ? 'collapsed' : ''}`}
-      >
-        {navLinks.map(({ id, tooltip, Icon, action }) => (
-          <button
-            key={id}
-            onClick={() => { action(); setIsExpanded(false); }}
-            className={`nav-item w-12 h-12 rounded-full ${activeItem === id ? 'active' : ''}`}
-            aria-label={tooltip}
-          >
-            <Icon className="nav-icon text-[#1B365F] dark:text-slate-300" />
-            <span className="tooltip">{tooltip}</span>
-          </button>
-        ))}
-      </div>
-    </nav>
-  );
-};
+// {done and moved}
 
 // --- GlobalStyles Component (was NavStyles) ---
-const GlobalStyles = () => (
-  <style>{`
-    html {
-        scroll-behavior: smooth;
-    }
-    .glass-nav {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-    }
-    .dark .glass-nav {
-        background: rgba(27, 54, 95, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .nav-item {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-    .nav-item .tooltip {
-        position: absolute;
-        left: -10px;
-        top: 50%;
-        transform: translate(-100%, -50%);
-        background-color: #1f2937;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        white-space: nowrap;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        pointer-events: none;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-    }
-    .nav-item:hover .tooltip {
-        opacity: 1;
-        visibility: visible;
-    }
-    .nav-item:hover {
-        background-color: rgba(238, 213, 142, 0.15);
-    }
-    .dark .nav-item:hover {
-        background-color: rgba(238, 213, 142, 0.2);
-    }
-    .nav-item.active {
-        background-color: rgba(238, 213, 142, 0.25);
-    }
-    .dark .nav-item.active {
-         background-color: rgba(238, 213, 142, 0.3);
-    }
-    .nav-icon {
-        transition: all 0.3s ease;
-    }
-    .nav-item:hover .nav-icon {
-        transform: scale(1.1);
-        color: #1B365F;
-    }
-    .dark .nav-item:hover .nav-icon {
-        color: #EED58E;
-    }
-
-    #peelContent {
-        width: 64px;
-        border-radius: 9999px;
-        transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-    }
-    #peelContent.collapsed {
-        height: 64px;
-        cursor: pointer;
-    }
-    #peelContent:not(.collapsed) {
-        height: 344px; /* Adjusted for 6 items */
-    }
-    #peelContent .nav-item {
-        position: absolute;
-        left: 50%;
-        flex-shrink: 0;
-        transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
-    }
-    #peelContent:not(.collapsed) .nav-item {
-        transform: translateX(-50%) scale(1);
-        opacity: 1;
-        pointer-events: all;
-    }
-    #peelContent:not(.collapsed) button.nav-item:nth-of-type(1) { top: 8px; }
-    #peelContent:not(.collapsed) button.nav-item:nth-of-type(2) { top: 64px; }
-    #peelContent:not(.collapsed) button.nav-item:nth-of-type(3) { top: 120px; }
-    #peelContent:not(.collapsed) button.nav-item:nth-of-type(4) { top: 176px; }
-    #peelContent:not(.collapsed) button.nav-item:nth-of-type(5) { top: 232px; }
-    #peelContent:not(.collapsed) button.nav-item:nth-of-type(6) { top: 288px; }
-
-    #peelContent.collapsed .nav-item {
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%) scale(0.8);
-        opacity: 0;
-        pointer-events: none;
-    }
-    #peelContent.collapsed .nav-item.active {
-        transform: translateX(-50%) translateY(-50%) scale(1);
-        opacity: 1;
-        pointer-events: all;
-    }
-  `}</style>
-);
+// {done and moved}
 
 // --- ViewSwitcher Component ---
 // {done and moved}
@@ -802,18 +614,13 @@ export default function App() {
   // --- Main render logic with authentication ---
   if (!isAuthenticated) {
     return (
-      <>
-        <GlobalStyles />
         <div className="bg-slate-50 dark:bg-[#122442] transition-colors duration-500">
            <AuthPage onLogin={handleLogin} onSignup={handleSignup} />
         </div>
-      </>
     );
   }
 
   return (
-    <>
-      <GlobalStyles />
       <div className="bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white">
         <AppBar user={user} theme={theme} />
         <main className="pt-24 pb-24">
@@ -829,6 +636,5 @@ export default function App() {
             goToPortal={goToPortal}
         />
       </div>
-    </>
   );
 }
