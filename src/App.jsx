@@ -63,6 +63,12 @@ import FloatingNav from './components/layout/FloatingNav';
 // --- Page & Feature Components ---
 import AuthPage from './features/authentication/AuthPage';
 import Dashboard from './pages/Dashboard';
+import SettingsPage from './pages/Settings';
+// --- NEW: Import the top-level portal pages ---
+import TrainingPortal from './pages/TrainingPortal';
+import DefectsPortal from './pages/DefectsPortal';
+import MaintenancePortal from './pages/MaintenancePortal';
+import InspectionsPortal from './pages/InspectionsPortal';
 
 // --- Mock Data ---
 const trainingLine = [
@@ -135,132 +141,16 @@ const PIE_COLORS = {
 
 
 // --- Portal Sub-Page Placeholders ---
-const PlaceholderView = ({ section, pageTitle }) => (
-    <div className="py-12 text-center">
-        <h2 className="text-2xl font-bold text-[#1B365F] dark:text-slate-100">{section.title} - {pageTitle}</h2>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">Page content for {pageTitle.toLowerCase()} will be displayed here.</p>
-    </div>
-);
-const PortalDashboardView = ({ section }) => <PlaceholderView section={section} pageTitle="Dashboard" />;
-const TableView = ({ section }) => <PlaceholderView section={section} pageTitle="Table View" />;
-const ImportView = ({ section }) => <PlaceholderView section={section} pageTitle="Import" />;
-const ExportView = ({ section }) => <PlaceholderView section={section} pageTitle="Export" />;
-const PortalSettingsView = ({ section }) => <PlaceholderView section={section} pageTitle="Settings" />;
-
+// All placeholder components (PlaceholderView, PortalDashboardView, TableView, etc.)
+// have been moved to src/features/portals/shared/views/
 
 // --- Portal Page Component ---
-const PortalPage = ({ section, setPage, portalSubPage }) => {
-    if (!section) return null;
-
-    const renderPortalContent = () => {
-        switch (portalSubPage) {
-            case 'portal-dashboard': return <PortalDashboardView section={section} />;
-            case 'table': return <TableView section={section} />;
-            case 'import': return <ImportView section={section} />;
-            case 'export': return <ExportView section={section} />;
-            case 'portal-settings': return <PortalSettingsView section={section} />;
-            default: return <PortalDashboardView section={section} />;
-        }
-    };
-    
-    return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
-             <Card className="w-full rounded-2xl overflow-hidden shadow-xl">
-                 <CardHeader className="flex items-center justify-between gap-4 bg-white dark:bg-white/5">
-                     <div className="flex items-center gap-4">
-                         <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
-                           <section.Icon className="h-7 w-7" />
-                         </div>
-                         <CardTitle className="text-2xl font-bold tracking-tight">{section.title} Portal</CardTitle>
-                     </div>
-                     <Button onClick={() => setPage('dashboard')} className="flex items-center gap-2">
-                         <ChevronLeft className="w-5 h-5" />
-                         Home
-                     </Button>
-                 </CardHeader>
-                 <CardContent className="p-6">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={portalSubPage}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            {renderPortalContent()}
-                        </motion.div>
-                    </AnimatePresence>
-                 </CardContent>
-             </Card>
-        </motion.div>
-    );
-};
+// The main PortalPage component has been replaced by a more generic PortalLayout
+// located at src/features/portals/shared/components/PortalLayout.jsx
+// and implemented within each specific portal page (e.g., src/pages/TrainingPortal.jsx).
 
 // --- Settings Page Component ---
-const SettingsPage = ({ theme, setTheme, defaultView, setDefaultView, setPage, handleLogout }) => {
-    return (
-         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
-            <Card className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl">
-                <CardHeader className="flex items-center justify-between gap-4 bg-white dark:bg-white/5">
-                    <div className="flex items-center gap-4">
-                        <div className={`rounded-xl p-3 bg-gradient-to-br from-slate-500 to-gray-500 text-white shadow-md`}>
-                           <Settings className="h-7 w-7" />
-                        </div>
-                        <CardTitle className="text-2xl font-bold tracking-tight">Settings</CardTitle>
-                    </div>
-                     <Button onClick={() => setPage('dashboard')} className="flex items-center gap-2">
-                         <ChevronLeft className="w-5 h-5" />
-                         Home
-                     </Button>
-                </CardHeader>
-                <CardContent className="divide-y divide-slate-200 dark:divide-white/10 p-0">
-                    <div className="p-6 flex items-center justify-between">
-                        <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Theme</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Switch between light and dark mode.</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Sun className={`w-6 h-6 ${theme === 'light' ? 'text-[#EED58E]' : 'text-slate-400'}`} />
-                            <Switch checked={theme === 'dark'} onChange={(isDark) => setTheme(isDark ? 'dark' : 'light')} />
-                            <Moon className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-300' : 'text-slate-400'}`} />
-                        </div>
-                    </div>
-                    <div className="p-6 flex items-center justify-between">
-                        <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Default View</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Choose the default layout for the dashboard.</p>
-                        </div>
-                         <div className="flex items-center gap-2">
-                            <List className={`w-6 h-6 ${defaultView === 'list' ? 'text-[#1B365F] dark:text-[#EED58E]' : 'text-slate-400'}`} />
-                            <Switch checked={defaultView === 'grid'} onChange={(isGrid) => setDefaultView(isGrid ? 'grid' : 'list')} />
-                            <LayoutGrid className={`w-6 h-6 ${defaultView === 'grid' ? 'text-[#1B365F] dark:text-[#EED58E]' : 'text-slate-400'}`} />
-                        </div>
-                    </div>
-                    <div className="p-6 flex items-center justify-between">
-                         <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Profile</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Manage your personal information.</p>
-                        </div>
-                        <Button className="flex items-center gap-2">
-                            <User className="w-5 h-5"/>
-                            Edit Profile
-                        </Button>
-                    </div>
-                    <div className="p-6 flex items-center justify-between">
-                         <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Account</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Sign out of your current session.</p>
-                        </div>
-                        <Button onClick={handleLogout} className="flex items-center gap-2 !bg-red-500/10 hover:!bg-red-500/20 !text-red-500 dark:!bg-red-500/10 dark:hover:!bg-red-500/20 dark:!text-red-400">
-                            <LogOut className="w-5 h-5"/>
-                            Logout
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
-        </motion.div>
-    )
-}
+// {moved to src/pages/Settings.jsx}
 
 // --- Dashboard Component (wrapper for existing list/grid) ---
 // {moved to src/pages/Dashboard.jsx}
@@ -326,11 +216,23 @@ export default function App() {
     setPortalSubPage('portal-dashboard'); // Always reset to dashboard view when entering a portal
   };
 
+  // --- REFACTORED: renderPage function ---
+  // This function is now much cleaner. It finds the correct data and passes it
+  // to the appropriate top-level page component.
   const renderPage = () => {
       const portalData = sections.find(s => s.id === page);
+      
       if (portalData) {
-          return <PortalPage section={portalData} setPage={setPage} portalSubPage={portalSubPage} />;
+          const commonProps = { section: portalData, setPage, portalSubPage };
+          switch (page) {
+              case 'training': return <TrainingPortal {...commonProps} />;
+              case 'defects': return <DefectsPortal {...commonProps} />;
+              case 'maintenance': return <MaintenancePortal {...commonProps} />;
+              case 'inspections': return <InspectionsPortal {...commonProps} />;
+              default: break; // Should not be reached
+          }
       }
+
       switch (page) {
           case 'settings':
               return <SettingsPage theme={theme} setTheme={setTheme} defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} handleLogout={handleLogout} />;
