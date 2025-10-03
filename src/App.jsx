@@ -114,7 +114,6 @@ const PIE_COLORS = {
     inspections: ['#16a34a', '#f43f5e'],
 };
 
-
 // --- Inline SVGs for lucide-react icons ---
 // {done and moved}
 
@@ -139,7 +138,6 @@ const PIE_COLORS = {
 // --- Grid View Components ---
 // {moved to src/features/dashboard/components/} Phase 3
 
-
 // --- Portal Sub-Page Placeholders ---
 // All placeholder components (PlaceholderView, PortalDashboardView, TableView, etc.)
 // have been moved to src/features/portals/shared/views/
@@ -154,7 +152,6 @@ const PIE_COLORS = {
 
 // --- Dashboard Component (wrapper for existing list/grid) ---
 // {moved to src/pages/Dashboard.jsx}
-
 
 export default function App() {
   const [page, setPage] = useState('dashboard'); // 'dashboard', 'settings', 'training', etc.
