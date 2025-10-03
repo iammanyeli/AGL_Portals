@@ -4,3 +4,5 @@ const Section = ({ title, children }) => (
         {children}
     </div>
 );
+
+export default Section;

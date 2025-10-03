@@ -40,3 +40,5 @@ const RecentActivity = ({ activities, showActivityPage }) => {
     );
 };
 
+export default RecentActivity;
+

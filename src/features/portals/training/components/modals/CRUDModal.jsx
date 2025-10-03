@@ -1,4 +1,7 @@
-const { useState, useEffect, useMemo } = React;
+import React, { useState, useEffect, useMemo } from 'react';
+import InputField from '../ui/InputField.jsx';
+import SelectField from '../ui/SelectField.jsx';
+import Section from '../ui/Section.jsx';
 
 const CRUDModal = ({ onClose, onSave, onSaveEmployee, modalState, sites, certificateTypes, uniqueEmployees }) => {
     const { type, data } = modalState;
@@ -184,3 +187,6 @@ const CRUDModal = ({ onClose, onSave, onSaveEmployee, modalState, sites, certifi
         </div>
     );
 };
+
+
+export default CRUDModal;

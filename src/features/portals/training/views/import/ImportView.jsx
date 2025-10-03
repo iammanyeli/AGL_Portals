@@ -1,4 +1,7 @@
-const { useState, useMemo, useCallback } = React;
+import React, { useState, useMemo, useCallback } from 'react';
+import InputField from '../../components/ui/InputField.jsx';
+import SelectField from '../../components/ui/SelectField.jsx';
+import Section from '../../components/ui/Section.jsx';
 
 const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportSuccess, settingsHandlers }) => {
     const [step, setStep] = useState(1); // 1: Upload, 2: Map, 2.5: Validate, 3: Preview, 4: Result
@@ -460,3 +463,4 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
     );
 };
 
+export default ImportPage;

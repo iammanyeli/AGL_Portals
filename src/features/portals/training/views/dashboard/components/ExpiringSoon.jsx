@@ -1,4 +1,3 @@
-// iammanyeli/certificate_tracker/iammanyeli-Certificate_Tracker-20eb0b35cbd5df5a15632092ea1b9dddb8bf369e/src/components/ExpiringSoon.js
 const ExpiringSoon = ({ expiringCerts, showActivityPage, showDetailedView, processedRecords }) => {
     const handleRenewClick = (certId) => {
         const recordToView = processedRecords.find(record => record.id === certId);
@@ -40,3 +39,5 @@ const ExpiringSoon = ({ expiringCerts, showActivityPage, showDetailedView, proce
         </div>
     );
 };
+
+export default ExpiringSoon;

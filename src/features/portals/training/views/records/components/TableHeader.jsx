@@ -6,3 +6,5 @@ const TableHeader = ({ title, sortKey, sortConfig, onSort }) => (
         </div>
     </th>
 );
+
+export default TableHeader;

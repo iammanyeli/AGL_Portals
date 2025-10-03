@@ -17,3 +17,5 @@ const AppliedFilters = ({ filters, sites }) => {
         </div>
     );
 }
+
+export default AppliedFilters;

@@ -1,26 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  BookOpen, 
-  Bug, 
-  CheckSquare, 
-  ChevronLeft, 
-  Download, 
-  Home, 
-  LayoutDashboard, 
-  LayoutGrid, 
-  List, 
-  Lock, 
-  LogOut, 
-  Mail, 
-  MessageCircle, 
-  Moon, 
-  Settings, 
-  Sun, 
-  Table2, 
-  Upload, 
-  User, 
-  Wrench 
+import {
+  BookOpen,
+  Bug,
+  CheckSquare,
+  Wrench
 } from './components/icons/index.js';
 import {
   ResponsiveContainer,
@@ -46,11 +30,11 @@ import {
 } from "recharts";
 
 // UI Components
-import { 
-  Card, 
-  CardHeader, 
-  CardContent, 
-  CardTitle 
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle
 } from './components/ui/Card';
 import Button from './components/ui/Button';
 import Switch from './components/ui/Switch';
@@ -64,11 +48,16 @@ import FloatingNav from './components/layout/FloatingNav';
 import AuthPage from './features/authentication/AuthPage';
 import Dashboard from './pages/Dashboard';
 import SettingsPage from './pages/Settings';
-// --- NEW: Import the top-level portal pages ---
 import TrainingPortal from './pages/TrainingPortal';
 import DefectsPortal from './pages/DefectsPortal';
 import MaintenancePortal from './pages/MaintenancePortal';
 import InspectionsPortal from './pages/InspectionsPortal';
+
+// --- Navigation Configurations ---
+import { mainNavLinks } from './navigation.js';
+import { defaultPortalNavLinks } from './features/portals/shared/navigation.js';
+import { trainingPortalNavLinks } from './features/portals/training/navigation.js';
+
 
 // --- Mock Data ---
 const trainingLine = [
@@ -107,51 +96,6 @@ const inspectionsPie = [
   { name: "Pass", value: 91 },
   { name: "Fail", value: 9 },
 ];
-const PIE_COLORS = {
-    defects: ['#ef4444', '#22c55e'],
-    training: ['#8b5cf6', '#a78bfa'],
-    maintenance: ['#f97316', '#fb923c'],
-    inspections: ['#16a34a', '#f43f5e'],
-};
-
-// --- Inline SVGs for lucide-react icons ---
-// {done and moved}
-
-// --- Simple UI Component Mocks for shadcn/ui ---
-// {done and moved}
-
-// --- Auth Components ---
-// {moved to src/features/authentication/} Phase 3
-
-// --- AppBar Component ---
-// {done and moved}
-
-// --- FloatingNav Component ---
-// {done and moved}
-
-// --- GlobalStyles Component (was NavStyles) ---
-// {done and moved}
-
-// --- ViewSwitcher Component ---
-// {done and moved}
-
-// --- Grid View Components ---
-// {moved to src/features/dashboard/components/} Phase 3
-
-// --- Portal Sub-Page Placeholders ---
-// All placeholder components (PlaceholderView, PortalDashboardView, TableView, etc.)
-// have been moved to src/features/portals/shared/views/
-
-// --- Portal Page Component ---
-// The main PortalPage component has been replaced by a more generic PortalLayout
-// located at src/features/portals/shared/components/PortalLayout.jsx
-// and implemented within each specific portal page (e.g., src/pages/TrainingPortal.jsx).
-
-// --- Settings Page Component ---
-// {moved to src/pages/Settings.jsx}
-
-// --- Dashboard Component (wrapper for existing list/grid) ---
-// {moved to src/pages/Dashboard.jsx}
 
 export default function App() {
   const [page, setPage] = useState('dashboard'); // 'dashboard', 'settings', 'training', etc.
@@ -173,7 +117,6 @@ export default function App() {
   
   // --- Mock Authentication Handlers ---
   const handleLogin = (email, password) => {
-    // This is a mock login. In a real app, you'd verify credentials.
     const userName = email.split('@')[0].replace(/[._]/g, ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase());
     const initials = userName.split(' ').map(n=>n[0]).join('').substring(0,2);
     setUser({ 
@@ -185,7 +128,6 @@ export default function App() {
   };
 
   const handleSignup = (fullName, email, password) => {
-    // This is a mock signup.
     const initials = fullName.split(' ').map(n=>n[0]).join('').substring(0,2);
     setUser({ 
         fullName: fullName, 
@@ -210,23 +152,47 @@ export default function App() {
 
   const goToPortal = (portalId) => {
     setPage(portalId);
-    setPortalSubPage('portal-dashboard'); // Always reset to dashboard view when entering a portal
+    setPortalSubPage('portal-dashboard');
   };
 
-  // --- REFACTORED: renderPage function ---
-  // This function is now much cleaner. It finds the correct data and passes it
-  // to the appropriate top-level page component.
+  const getNavLinks = () => {
+      const navActions = {
+          setPage: (pageId) => setPage(pageId),
+          goToPortal: (portalId) => goToPortal(portalId),
+          setPortalSubPage: (subPageId) => setPortalSubPage(subPageId),
+      };
+
+      // Turns the action strings from the config files into callable functions
+      const hydrateLinks = (links) => links.map(link => ({
+          ...link,
+          action: () => navActions[link.action](link.id),
+      }));
+      
+      const isPortalView = page !== 'dashboard' && page !== 'settings';
+      if (!isPortalView) return hydrateLinks(mainNavLinks);
+
+      switch (page) {
+          case 'training':
+              return hydrateLinks(trainingPortalNavLinks);
+          // Future portals will have their own case here
+          // case 'defects':
+          //     return hydrateLinks(defectsPortalNavLinks); 
+          default:
+              return hydrateLinks(defaultPortalNavLinks);
+      }
+  };
+
   const renderPage = () => {
       const portalData = sections.find(s => s.id === page);
       
       if (portalData) {
           const commonProps = { section: portalData, setPage, portalSubPage };
           switch (page) {
-              case 'training': return <TrainingPortal {...commonProps} />;
+              case 'training': return <TrainingPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
               case 'defects': return <DefectsPortal {...commonProps} />;
               case 'maintenance': return <MaintenancePortal {...commonProps} />;
               case 'inspections': return <InspectionsPortal {...commonProps} />;
-              default: break; // Should not be reached
+              default: break;
           }
       }
 
@@ -239,7 +205,6 @@ export default function App() {
       }
   };
 
-  // --- Main render logic with authentication ---
   if (!isAuthenticated) {
     return (
         <div className="bg-slate-50 dark:bg-[#122442] transition-colors duration-500">
@@ -258,10 +223,8 @@ export default function App() {
         </main>
         <FloatingNav 
             currentPage={page} 
-            setPage={setPage}
             portalSubPage={portalSubPage}
-            setPortalSubPage={setPortalSubPage}
-            goToPortal={goToPortal}
+            navLinks={getNavLinks()}
         />
       </div>
   );

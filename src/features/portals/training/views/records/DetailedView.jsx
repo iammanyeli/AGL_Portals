@@ -1,4 +1,4 @@
-const { useMemo, useState, useEffect } = React;
+import React, { useMemo, useState, useEffect } from 'react';
 
 const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, setCurrentPage, setModalState, setDeletingRecordId, expiryThreshold }) => {
     const allEmployeeRecords = useMemo(() =>
@@ -253,3 +253,6 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
         </div>
     )
 };
+
+
+export default DetailedViewPage;

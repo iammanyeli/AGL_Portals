@@ -13,3 +13,5 @@ const ConfirmationModal = ({ title, message, onConfirm, onClose }) => (
         </div>
     </div>
 );
+
+export default ConfirmationModal;

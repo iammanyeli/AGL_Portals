@@ -13,3 +13,5 @@ const DeleteModal = ({ onClose, onConfirm }) => (
         </div>
     </div>
 );
+
+export default DeleteModal;

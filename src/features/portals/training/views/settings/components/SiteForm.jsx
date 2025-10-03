@@ -1,4 +1,6 @@
-const { useState } = React;
+import React, { useState } from 'react';
+import InputField from '../../../components/ui/InputField.jsx';
+import SelectField from '../../../components/ui/SelectField.jsx';
 
 const SiteForm = ({ site, provinces, certificates, onSave, onCancel, onAddProvince, onAddCertificate }) => {
     const [formData, setFormData] = useState(
@@ -80,3 +82,5 @@ const SiteForm = ({ site, provinces, certificates, onSave, onCancel, onAddProvin
         </form>
     );
 }
+
+export default SiteForm;

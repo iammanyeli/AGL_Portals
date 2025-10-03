@@ -1,4 +1,9 @@
-const { useState, useRef, useEffect } = React;
+import React, { useState, useRef, useEffect } from 'react';
+import InputField from '../../components/ui/InputField.jsx';
+import SelectField from '../../components/ui/SelectField.jsx';
+import ExportDropdown from '../../components/ui/ExportDropdown.jsx';
+import AppliedFilters from './components/AppliedFilters.jsx';
+import TableHeader from './components/TableHeader.jsx';
 
 const RecordsPage = ({ logActivity, filters, setFilters, certificateTypes, sites, filteredAndSortedRecords, sortConfig, handleSort, setModalState, showDetailedView }) => {
     const [showFilters, setShowFilters] = useState(false);
@@ -140,3 +145,4 @@ const RecordsPage = ({ logActivity, filters, setFilters, certificateTypes, sites
     );
 };
 
+export default RecordsPage;

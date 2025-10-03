@@ -1,4 +1,5 @@
-const { useState } = React;
+import React, { useState } from 'react';
+import SiteForm from './SiteForm.jsx';
 
 const SiteManager = ({ sites, provinces, certificates, onAddSite, onUpdateSite, onDeleteSite, onAddProvince, onAddCertificate }) => {
     const [editingSite, setEditingSite] = useState(null); // stores the site being edited
@@ -47,3 +48,5 @@ const SiteManager = ({ sites, provinces, certificates, onAddSite, onUpdateSite, 
         </div>
     );
 };
+
+export default SiteManager;

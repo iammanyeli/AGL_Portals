@@ -1,4 +1,4 @@
-const { useState, useEffect, useRef } = React;
+import React, { useState, useEffect, useRef } from 'react';
 
 const ExportDropdown = ({ onPdf, onExcel }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -31,3 +31,5 @@ const ExportDropdown = ({ onPdf, onExcel }) => {
         </div>
     );
 };
+
+export default ExportDropdown;

@@ -1,5 +1,9 @@
-// iammanyeli/certificate_tracker/iammanyeli-Certificate_Tracker-c7b517a533971ac919c2f8d5658e1de5988c6f93/src/pages/DashboardPage.js
-const { useRef, useMemo, useCallback } = React;
+import React, { useRef, useMemo, useCallback } from 'react';
+import DashboardCard from './components/DashboardCard.jsx';
+import ChartComponent from '../../components/ui/ChartComponent.jsx';
+import DrillDownChart from './components/DrillDownChart.jsx';
+import ExpiringSoon from './components/ExpiringSoon.jsx';
+import RecentActivity from './components/RecentActivity.jsx';
 
 const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboard, setSelectedSiteDashboard, activities, expiringCerts, activeFilter, setActiveFilter, resetFilters, showActivityPage, showDetailedView, processedRecords }) => {
     const statusChartRef = useRef(null);
@@ -148,3 +152,5 @@ const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboar
         </div>
     );
 };
+
+export default DashboardPage;

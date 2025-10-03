@@ -9,3 +9,5 @@ const SettingsMenuItem = ({ title, description, icon, onClick}) => (
         </div>
     </div>
 );
+
+export default SettingsMenuItem;

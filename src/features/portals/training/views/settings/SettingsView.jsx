@@ -1,4 +1,8 @@
-const { useState, useEffect } = React;
+import React, { useState, useEffect } from 'react';
+import SettingsListManager from './components/SettingsListManager.jsx';
+import SiteManager from './components/SiteManager.jsx';
+import SettingsMenuItem from './components/SettingsMenuItem.jsx';
+import ConfirmationModal from '../../components/modals/ConfirmationModal.jsx';
 
 // --- Sub-component for Expiry Settings ---
 const ExpirySettingsView = ({ initialThreshold, onSaveThreshold }) => {
@@ -138,3 +142,5 @@ const SettingsPage = ({
         </div>
     );
 };
+
+export default SettingsPage;

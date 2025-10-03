@@ -1,41 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    LayoutDashboard, 
-    BookOpen, 
-    Bug, 
-    Wrench, 
-    CheckSquare, 
-    Settings,
-    Home,
-    Table2,
-    Upload,
-    Download
-} from '../icons';
 
-const FloatingNav = ({ currentPage, setPage, portalSubPage, setPortalSubPage, goToPortal }) => {
+/**
+ * A floating navigation component that displays a dynamic set of links.
+ * The specific links to display are passed in via the `navLinks` prop from the main App.jsx.
+ * This allows each portal (or the main dashboard) to have its own unique navigation items.
+ *
+ * It determines the active item based on `currentPage` and `portalSubPage` props.
+ */
+const FloatingNav = ({ currentPage, portalSubPage, navLinks }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Determine which navigation item should be highlighted as "active"
   const isPortalView = currentPage !== 'dashboard' && currentPage !== 'settings';
-
-  const mainNavLinks = [
-    { id: 'dashboard', tooltip: 'Dashboard', Icon: LayoutDashboard, action: () => setPage('dashboard') },
-    { id: 'training', tooltip: 'Training', Icon: BookOpen, action: () => goToPortal('training') },
-    { id: 'defects', tooltip: 'Defects', Icon: Bug, action: () => goToPortal('defects') },
-    { id: 'maintenance', tooltip: 'Maintenance', Icon: Wrench, action: () => goToPortal('maintenance') },
-    { id: 'inspections', tooltip: 'Inspections', Icon: CheckSquare, action: () => goToPortal('inspections') },
-    { id: 'settings', tooltip: 'Settings', Icon: Settings, action: () => setPage('settings') },
-  ];
-
-  const portalNavLinks = [
-    { id: 'home', tooltip: 'Main Dashboard', Icon: Home, action: () => setPage('dashboard') },
-    { id: 'portal-dashboard', tooltip: 'Portal Dashboard', Icon: LayoutDashboard, action: () => setPortalSubPage('portal-dashboard') },
-    { id: 'table', tooltip: 'Table View', Icon: Table2, action: () => setPortalSubPage('table') },
-    { id: 'import', tooltip: 'Import Data', Icon: Upload, action: () => setPortalSubPage('import') },
-    { id: 'export', tooltip: 'Export Data', Icon: Download, action: () => setPortalSubPage('export') },
-    { id: 'portal-settings', tooltip: 'Portal Settings', Icon: Settings, action: () => setPortalSubPage('portal-settings') },
-  ];
-
-  const navLinks = isPortalView ? portalNavLinks : mainNavLinks;
   const activeItem = isPortalView ? portalSubPage : currentPage;
   
   const handlePeelClick = () => {
@@ -44,6 +20,7 @@ const FloatingNav = ({ currentPage, setPage, portalSubPage, setPortalSubPage, go
       }
   }
 
+  // Effect to collapse the menu when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
         const peel = document.getElementById('peelContent');
@@ -64,13 +41,17 @@ const FloatingNav = ({ currentPage, setPage, portalSubPage, setPortalSubPage, go
         id="peelContent"
         onClick={handlePeelClick}
         className={`p-2 glass-nav ${!isExpanded ? 'collapsed' : ''}`}
+        // Dynamically set the expanded height based on the number of nav links
+        style={{ height: !isExpanded ? '64px' : `${8 + navLinks.length * 56}px` }}
       >
-        {navLinks.map(({ id, tooltip, Icon, action }) => (
+        {navLinks.map(({ id, tooltip, Icon, action }, index) => (
           <button
             key={id}
             onClick={() => { action(); setIsExpanded(false); }}
             className={`nav-item w-12 h-12 rounded-full ${activeItem === id ? 'active' : ''}`}
             aria-label={tooltip}
+            // Dynamically set the top position for the peel animation
+            style={{ top: !isExpanded ? '50%' : `${8 + index * 56}px` }}
           >
             <Icon className="nav-icon text-[#1B365F] dark:text-slate-300" />
             <span className="tooltip">{tooltip}</span>

@@ -2,15 +2,15 @@ import React, { useState, useMemo, useCallback } from 'react';
 import useTrainingApi from './hooks/useTrainingApi';
 
 // Import all views and components from the training feature
-import DashboardPage from './views/dashboard/DashboardView';
-import RecordsPage from './views/records/RecordsView';
-import ImportPage from './views/import/ImportView';
-import SettingsPage from './views/settings/SettingsView';
-import DetailedViewPage from './views/records/DetailedView';
-import ActivityDetailsPage from './views/activity/ActivityDetailsView';
+import DashboardPage from './views/dashboard/DashboardView.jsx';
+import RecordsPage from './views/records/RecordsView.jsx';
+import ImportPage from './views/import/ImportView.jsx';
+import SettingsPage from './views/settings/SettingsView.jsx';
+import DetailedViewPage from './views/records/DetailedView.jsx';
+import ActivityDetailsPage from './views/activity/ActivityDetailsView.jsx';
 
-import CRUDModal from './components/modals/CRUDModal';
-import DeleteModal from './components/modals/DeleteModal';
+import CRUDModal from './components/modals/CRUDModal.jsx';
+import DeleteModal from './components/modals/DeleteModal.jsx';
 
 const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     // --- Custom hook for all data logic and API interaction ---

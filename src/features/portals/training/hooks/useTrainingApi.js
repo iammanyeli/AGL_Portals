@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import * as api from '../../../../services/__mocks__/trainingAPI';
+import * as api from '../../../../services/__mocks__/trainingAPI.js';
 
 const useTrainingApi = () => {
     // --- Core Data State ---

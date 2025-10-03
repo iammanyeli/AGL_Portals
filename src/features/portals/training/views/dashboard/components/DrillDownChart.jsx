@@ -1,4 +1,5 @@
-const { useState, useMemo } = React;
+import React, { useState, useMemo } from 'react';
+import ChartComponent from '../../../components/ui/ChartComponent.jsx';
 
 const DrillDownChart = ({ chartRef, data, initialConfig, drillDownConfigFn }) => {
     const [drillDownKey, setDrillDownKey] = useState(null);
@@ -31,3 +32,5 @@ const DrillDownChart = ({ chartRef, data, initialConfig, drillDownConfigFn }) =>
         </div>
     );
 }
+
+export default DrillDownChart;

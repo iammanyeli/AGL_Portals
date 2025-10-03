@@ -1,5 +1,5 @@
 
-const { useState, useMemo, useEffect } = React;
+import React, { useState, useMemo, useEffect } from 'react';
 
 // --- REUSABLE COMPONENTS ---
 

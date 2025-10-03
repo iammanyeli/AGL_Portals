@@ -8,3 +8,5 @@ const SelectField = ({ label, name, value, onChange, options, required, disabled
         </select>
     </div>
 );
+
+export default SelectField;

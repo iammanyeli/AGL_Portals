@@ -1,4 +1,5 @@
-const { useEffect } = React;
+import React, { useEffect } from 'react';
+import { Chart } from 'chart.js/auto';
 
 const ChartComponent = ({ chartRef, config }) => {
     useEffect(() => {
@@ -6,7 +7,7 @@ const ChartComponent = ({ chartRef, config }) => {
         if (chartRef.current.chart) {
             chartRef.current.chart.destroy();
         }
-        const chartInstance = new window.Chart(chartRef.current, config);
+        const chartInstance = new Chart(chartRef.current, config);
         chartRef.current.chart = chartInstance;
         return () => {
             chartInstance.destroy();
@@ -15,3 +16,5 @@ const ChartComponent = ({ chartRef, config }) => {
 
     return <canvas ref={chartRef} />;
 }
+
+export default ChartComponent;

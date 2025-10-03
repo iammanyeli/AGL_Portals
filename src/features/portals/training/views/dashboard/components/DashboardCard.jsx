@@ -10,3 +10,5 @@ const DashboardCard = ({ title, count, icon, color, isActive, onClick }) => (
         <p className="text-3xl font-bold">{count}</p>
     </div>
 );
+
+export default DashboardCard;

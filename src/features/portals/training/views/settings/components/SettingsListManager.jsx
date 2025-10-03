@@ -1,4 +1,4 @@
-const { useState } = React;
+import React, { useState } from 'react';
 
 const SettingsListManager = ({ items, onAdd, onDelete, onUpdate, placeholder }) => {
     const [newItem, setNewItem] = useState('');
@@ -60,3 +60,5 @@ const SettingsListManager = ({ items, onAdd, onDelete, onUpdate, placeholder }) 
         </div>
     );
 };
+
+export default SettingsListManager;
