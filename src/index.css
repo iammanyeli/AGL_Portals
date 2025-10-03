@@ -111,3 +111,46 @@ html {
     opacity: 1;
     pointer-events: all;
 }
+
+/* ----------- */
+/* --- STYLES MIGRATED FROM CERTIFICATE TRACKER --- */
+@media print { 
+    .no-print, .no-print * { display: none !important; } 
+    body { background-color: #fff; } 
+    #printable-area { box-shadow: none; padding: 0; } 
+}
+.animate-fade-in { 
+    animation: fadeIn 0.5s ease-in-out; 
+}
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+.subtle-scrollbar::-webkit-scrollbar { 
+    width: 8px; height: 8px; 
+}
+.subtle-scrollbar::-webkit-scrollbar-track { 
+    background: transparent; 
+}
+.subtle-scrollbar::-webkit-scrollbar-thumb { 
+    background-color: rgba(156, 163, 175, 0); 
+    border-radius: 4px; 
+    transition: background-color 0.2s; 
+}
+.subtle-scrollbar:hover::-webkit-scrollbar-thumb { 
+    background-color: rgba(156, 163, 175, 0.5); 
+}
+.cert-list-scrollbar::-webkit-scrollbar { 
+    width: 6px; 
+}
+.cert-list-scrollbar::-webkit-scrollbar-track { 
+    background: #f1f5f9; 
+    border-radius: 10px; 
+}
+.cert-list-scrollbar::-webkit-scrollbar-thumb { 
+    background: #94a3b8; 
+    border-radius: 10px; 
+}
+.cert-list-scrollbar::-webkit-scrollbar-thumb:hover { 
+    background: #475569; 
+}

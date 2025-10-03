@@ -1,4 +1,4 @@
-// iammanyeli/certificate_tracker/iammanyeli-Certificate_Tracker-c7b517a533971ac919c2f8d5658e1de5988c6f93/src/pages/ActivityDetailsPage.js
+
 const { useState, useMemo, useEffect } = React;
 
 // --- REUSABLE COMPONENTS ---
@@ -343,3 +343,4 @@ const ActivityDetailsPage = ({ setCurrentPage, expiringCerts, activities, initia
     );
 };
 
+export default ActivityDetailsPage;
