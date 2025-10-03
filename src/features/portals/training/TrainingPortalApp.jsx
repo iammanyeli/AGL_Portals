@@ -22,7 +22,6 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     } = useTrainingApi();
 
     // --- UI State Management ---
-    // Note: 'currentPage' is now controlled by the `portalSubPage` prop
     const [settingsView, setSettingsView] = useState('main');
     const [activityTab, setActivityTab] = useState('expiring');
     const [filters, setFilters] = useState({ searchTerm: '', province: '', site: '', trainingTitle: '', status: '' });
@@ -37,13 +36,18 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     const handleSort = (key) => setSortConfig(prev => ({ key, direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc' }));
     
     const showDetailedView = (record) => {
+         
         setViewingEmployee({ employeeNumber: record.employee.employeeNumber, initialRecordId: record.id });
-        setPortalSubPage('detailedView'); // Use the setter from props
+        setPortalSubPage('table');
+    };
+    
+    const hideDetailedView = () => {
+        setViewingEmployee(null);
     };
 
     const showActivityPage = (tab) => {
         setActivityTab(tab);
-        setPortalSubPage('activityDetails'); // Use the setter from props
+        setPortalSubPage('activityDetails');
     };
 
     const resetDashboardFilters = () => {
@@ -64,11 +68,13 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     const onConfirmDelete = async (recordId) => {
         await handleDeleteRecord(recordId);
         setDeletingRecordId(null);
-        if (portalSubPage === 'detailedView') {
-            const recordToDelete = records.find(r => r.id === recordId);
+        // If we are in the detailed view when deleting, we might need to hide it.
+        if (viewingEmployee) {
+             const recordToDelete = records.find(r => r.id === recordId);
+            // Check if we just deleted the last record for this employee
             const remaining = records.filter(r => r.employee.employeeNumber === recordToDelete?.employee.employeeNumber && r.id !== recordId);
-            if (remaining.length <= 1) {
-                setPortalSubPage('table'); // Go back to records view
+            if (remaining.length === 0) {
+                hideDetailedView();
             }
         }
     };
@@ -159,20 +165,24 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
 
     // --- Page Rendering Logic based on prop ---
     const renderPage = () => {
-        // Map hub sub-pages to training portal pages
         switch (portalSubPage) {
             case 'portal-dashboard': 
                 return <DashboardPage logActivity={logActivity} dashboardData={dashboardData} sites={sites} selectedSiteDashboard={selectedSiteDashboard} setSelectedSiteDashboard={setSelectedSiteDashboard} activities={activities} expiringCerts={expiringCertsForDashboard.slice(0,5)} activeFilter={activeDashboardFilter} setActiveFilter={setActiveDashboardFilter} resetFilters={resetDashboardFilters} showActivityPage={showActivityPage} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
+            
             case 'table': 
+                // **THE FIX**: The 'table' case is now smart. It decides what to show.
+                if (viewingEmployee) {
+                    // If we have an employee to view, show the detail page.
+                    return <DetailedViewPage {...viewingEmployee} processedRecords={processedRecords} setCurrentPage={hideDetailedView} setModalState={setModalState} setDeletingRecordId={setDeletingRecordId} expiryThreshold={expiryThreshold} />;
+                }
+                // Otherwise, show the records list.
                 return <RecordsPage logActivity={logActivity} filters={filters} setFilters={setFilters} certificateTypes={certificateTypes} sites={sites} filteredAndSortedRecords={filteredAndSortedRecords} sortConfig={sortConfig} handleSort={handleSort} setModalState={setModalState} showDetailedView={showDetailedView} />;
+            
             case 'import': 
                 return <ImportPage logActivity={logActivity} sites={sites} provinces={provinces} certificateTypes={certificateTypes} onImportSuccess={fetchAllData} settingsHandlers={settingsHandlers} />;
             case 'portal-settings': 
                 return <SettingsPage settingsView={settingsView} setSettingsView={setSettingsView} expiryThreshold={expiryThreshold} setExpiryThreshold={handleSetExpiryThreshold} provinces={provinces} certificateTypes={certificateTypes} sites={sites} {...settingsHandlers} />;
             
-            // Internal states of the training portal
-            case 'detailedView': 
-                return viewingEmployee ? <DetailedViewPage {...viewingEmployee} processedRecords={processedRecords} setCurrentPage={setPortalSubPage} setModalState={setModalState} setDeletingRecordId={setDeletingRecordId} expiryThreshold={expiryThreshold} /> : <RecordsPage/>; // Fallback to records
             case 'activityDetails': 
                 return <ActivityDetailsPage setCurrentPage={setPortalSubPage} expiringCerts={expiringCertsForDashboard} activities={activities} initialTab={activityTab} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
 

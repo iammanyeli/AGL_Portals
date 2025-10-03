@@ -21,16 +21,13 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
         [allEmployeeRecords, certSearch]
     );
 
+    // **THE FIX**: This hook is now simplified. It ONLY handles the case where the
+    // active record is deleted while being viewed. It no longer tries to navigate.
     useEffect(() => {
-        const newActive = allEmployeeRecords.find(r => r.id === activeRecord?.id);
-        if(newActive) {
-            setActiveRecord(newActive);
-        } else if(allEmployeeRecords.length > 0) {
+        if (allEmployeeRecords.length > 0 && !allEmployeeRecords.some(r => r.id === activeRecord?.id)) {
             setActiveRecord(allEmployeeRecords[0]);
-        } else {
-            setCurrentPage('records');
         }
-    }, [allEmployeeRecords]);
+    }, [allEmployeeRecords, activeRecord]);
 
     const getValidityStyles = (status) => {
         const styles = {
@@ -63,7 +60,7 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
         return (
             <div className="text-center p-10">
                 <p>Loading employee data...</p>
-                <button onClick={() => setCurrentPage('records')} className="mt-4 px-4 py-2 bg-gray-200 rounded-lg">
+                <button onClick={() => setCurrentPage()} className="mt-4 px-4 py-2 bg-gray-200 rounded-lg">
                     Back to All Records
                 </button>
             </div>
@@ -183,7 +180,7 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
                 <div className="p-0 lg:p-6 lg:pt-0">
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                             <button onClick={() => setCurrentPage('records')} className="text-sm font-medium text-slate-500 hover:text-blue-600 flex items-center mb-4 no-print">
+                             <button onClick={() => setCurrentPage()} className="text-sm font-medium text-slate-500 hover:text-blue-600 flex items-center mb-4 no-print">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                                 Back to All Records
                             </button>
