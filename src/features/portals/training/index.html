@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSE Training Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        @media print { .no-print, .no-print * { display: none !important; } body { background-color: #fff; } #printable-area { box-shadow: none; padding: 0; } }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .subtle-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .subtle-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .subtle-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0); border-radius: 4px; transition: background-color 0.2s; }
+        .subtle-scrollbar:hover::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); }
+        .cert-list-scrollbar::-webkit-scrollbar { width: 6px; }
+        .cert-list-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .cert-list-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        .cert-list-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Components -->
+    <script type="text/babel" src="components/modals/CRUDModal.jsx"></script>
+    <script type="text/babel" src="components/modals/ConfirmationModal.jsx"></script>
+    <script type="text/babel" src="components/modals/DeleteModal.jsx"></script>
+    <script type="text/babel" src="components/ui/ChartComponent.jsx"></script>
+    <script type="text/babel" src="components/ui/ExportDropdown.jsx"></script>
+    <script type="text/babel" src="components/ui/InputField.jsx"></script>
+    <script type="text/babel" src="components/ui/Section.jsx"></script>
+    <script type="text/babel" src="components/ui/SelectField.jsx"></script>
+    <script type="text/babel" src="layout/Navigation.jsx"></script>
+
+    <!-- Feature-Specific Components -->
+    <script type="text/babel" src="features/dashboard/components/DashboardCard.jsx"></script>
+    <script type="text/babel" src="features/dashboard/components/DrillDownChart.jsx"></script>
+    <script type="text/babel" src="features/dashboard/components/ExpiringSoon.jsx"></script>
+    <script type="text/babel" src="features/dashboard/components/RecentActivity.jsx"></script>
+    <script type="text/babel" src="features/records/components/AppliedFilters.jsx"></script>
+    <script type="text/babel" src="features/records/components/TableHeader.jsx"></script>
+    <script type="text/babel" src="features/settings/components/SettingsListManager.jsx"></script>
+    <script type="text/babel" src="features/settings/components/SettingsMenuItem.jsx"></script>
+    <script type="text/babel" src="features/settings/components/SiteForm.jsx"></script>
+    <script type="text/babel" src="features/settings/components/SiteManager.jsx"></script>
+    
+    <!-- Views (Pages) -->
+    <script type="text/babel" src="features/dashboard/DashboardView.jsx"></script>
+    <script type="text/babel" src="features/records/RecordsView.jsx"></script>
+    <script type="text/babel" src="features/records/DetailedView.jsx"></script>
+    <script type="text/babel" src="features/import/ImportView.jsx"></script>
+    <script type="text/babel" src="features/settings/SettingsView.jsx"></script>
+    <script type="text/babel" src="features/activity/ActivityDetailsView.jsx"></script>
+
+    <!-- NEW HOOK and Main App -->
+    <script type="text/babel" src="hooks/useTrainingApi.js"></script>
+    <script type="text/babel" src="App.jsx"></script>
+    <script type="text/babel" src="main.jsx"></script>
+</body>
+</html>
+
