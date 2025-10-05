@@ -28,10 +28,10 @@ import Button from '../../../components/ui/Button';
 import { LayoutGrid, MessageCircle } from '../../../components/icons';
 
 const PIE_COLORS = {
-    defects: ['#ef4444', '#22c55e'],
-    training: ['#8b5cf6', '#a78bfa'],
-    maintenance: ['#f97316', '#fb923c'],
-    inspections: ['#16a34a', '#f43f5e'],
+    'portal-defects': ['#ef4444', '#22c55e'],
+    'portal-training': ['#8b5cf6', '#a78bfa'],
+    'portal-maintenance': ['#f97316', '#fb923c'],
+    'portal-inspections': ['#16a34a', '#f43f5e'],
 };
 
 const DashboardList = ({ sections, goToPortal }) => {

@@ -170,12 +170,9 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
                 return <DashboardPage logActivity={logActivity} dashboardData={dashboardData} sites={sites} selectedSiteDashboard={selectedSiteDashboard} setSelectedSiteDashboard={setSelectedSiteDashboard} activities={activities} expiringCerts={expiringCertsForDashboard.slice(0,5)} activeFilter={activeDashboardFilter} setActiveFilter={setActiveDashboardFilter} resetFilters={resetDashboardFilters} showActivityPage={showActivityPage} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
             
             case 'training-records': 
-                // **THE FIX**: The 'table' case is now smart. It decides what to show.
                 if (viewingEmployee) {
-                    // If we have an employee to view, show the detail page.
                     return <DetailedViewPage {...viewingEmployee} processedRecords={processedRecords} setCurrentPage={hideDetailedView} setModalState={setModalState} setDeletingRecordId={setDeletingRecordId} expiryThreshold={expiryThreshold} />;
                 }
-                // Otherwise, show the records list.
                 return <RecordsPage logActivity={logActivity} filters={filters} setFilters={setFilters} certificateTypes={certificateTypes} sites={sites} filteredAndSortedRecords={filteredAndSortedRecords} sortConfig={sortConfig} handleSort={handleSort} setModalState={setModalState} showDetailedView={showDetailedView} />;
             
             case 'training-import': 

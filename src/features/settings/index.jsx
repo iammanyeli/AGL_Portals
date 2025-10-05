@@ -34,7 +34,7 @@ export default function SettingsPage({ theme, setTheme, defaultView, setDefaultV
                         </div>
                         <CardTitle className="text-2xl font-bold tracking-tight">Settings</CardTitle>
                     </div>
-                     <Button onClick={() => setPage('dashboard')} className="flex items-center gap-2">
+                     <Button onClick={() => setPage('hub-home')} className="flex items-center gap-2">
                          <ChevronLeft className="w-5 h-5" />
                          Home
                      </Button>

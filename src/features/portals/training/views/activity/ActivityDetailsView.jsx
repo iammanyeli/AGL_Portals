@@ -312,7 +312,7 @@ const ActivityDetailsPage = ({ setCurrentPage, expiringCerts, activities, initia
 
     return (
         <div>
-            <Header title="Activity & Expiry Details" onBack={() => setCurrentPage('dashboard')} />
+            <Header title="Activity & Expiry Details" onBack={() => setCurrentPage('training-dashboard')} />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* --- Left Navigation --- */}
