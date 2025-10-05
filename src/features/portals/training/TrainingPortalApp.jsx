@@ -38,7 +38,7 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     const showDetailedView = (record) => {
          
         setViewingEmployee({ employeeNumber: record.employee.employeeNumber, initialRecordId: record.id });
-        setPortalSubPage('table');
+        setPortalSubPage('training-records');
     };
     
     const hideDetailedView = () => {
@@ -47,7 +47,7 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
 
     const showActivityPage = (tab) => {
         setActivityTab(tab);
-        setPortalSubPage('activityDetails');
+        setPortalSubPage('training-activity');
     };
 
     const resetDashboardFilters = () => {
@@ -166,10 +166,10 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     // --- Page Rendering Logic based on prop ---
     const renderPage = () => {
         switch (portalSubPage) {
-            case 'portal-dashboard': 
+            case 'training-dashboard': 
                 return <DashboardPage logActivity={logActivity} dashboardData={dashboardData} sites={sites} selectedSiteDashboard={selectedSiteDashboard} setSelectedSiteDashboard={setSelectedSiteDashboard} activities={activities} expiringCerts={expiringCertsForDashboard.slice(0,5)} activeFilter={activeDashboardFilter} setActiveFilter={setActiveDashboardFilter} resetFilters={resetDashboardFilters} showActivityPage={showActivityPage} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
             
-            case 'table': 
+            case 'training-records': 
                 // **THE FIX**: The 'table' case is now smart. It decides what to show.
                 if (viewingEmployee) {
                     // If we have an employee to view, show the detail page.
@@ -178,12 +178,12 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
                 // Otherwise, show the records list.
                 return <RecordsPage logActivity={logActivity} filters={filters} setFilters={setFilters} certificateTypes={certificateTypes} sites={sites} filteredAndSortedRecords={filteredAndSortedRecords} sortConfig={sortConfig} handleSort={handleSort} setModalState={setModalState} showDetailedView={showDetailedView} />;
             
-            case 'import': 
+            case 'training-import': 
                 return <ImportPage logActivity={logActivity} sites={sites} provinces={provinces} certificateTypes={certificateTypes} onImportSuccess={fetchAllData} settingsHandlers={settingsHandlers} />;
-            case 'portal-settings': 
+            case 'training-settings': 
                 return <SettingsPage settingsView={settingsView} setSettingsView={setSettingsView} expiryThreshold={expiryThreshold} setExpiryThreshold={handleSetExpiryThreshold} provinces={provinces} certificateTypes={certificateTypes} sites={sites} {...settingsHandlers} />;
             
-            case 'activityDetails': 
+            case 'training-activity': 
                 return <ActivityDetailsPage setCurrentPage={setPortalSubPage} expiringCerts={expiringCertsForDashboard} activities={activities} initialTab={activityTab} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
 
             default: 

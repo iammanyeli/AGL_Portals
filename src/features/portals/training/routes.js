@@ -8,10 +8,11 @@ import {
 } from '../../../components/icons';
 
 export const trainingPortalNavLinks = [
-    { id: 'dashboard', tooltip: 'Main Dashboard', Icon: Home, action: 'setPage' },
-    { id: 'portal-dashboard', tooltip: 'Portal Dashboard', Icon: LayoutDashboard, action: 'setPortalSubPage' },
-    { id: 'table', tooltip: 'Records', Icon: Table2, action: 'setPortalSubPage' },
-    { id: 'activityDetails', tooltip: 'Activity Log', Icon: MessageCircle, action: 'setPortalSubPage' },
-    { id: 'import', tooltip: 'Import / Export', Icon: Upload, action: 'setPortalSubPage' },
-    { id: 'portal-settings', tooltip: 'Portal Settings', Icon: Settings, action: 'setPortalSubPage' },
+    { id: 'hub-home', tooltip: 'Main Hub', Icon: Home, action: 'setPage' },
+
+    { id: 'training-dashboard', tooltip: 'Dashboard', Icon: LayoutDashboard, action: 'setPortalSubPage' },
+    { id: 'training-records', tooltip: 'Records', Icon: Table2, action: 'setPortalSubPage' },
+    { id: 'training-activity', tooltip: 'Activity Log', Icon: MessageCircle, action: 'setPortalSubPage' },
+    { id: 'training-import', tooltip: 'Import / Export', Icon: Upload, action: 'setPortalSubPage' },
+    { id: 'training-settings', tooltip: 'Settings', Icon: Settings, action: 'setPortalSubPage' },
 ];

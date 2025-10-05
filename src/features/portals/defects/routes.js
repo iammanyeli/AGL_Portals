@@ -8,11 +8,11 @@ import {
 } from '../../../components/icons';
 
 export const defectsPortalNavLinks = [
-  // { id: 'home', tooltip: 'Main Dashboard', Icon: Home, action: 'setPage' },
-  { id: 'dashboard', tooltip: 'Main Dashboard', Icon: Home, action: 'setPage' },
-  { id: 'portal-dashboard', tooltip: 'Portal Dashboard', Icon: LayoutDashboard, action: 'setPortalSubPage' },
-  { id: 'table', tooltip: 'Table View', Icon: Table2, action: 'setPortalSubPage' },
-  { id: 'import', tooltip: 'Import', Icon: Upload, action: 'setPortalSubPage' },
-  { id: 'export', tooltip: 'Export', Icon: Download, action: 'setPortalSubPage' },
-  { id: 'portal-settings', tooltip: 'Portal Settings', Icon: Settings, action: 'setPortalSubPage' },
+  { id: 'hub-home', tooltip: 'Main Hub', Icon: Home, action: 'setPage' },
+
+  { id: 'defects-dashboard', tooltip: 'Dashboard', Icon: LayoutDashboard, action: 'setPortalSubPage' },
+  { id: 'defects-table', tooltip: 'Table View', Icon: Table2, action: 'setPortalSubPage' },
+  { id: 'defects-import', tooltip: 'Import', Icon: Upload, action: 'setPortalSubPage' },
+  { id: 'defects-export', tooltip: 'Export', Icon: Download, action: 'setPortalSubPage' },
+  { id: 'defects-settings', tooltip: 'Settings', Icon: Settings, action: 'setPortalSubPage' },
 ];

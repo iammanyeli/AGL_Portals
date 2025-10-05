@@ -11,7 +11,7 @@ const FloatingNav = ({ currentPage, portalSubPage, navLinks }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Determine which navigation item should be highlighted as "active"
-  const isPortalView = currentPage !== 'dashboard' && currentPage !== 'settings';
+  const isPortalView = currentPage !== 'hub-home' && currentPage !== 'hub-settings';
   const activeItem = isPortalView ? portalSubPage : currentPage;
 
   const handlePeelClick = () => {

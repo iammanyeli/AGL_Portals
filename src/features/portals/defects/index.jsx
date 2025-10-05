@@ -15,17 +15,15 @@ const DefectsPortal = ({ section, setPage, portalSubPage }) => {
     
     const renderContent = () => {
         switch (portalSubPage) {
-            case 'portal-dashboard':
-                // return <DefectsDashboard section={section} />;
+            case 'defects-dashboard':
                 return <DashboardView section={section} />;
-            case 'table':
-                // return <DefectsTable section={section} />;
+            case 'defects-table':
                 return <TableView section={section} />;
-            case 'import':
+            case 'defects-import':
                 return <ImportView section={section} />;
-            case 'export':
+            case 'defects-export':
                 return <ExportView section={section} />;
-            case 'portal-settings':
+            case 'defects-settings':
                 return <SettingsView section={section} />;
             default:
                 return <DashboardView section={section} />;
