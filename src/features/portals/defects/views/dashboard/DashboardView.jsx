@@ -6,6 +6,6 @@ import PlaceholderView from '../../components/PlaceholderView';
  * @param {object} props - The component props.
  * @param {object} props.section - The portal section data object.
  */
-const PortalDashboardView = ({ section }) => <PlaceholderView section={section} pageTitle="Dashboard" />;
+const DashboardView = ({ section }) => <PlaceholderView section={section} pageTitle="Dashboard" />;
 
-export default PortalDashboardView;
+export default DashboardView;

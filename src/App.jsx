@@ -57,6 +57,8 @@ import InspectionsPortal from './features/portals/inspections/index.jsx';
 import { mainNavLinks } from './routes/mainNavLinks.js';
 import { defaultPortalNavLinks } from './features/portals/shared/navigation.js';
 import { trainingPortalNavLinks } from './features/portals/training/routes.js';
+import { defectsPortalNavLinks } from './features/portals/defects/routes.js';
+
 
 
 // --- Mock Data ---
@@ -174,9 +176,8 @@ export default function App() {
       switch (page) {
           case 'training':
               return hydrateLinks(trainingPortalNavLinks);
-          // Future portals will have their own case here
-          // case 'defects':
-          //     return hydrateLinks(defectsPortalNavLinks); 
+          case 'defects':
+              return hydrateLinks(defectsPortalNavLinks); 
           default:
               return hydrateLinks(defaultPortalNavLinks);
       }

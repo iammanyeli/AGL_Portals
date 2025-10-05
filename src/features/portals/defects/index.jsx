@@ -1,19 +1,16 @@
 import React from 'react';
-import { defectPortalNavLinks } from './routes.js';
 import PortalLayout from '../../../components/layout/PortalLayout';
 
-// Import all of the new, local defect views
-import DashboardView from './views/dashboard/DashboardView.jsx';
-import TableView from './views/table/TableView.jsx';
-import ImportView from './views/import/ImportView.jsx';
-import ExportView from './views/export/ExportView.jsx';
-import SettingsView from './views/settings/SettingsView.jsx';
 
-/**
- * Top-level page component for the Defects Portal.
- * It uses the shared PortalLayout and renders the correct sub-page view
- * based on the portalSubPage state.
- */
+
+import DashboardView from './views/dashboard/DashboardView';
+import TableView from './views/table/TableView';
+import ImportView from './views/import/ImportView';
+import ExportView from './views/export/ExportView';
+import SettingsView from './views/settings/SettingsView';
+
+
+
 const DefectsPortal = ({ section, setPage, portalSubPage }) => {
     
     const renderContent = () => {
