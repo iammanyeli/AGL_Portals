@@ -22,9 +22,10 @@ import InspectionsPortal from './features/portals/inspections/index.jsx';
 
 // --- Navigation Configurations ---
 import { mainNavLinks } from './routes/mainNavLinks.js';
-import { defaultPortalNavLinks } from './features/portals/shared/navigation.js';
 import { trainingPortalNavLinks } from './features/portals/training/routes.js';
 import { defectsPortalNavLinks } from './features/portals/defects/routes.js';
+import { inspectionsPortalNavLinks } from './features/portals/inspections/routes.js';
+import { maintenancePortalNavLinks } from './features/portals/maintenance/routes.js';
 
 
 
@@ -145,9 +146,14 @@ export default function App() {
           case 'portal-training':
               return hydrateLinks(trainingPortalNavLinks);
           case 'portal-defects':
-              return hydrateLinks(defectsPortalNavLinks); 
+              return hydrateLinks(defectsPortalNavLinks);
+          case 'portal-inspections':
+                  return hydrateLinks(inspectionsPortalNavLinks);
+          case 'portal-maintenance':
+              return hydrateLinks(maintenancePortalNavLinks);
           default:
-              return hydrateLinks(defaultPortalNavLinks);
+              const homeLink = mainNavLinks.find(link => link.id === 'hub-home');
+              return hydrateLinks(homeLink ? [homeLink] : []);
       }
   };
 

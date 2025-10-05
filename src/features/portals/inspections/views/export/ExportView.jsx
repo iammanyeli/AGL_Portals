@@ -1,5 +1,5 @@
 import React from 'react';
-import PlaceholderView from './PlaceholderView';
+import PlaceholderView from '../../components/PlaceholderView';
 
 /**
  * Placeholder view for a portal's data export page.

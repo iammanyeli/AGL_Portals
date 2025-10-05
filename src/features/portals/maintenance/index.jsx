@@ -1,40 +1,28 @@
 import React from 'react';
 import PortalLayout from '../../../components/layout/PortalLayout';
 
-// Import shared placeholder views
-import PortalDashboardView from '../shared/views/PortalDashboardView';
-import TableView from '../shared/views/TableView';
-import ImportView from '../shared/views/ImportView';
-import ExportView from '../shared/views/ExportView';
-import PortalSettingsView from '../shared/views/PortalSettingsView';
+import DashboardView from './views/dashboard/DashboardView';
+import TableView from './views/table/TableView';
+import ImportView from './views/import/ImportView';
+import ExportView from './views/export/ExportView';
+import SettingsView from './views/settings/SettingsView';
 
-// Future imports for real components:
-// import MaintenanceDashboard from '../features/portals/maintenance/Dashboard';
-// import MaintenanceTable from '../features/portals/maintenance/DefectsTable';
-
-/**
- * Top-level page component for the Maintenance Portal.
- * It uses the shared PortalLayout and renders the correct sub-page view
- * based on the portalSubPage state.
- */
 const MaintenancePortal = ({ section, setPage, portalSubPage }) => {
     
     const renderContent = () => {
         switch (portalSubPage) {
-            case 'portal-dashboard':
-                // return <MaintenanceDashboard section={section} />;
-                return <PortalDashboardView section={section} />;
-            case 'table':
-                // return <MaintenanceTable section={section} />;
+            case 'maintenance-dashboard':
+                return <DashboardView section={section} />;
+            case 'maintenance-table':
                 return <TableView section={section} />;
-            case 'import':
+            case 'maintenance-import':
                 return <ImportView section={section} />;
-            case 'export':
+            case 'maintenance-export':
                 return <ExportView section={section} />;
-            case 'portal-settings':
-                return <PortalSettingsView section={section} />;
+            case 'maintenance-settings':
+                return <SettingsView section={section} />;
             default:
-                return <PortalDashboardView section={section} />;
+                return <DashboardView section={section} />;
         }
     };
 

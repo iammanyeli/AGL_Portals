@@ -25,7 +25,7 @@ const PortalLayout = ({ section, setPage, portalSubPage, children }) => {
                          <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
                            <section.Icon className="h-7 w-7" />
                          </div>
-                         <CardTitle className="text-2xl font-bold tracking-tight">{section.title} Portal</CardTitle>
+                         <CardTitle className="text-2xl font-bold tracking-tight">{section.title}</CardTitle>
                      </div>
                      <Button onClick={() => setPage('dashboard')} className="flex items-center gap-2">
                          <ChevronLeft className="w-5 h-5" />
