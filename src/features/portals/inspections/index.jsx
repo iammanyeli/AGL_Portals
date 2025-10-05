@@ -1,12 +1,12 @@
 import React from 'react';
-import PortalLayout from '../features/portals/shared/components/PortalLayout';
+import PortalLayout from '../../../components/layout/PortalLayout';
 
 // Import shared placeholder views
-import PortalDashboardView from '../features/portals/shared/views/PortalDashboardView';
-import TableView from '../features/portals/shared/views/TableView';
-import ImportView from '../features/portals/shared/views/ImportView';
-import ExportView from '../features/portals/shared/views/ExportView';
-import PortalSettingsView from '../features/portals/shared/views/PortalSettingsView';
+import PortalDashboardView from '../shared/views/PortalDashboardView';
+import TableView from '../shared/views/TableView';
+import ImportView from '../shared/views/ImportView';
+import ExportView from '../shared/views/ExportView';
+import PortalSettingsView from '../shared/views/PortalSettingsView';
 
 // Future imports for real components:
 // import InspectionsDashboard from '../features/portals/inspections/InspectionsDashboard';

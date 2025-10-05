@@ -48,8 +48,8 @@
 // export default TrainingPortal;
 
 import React from 'react';
-import PortalLayout from '../features/portals/shared/components/PortalLayout.jsx';
-import TrainingPortalApp from '../features/portals/training/TrainingPortalApp.jsx';
+import PortalLayout from '../../../components/layout/PortalLayout.jsx';
+import TrainingPortalApp from './TrainingPortalApp.jsx';
 
 /**
  * Top-level page component for the Training Portal.

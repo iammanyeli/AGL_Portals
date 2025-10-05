@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import useTrainingApi from './hooks/useTrainingApi';
+import useTrainingApi from './api/useTrainingApi.js';
 
 // Import all views and components from the training feature
 import DashboardPage from './views/dashboard/DashboardView.jsx';

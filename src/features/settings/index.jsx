@@ -7,9 +7,9 @@ import {
   CardHeader, 
   CardContent, 
   CardTitle 
-} from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import Switch from '../components/ui/Switch';
+} from '../../components/ui/Card';
+import Button from '../../components/ui/Button';
+import Switch from '../../components/ui/Switch';
 
 // Icons
 import { 
@@ -21,7 +21,7 @@ import {
   Settings, 
   Sun, 
   User 
-} from '../components/icons';
+} from '../../components/icons';
 
 export default function SettingsPage({ theme, setTheme, defaultView, setDefaultView, setPage, handleLogout }) {
     return (

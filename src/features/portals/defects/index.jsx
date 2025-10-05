@@ -1,16 +1,13 @@
 import React from 'react';
-import PortalLayout from '../features/portals/shared/components/PortalLayout';
+import { defectPortalNavLinks } from './routes.js';
+import PortalLayout from '../../../components/layout/PortalLayout';
 
-// Import shared placeholder views
-import PortalDashboardView from '../features/portals/shared/views/PortalDashboardView';
-import TableView from '../features/portals/shared/views/TableView';
-import ImportView from '../features/portals/shared/views/ImportView';
-import ExportView from '../features/portals/shared/views/ExportView';
-import PortalSettingsView from '../features/portals/shared/views/PortalSettingsView';
-
-// Future imports for real components:
-// import DefectsDashboard from '../features/portals/defects/DefectsDashboard';
-// import DefectsTable from '../features/portals/defects/DefectsTable';
+// Import all of the new, local defect views
+import DashboardView from './views/dashboard/DashboardView.jsx';
+import TableView from './views/table/TableView.jsx';
+import ImportView from './views/import/ImportView.jsx';
+import ExportView from './views/export/ExportView.jsx';
+import SettingsView from './views/settings/SettingsView.jsx';
 
 /**
  * Top-level page component for the Defects Portal.
@@ -23,7 +20,7 @@ const DefectsPortal = ({ section, setPage, portalSubPage }) => {
         switch (portalSubPage) {
             case 'portal-dashboard':
                 // return <DefectsDashboard section={section} />;
-                return <PortalDashboardView section={section} />;
+                return <DashboardView section={section} />;
             case 'table':
                 // return <DefectsTable section={section} />;
                 return <TableView section={section} />;
@@ -32,9 +29,9 @@ const DefectsPortal = ({ section, setPage, portalSubPage }) => {
             case 'export':
                 return <ExportView section={section} />;
             case 'portal-settings':
-                return <PortalSettingsView section={section} />;
+                return <SettingsView section={section} />;
             default:
-                return <PortalDashboardView section={section} />;
+                return <DashboardView section={section} />;
         }
     };
 

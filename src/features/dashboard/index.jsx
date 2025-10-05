@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import ViewSwitcher from '../components/ui/ViewSwitcher';
-import DashboardGrid from '../features/dashboard/components/DashboardGrid';
-import DashboardList from '../features/dashboard/components/DashboardList';
+import ViewSwitcher from '../../components/ui/ViewSwitcher';
+import DashboardGrid from './components/DashboardGrid';
+import DashboardList from './components/DashboardList';
 
 
 const Dashboard = ({ sections, goToPortal, defaultView }) => {

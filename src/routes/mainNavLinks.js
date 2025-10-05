@@ -5,7 +5,7 @@ import {
   LayoutDashboard,
   Settings,
   Wrench,
-} from './components/icons';
+} from '../components/icons';
 
 export const mainNavLinks = [
   { id: 'dashboard', tooltip: 'Dashboard', Icon: LayoutDashboard, action: 'setPage' },

@@ -45,18 +45,18 @@ import AppBar from './components/layout/AppBar';
 import FloatingNav from './components/layout/FloatingNav';
 
 // --- Page & Feature Components ---
-import AuthPage from './features/authentication/AuthPage';
-import Dashboard from './pages/Dashboard';
-import SettingsPage from './pages/Settings';
-import TrainingPortal from './pages/TrainingPortal';
-import DefectsPortal from './pages/DefectsPortal';
-import MaintenancePortal from './pages/MaintenancePortal';
-import InspectionsPortal from './pages/InspectionsPortal';
+import AuthPage from './features/authentication/index.jsx';
+import Dashboard from './features/dashboard/index.jsx';
+import SettingsPage from './features/settings/index.jsx';
+import TrainingPortal from './features/portals/training/index.jsx';
+import DefectsPortal from './features/portals/defects/index.jsx';
+import MaintenancePortal from './features/portals/maintenance/index.jsx';
+import InspectionsPortal from './features/portals/inspections/index.jsx';
 
 // --- Navigation Configurations ---
-import { mainNavLinks } from './navigation.js';
+import { mainNavLinks } from './routes/mainNavLinks.js';
 import { defaultPortalNavLinks } from './features/portals/shared/navigation.js';
-import { trainingPortalNavLinks } from './features/portals/training/navigation.js';
+import { trainingPortalNavLinks } from './features/portals/training/routes.js';
 
 
 // --- Mock Data ---
