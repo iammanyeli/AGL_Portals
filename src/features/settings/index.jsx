@@ -22,8 +22,11 @@ import {
   Sun, 
   User 
 } from '../../components/icons';
+import useTheme from '../../hooks/useTheme';
 
-export default function SettingsPage({ theme, setTheme, defaultView, setDefaultView, setPage, handleLogout }) {
+export default function SettingsPage({ defaultView, setDefaultView, setPage, handleLogout }) {
+    const { theme, toggleTheme } = useTheme();
+
     return (
          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
             <Card className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl">
@@ -47,7 +50,7 @@ export default function SettingsPage({ theme, setTheme, defaultView, setDefaultV
                         </div>
                         <div className="flex items-center gap-2">
                             <Sun className={`w-6 h-6 ${theme === 'light' ? 'text-[#EED58E]' : 'text-slate-400'}`} />
-                            <Switch checked={theme === 'dark'} onChange={(isDark) => setTheme(isDark ? 'dark' : 'light')} />
+                            <Switch checked={theme === 'dark'} onChange={toggleTheme} />
                             <Moon className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-300' : 'text-slate-400'}`} />
                         </div>
                     </div>

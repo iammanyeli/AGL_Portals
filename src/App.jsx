@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -31,6 +31,7 @@ import { maintenancePortalNavLinks } from './features/portals/maintenance/routes
 
 // --- Hooks ---
 import useAuth from './hooks/useAuth.js';
+import useTheme from './hooks/useTheme';
 import useTrainingApi, { adaptDashboardDataForHub } from './features/portals/training/api/useTrainingApi.js';
 
 
@@ -68,23 +69,14 @@ const inspectionsPie = [
 
 export default function App() {
   const { user, isAuthenticated, logout } = useAuth();
+  const { theme } = useTheme();
   const [page, setPage] = useState('hub-home');
   const [portalSubPage, setPortalSubPage] = useState('training-dashboard');
-  const [theme, setTheme] = useState('dark');
   const [defaultView, setDefaultView] = useState('grid');
   
   // --- Data Hooks ---
   // Fetch and model training data using the centralized hook
   const { dashboardModelData } = useTrainingApi();
-
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
 
   const handleLogout = () => {
     logout();
@@ -165,7 +157,7 @@ export default function App() {
 
     switch (page) {
       case 'hub-settings':
-        return <SettingsPage theme={theme} setTheme={setTheme} defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} handleLogout={handleLogout} />;
+        return <SettingsPage defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} handleLogout={handleLogout} />;
       case 'hub-home':
       default:
         return <Dashboard sections={sections} goToPortal={goToPortal} defaultView={defaultView} />;
@@ -181,8 +173,8 @@ export default function App() {
   }
 
   return (
-    <div className="bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white">
-      <AppBar user={user} theme={theme} />
+    <div className={`transition-colors duration-500 bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white`}>
+      <AppBar user={user} />
       <main className="pt-24 pb-24">
         <AnimatePresence mode="wait">
           {renderPage()}
