@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -27,7 +29,8 @@ import { defectsPortalNavLinks } from './features/portals/defects/routes.js';
 import { inspectionsPortalNavLinks } from './features/portals/inspections/routes.js';
 import { maintenancePortalNavLinks } from './features/portals/maintenance/routes.js';
 
-
+// --- Hooks ---
+import useAuth from './hooks/useAuth.js';
 
 // --- Mock Data ---
 const trainingLine = [
@@ -68,14 +71,11 @@ const inspectionsPie = [
 ];
 
 export default function App() {
-  const [page, setPage] = useState('hub-home'); 
-  const [portalSubPage, setPortalSubPage] = useState('training-dashboard'); 
+  const { user, isAuthenticated, logout } = useAuth();
+  const [page, setPage] = useState('hub-home');
+  const [portalSubPage, setPortalSubPage] = useState('training-dashboard');
   const [theme, setTheme] = useState('dark');
   const [defaultView, setDefaultView] = useState('grid');
-  
-  // --- New Authentication State ---
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -84,32 +84,9 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
-  
-  // --- Mock Authentication Handlers ---
-  const handleLogin = (email, password) => {
-    const userName = email.split('@')[0].replace(/[._]/g, ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase());
-    const initials = userName.split(' ').map(n=>n[0]).join('').substring(0,2);
-    setUser({ 
-        fullName: userName, 
-        email: email, 
-        photoURL: `https://placehold.co/40x40/d1d5db/4b5563?text=${initials}`
-    });
-    setIsAuthenticated(true);
-  };
-
-  const handleSignup = (fullName, email, password) => {
-    const initials = fullName.split(' ').map(n=>n[0]).join('').substring(0,2);
-    setUser({ 
-        fullName: fullName, 
-        email: email,
-        photoURL: `https://placehold.co/40x40/d1d5db/4b5563?text=${initials}`
-    });
-    setIsAuthenticated(true);
-  };
 
   const handleLogout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
+    logout();
     setPage('hub-home'); // Reset to default page on logout
   };
 
@@ -122,85 +99,85 @@ export default function App() {
 
   const goToPortal = (portalId) => {
     setPage(portalId);
-    const defaultSubPage = `${portalId.replace('portal-', '')}-dashboard`; 
+    const defaultSubPage = `${portalId.replace('portal-', '')}-dashboard`;
     setPortalSubPage(defaultSubPage);
   };
 
   const getNavLinks = () => {
-      const navActions = {
-          setPage: (pageId) => setPage(pageId),
-          goToPortal: (portalId) => goToPortal(portalId),
-          setPortalSubPage: (subPageId) => setPortalSubPage(subPageId),
-      };
+    const navActions = {
+      setPage: (pageId) => setPage(pageId),
+      goToPortal: (portalId) => goToPortal(portalId),
+      setPortalSubPage: (subPageId) => setPortalSubPage(subPageId),
+    };
 
-      // Turns the action strings from the config files into callable functions
-      const hydrateLinks = (links) => links.map(link => ({
-          ...link,
-          action: () => navActions[link.action](link.id),
-      }));
-      
-      const isPortalView = page !== 'hub-home' && page !== 'hub-settings';
-      if (!isPortalView) return hydrateLinks(mainNavLinks);
+    // Turns the action strings from the config files into callable functions
+    const hydrateLinks = (links) => links.map(link => ({
+      ...link,
+      action: () => navActions[link.action](link.id),
+    }));
 
-      switch (page) {
-          case 'portal-training':
-              return hydrateLinks(trainingPortalNavLinks);
-          case 'portal-defects':
-              return hydrateLinks(defectsPortalNavLinks);
-          case 'portal-inspections':
-                  return hydrateLinks(inspectionsPortalNavLinks);
-          case 'portal-maintenance':
-              return hydrateLinks(maintenancePortalNavLinks);
-          default:
-              const homeLink = mainNavLinks.find(link => link.id === 'hub-home');
-              return hydrateLinks(homeLink ? [homeLink] : []);
-      }
+    const isPortalView = page !== 'hub-home' && page !== 'hub-settings';
+    if (!isPortalView) return hydrateLinks(mainNavLinks);
+
+    switch (page) {
+      case 'portal-training':
+        return hydrateLinks(trainingPortalNavLinks);
+      case 'portal-defects':
+        return hydrateLinks(defectsPortalNavLinks);
+      case 'portal-inspections':
+        return hydrateLinks(inspectionsPortalNavLinks);
+      case 'portal-maintenance':
+        return hydrateLinks(maintenancePortalNavLinks);
+      default:
+        const homeLink = mainNavLinks.find(link => link.id === 'hub-home');
+        return hydrateLinks(homeLink ? [homeLink] : []);
+    }
   };
 
   const renderPage = () => {
-      const portalData = sections.find(s => s.id === page);
-      
-      if (portalData) {
-          const commonProps = { section: portalData, setPage, portalSubPage };
-          switch (page) {
-              case 'portal-training': return <TrainingPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
-              case 'portal-defects': return <DefectsPortal {...commonProps} />;
-              case 'portal-maintenance': return <MaintenancePortal {...commonProps} />;
-              case 'portal-inspections': return <InspectionsPortal {...commonProps} />;
-              default: break;
-          }
-      }
+    const portalData = sections.find(s => s.id === page);
 
+    if (portalData) {
+      const commonProps = { section: portalData, setPage, portalSubPage };
       switch (page) {
-          case 'hub-settings':
-              return <SettingsPage theme={theme} setTheme={setTheme} defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} handleLogout={handleLogout} />;
-          case 'hub-home':
-          default:
-              return <Dashboard sections={sections} goToPortal={goToPortal} defaultView={defaultView} />;
+        case 'portal-training': return <TrainingPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
+        case 'portal-defects': return <DefectsPortal {...commonProps} />;
+        case 'portal-maintenance': return <MaintenancePortal {...commonProps} />;
+        case 'portal-inspections': return <InspectionsPortal {...commonProps} />;
+        default: break;
       }
+    }
+
+    switch (page) {
+      case 'hub-settings':
+        return <SettingsPage theme={theme} setTheme={setTheme} defaultView={defaultView} setDefaultView={setDefaultView} setPage={setPage} handleLogout={handleLogout} />;
+      case 'hub-home':
+      default:
+        return <Dashboard sections={sections} goToPortal={goToPortal} defaultView={defaultView} />;
+    }
   };
 
   if (!isAuthenticated) {
     return (
-        <div className="bg-slate-50 dark:bg-[#122442] transition-colors duration-500">
-           <AuthPage onLogin={handleLogin} onSignup={handleSignup} />
-        </div>
+      <div className="bg-slate-50 dark:bg-[#122442] transition-colors duration-500">
+        <AuthPage />
+      </div>
     );
   }
 
   return (
-      <div className="bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white">
-        <AppBar user={user} theme={theme} />
-        <main className="pt-24 pb-24">
-            <AnimatePresence mode="wait">
-                 {renderPage()}
-            </AnimatePresence>
-        </main>
-        <FloatingNav 
-            currentPage={page} 
-            portalSubPage={portalSubPage}
-            navLinks={getNavLinks()}
-        />
-      </div>
+    <div className="bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white">
+      <AppBar user={user} theme={theme} />
+      <main className="pt-24 pb-24">
+        <AnimatePresence mode="wait">
+          {renderPage()}
+        </AnimatePresence>
+      </main>
+      <FloatingNav
+        currentPage={page}
+        portalSubPage={portalSubPage}
+        navLinks={getNavLinks()}
+      />
+    </div>
   );
 }
