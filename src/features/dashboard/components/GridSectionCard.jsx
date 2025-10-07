@@ -1,27 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  AreaChart,
-  Area,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-} from "recharts";
+import { Chart } from 'chart.js/auto';
 import { Card, CardHeader, CardContent, CardTitle } from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 
@@ -30,6 +9,20 @@ const PIE_COLORS = {
     'portal-training': ['#8b5cf6', '#a78bfa'],
     'portal-maintenance': ['#f97316', '#fb923c'],
     'portal-inspections': ['#16a34a', '#f43f5e'],
+};
+
+const ChartComponent = ({ config }) => {
+    const chartRef = useRef(null);
+
+    useEffect(() => {
+        if (!chartRef.current) return;
+        const chartInstance = new Chart(chartRef.current, config);
+        return () => {
+            chartInstance.destroy();
+        };
+    }, [config]);
+
+    return <canvas ref={chartRef} />;
 };
 
 const GridSectionCard = ({ section, goToPortal }) => {
@@ -54,6 +47,103 @@ const GridSectionCard = ({ section, goToPortal }) => {
         else if (newIndex >= views.length) { newIndex = 0; }
         setView([newIndex, newDirection]);
     };
+
+    const getChartConfig = (chart) => {
+        const sharedOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                padding: 20
+            },
+            plugins: {
+                legend: {
+                    display: chart.type === 'pie' || chart.type === 'doughnut',
+                    position: 'bottom',
+                },
+                tooltip: {
+                    bodyFont: {
+                        size: 14,
+                    },
+                    padding: 10,
+                },
+            },
+        };
+
+        switch (chart.type) {
+            case 'line':
+                return {
+                    type: 'line',
+                    data: {
+                        labels: chart.data.map(d => d.name),
+                        datasets: [{
+                            label: 'Value',
+                            data: chart.data.map(d => d.value),
+                            borderColor: '#4f46e5',
+                            tension: 0.1
+                        }]
+                    },
+                    options: sharedOptions,
+                };
+            case 'bar':
+                return {
+                    type: 'bar',
+                    data: {
+                        labels: chart.data.map(d => d.name),
+                        datasets: [{
+                            label: 'Bugs',
+                            data: chart.data.map(d => d.bugs),
+                            backgroundColor: '#ef4444',
+                        }]
+                    },
+                    options: sharedOptions,
+                };
+            case 'area':
+                return {
+                    type: 'line',
+                    data: {
+                        labels: chart.data.map(d => d.month),
+                        datasets: [{
+                            label: 'Completed',
+                            data: chart.data.map(d => d.completed),
+                            fill: true,
+                            backgroundColor: '#fed7aa',
+                            borderColor: '#f97316',
+                        }]
+                    },
+                    options: sharedOptions,
+                };
+            case 'radar':
+                return {
+                    type: 'radar',
+                    data: {
+                        labels: chart.data.map(d => d.subject),
+                        datasets: [{
+                            label: section.title,
+                            data: chart.data.map(d => d.A),
+                            backgroundColor: 'rgba(134, 239, 172, 0.2)',
+                            borderColor: '#16a34a',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: sharedOptions,
+                };
+            case 'pie':
+                return {
+                    type: 'pie',
+                    data: {
+                        labels: chart.data.map(d => d.name),
+                        datasets: [{
+                            data: chart.data.map(d => d.value),
+                            backgroundColor: PIE_COLORS[section.id],
+                        }]
+                    },
+                    options: sharedOptions,
+                };
+            default:
+                return {};
+        }
+    };
+
 
     return (
         <Card className="w-full rounded-2xl overflow-hidden shadow-xl h-[560px] flex flex-col">
@@ -85,8 +175,8 @@ const GridSectionCard = ({ section, goToPortal }) => {
                             }}
                         >
                             {viewIndex === 0 && (<div className="grid grid-cols-2 gap-4 h-full">{section.metrics.map((m, idx) => (<div key={idx} className="rounded-xl p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm flex flex-col justify-center"><div className="text-sm text-slate-500 dark:text-slate-400">{m.label}</div><div className="mt-1 text-3xl font-semibold text-[#1B365F] dark:text-slate-100">{m.value}</div></div>))}</div>)}
-                            {viewIndex === 1 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col">{section.charts[0].type === "line" && <ResponsiveContainer width="100%" height="100%"><LineChart data={section.charts[0].data} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}><CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /><XAxis dataKey="name" stroke="#6b7280" fontSize={12} /><YAxis stroke="#6b7280" fontSize={12} /><Tooltip wrapperClassName="rounded-md shadow-lg" /><Line type="monotone" dataKey="value" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} /></LineChart></ResponsiveContainer>} {section.charts[0].type === "bar" && <ResponsiveContainer width="100%" height="100%"><BarChart data={section.charts[0].data} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}><CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /><XAxis dataKey="name" stroke="#6b7280" fontSize={12} /><YAxis stroke="#6b7280" fontSize={12} /><Tooltip wrapperClassName="rounded-md shadow-lg" /><Bar dataKey="bugs" fill="#ef4444" radius={[4, 4, 0, 0]} /></BarChart></ResponsiveContainer>} {section.charts[0].type === "area" && <ResponsiveContainer width="100%" height="100%"><AreaChart data={section.charts[0].data} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}><CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /><XAxis dataKey="month" stroke="#6b7280" fontSize={12}/><YAxis stroke="#6b7280" fontSize={12}/><Tooltip wrapperClassName="rounded-md shadow-lg" /><Area type="monotone" dataKey="completed" stroke="#f97316" fill="#fed7aa" strokeWidth={2} /></AreaChart></ResponsiveContainer>} {section.charts[0].type === "radar" && <ResponsiveContainer width="100%" height="100%"><RadarChart cx="50%" cy="50%" outerRadius="80%" data={section.charts[0].data}><PolarGrid /><PolarAngleAxis dataKey="subject" fontSize={12} /><PolarRadiusAxis angle={30} domain={[0, 150]} fontSize={10}/><Radar name={section.title} dataKey="A" stroke="#16a34a" fill="#86efac" fillOpacity={0.6} /><Tooltip wrapperClassName="rounded-md shadow-lg" /></RadarChart></ResponsiveContainer>}</div>)}
-                            {viewIndex === 2 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={section.charts[1].data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>{section.charts[1].data.map((entry, i) => (<Cell key={`cell-${i}`} fill={PIE_COLORS[section.id][i % PIE_COLORS[section.id].length]} />))}</Pie><Tooltip wrapperClassName="rounded-md shadow-lg" /><Legend /></PieChart></ResponsiveContainer></div>)}
+                            {viewIndex === 1 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col"><ChartComponent config={getChartConfig(section.charts[0])} /></div>)}
+                            {viewIndex === 2 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center"><ChartComponent config={getChartConfig(section.charts[1])} /></div>)}
                             {viewIndex === 3 && (<div className="space-y-4 h-full overflow-y-auto pr-2">{section.updates.map((update, index) => (<div key={index} className="flex items-start gap-3"><img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-white shadow-sm" /><div><p className="text-sm text-slate-800 dark:text-slate-200 leading-snug"><span className="font-semibold">{update.user}</span> {update.action}</p><p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{update.time}</p></div></div>))}</div>)}
                         </motion.div>
                     </AnimatePresence>
