@@ -1,0 +1,12 @@
+# Training Models
+
+This directory contains the canonical data models for the Training Portal feature. These models define the shape of the data as it is used throughout the application, ensuring consistency between the portal, the Home Hub, and any services.
+
+## Overview
+
+- **`record.model.js`**: Defines the structure of a single, processed training record, including calculated status fields.
+- **`stats.model.js`**: Defines the shape for summary counts (e.g., total, valid, expired).
+- **`chart.model.js`**: A generic model for chart data, compatible with the application's chart components.
+- **`dashboard.model.js`**: The main aggregate model that combines all other models into a single payload for the Training Portal dashboard.
+
+These models are instantiated in `src/features/portals/training/api/useTrainingApi.js` after fetching and processing the raw data from the mock API.

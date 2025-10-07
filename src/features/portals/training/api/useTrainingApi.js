@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import * as api from '../../../../services/__mocks__/trainingAPI.js';
+import { createDashboardModel } from '../../../../models/training/dashboard.model.js';
 
 const useTrainingApi = () => {
     // --- Core Data State ---
@@ -47,7 +48,7 @@ const useTrainingApi = () => {
         fetchAllData();
     }, [fetchAllData]);
 
-    // --- Memoized Data Processing (No Changes Here) ---
+    // --- Memoized Data Processing ---
     const processedRecords = useMemo(() => {
         return records.map(record => {
             const expiryDate = new Date(record.status.dateOfExpiry);
@@ -60,7 +61,7 @@ const useTrainingApi = () => {
             return { ...record, status: { ...record.status, daysLeft, status } };
         });
     }, [records, expiryThreshold]);
-    
+
     const uniqueEmployees = useMemo(() => {
         const employeeMap = new Map();
         processedRecords.forEach(record => {
@@ -70,6 +71,71 @@ const useTrainingApi = () => {
         });
         return Array.from(employeeMap.values());
     }, [processedRecords]);
+
+    // --- Model-Driven Dashboard Data ---
+    const dashboardModelData = useMemo(() => {
+        const stats = {
+            total: processedRecords.length,
+            valid: processedRecords.filter(r => r.status.status === 'Valid').length,
+            expiringSoon: processedRecords.filter(r => r.status.status === 'Expiring Soon').length,
+            expired: processedRecords.filter(r => r.status.status === 'Expired').length,
+        };
+
+        const statusBreakdown = {
+            labels: ['Valid', 'Expiring Soon', 'Expired'],
+            data: [stats.valid, stats.expiringSoon, stats.expired]
+        };
+
+        const provinceBreakdown = processedRecords.reduce((acc, r) => {
+            const provinceName = r.location.province || 'Unassigned';
+            acc[provinceName] = (acc[provinceName] || 0) + 1;
+            return acc;
+        }, {});
+
+        const expiringSoon = processedRecords
+            .filter(r => r.status.status === 'Expiring Soon' || r.status.status === 'Expired')
+            .sort((a, b) => a.status.daysLeft - b.status.daysLeft);
+
+        const drillDownData = {
+             totalBySite: processedRecords.reduce((acc, r) => {
+                const siteName = r.location.site || 'Unassigned';
+                acc[siteName] = (acc[siteName] || 0) + 1;
+                return acc;
+            }, {}),
+            trainingBySiteBreakdown: processedRecords.reduce((acc, r) => {
+                const siteName = r.location.site || 'Unassigned';
+                if (!acc[siteName]) acc[siteName] = {};
+                acc[siteName][r.trainingTitle] = (acc[siteName][r.trainingTitle] || 0) + 1;
+                return acc;
+            }, {})
+        };
+
+
+        const dashboardPayload = {
+            stats,
+            charts: [
+                {
+                    type: 'doughnut',
+                    title: 'Training Status Breakdown',
+                    labels: statusBreakdown.labels,
+                    datasets: [{ data: statusBreakdown.data }],
+                },
+                {
+                    type: 'bar',
+                    title: 'Training by Province',
+                    labels: Object.keys(provinceBreakdown),
+                    datasets: [{ label: 'Certificates', data: Object.values(provinceBreakdown) }],
+                }
+            ],
+            expiringSoon: expiringSoon.slice(0, 5), // For the dashboard widget
+            recentActivity: activities.slice(0, 5),
+            drillDownData,
+        };
+
+        return createDashboardModel(dashboardPayload);
+
+    }, [processedRecords, activities]);
+
 
     // --- Handlers (Kept Original Logic) ---
     const handleAddOrUpdateRecord = async (recordData, modalType) => {
@@ -82,8 +148,8 @@ const useTrainingApi = () => {
                 await api.updateRecord(recordData);
                 await logActivity('record', `Updated certificate '${recordData.trainingTitle}' for ${recordBefore.employee.firstName} ${recordBefore.employee.surname}.`, { before: recordBefore, after: recordData });
             }
-        } catch (error) { 
-            console.error("Failed to save record:", error); 
+        } catch (error) {
+            console.error("Failed to save record:", error);
         } finally {
             fetchAllData();
         }
@@ -94,8 +160,8 @@ const useTrainingApi = () => {
             const employeeBefore = uniqueEmployees.find(e => e.employeeNumber === employeeData.employeeNumber);
             await api.updateEmployee(employeeData);
             await logActivity('record', `Updated employee profile for ${employeeData.firstName} ${employeeData.surname}.`, { before: employeeBefore, after: employeeData });
-        } catch (error) { 
-            console.error("Failed to update employee:", error); 
+        } catch (error) {
+            console.error("Failed to update employee:", error);
         } finally {
             fetchAllData();
         }
@@ -108,13 +174,13 @@ const useTrainingApi = () => {
                 await api.deleteRecord(recordId);
                 await logActivity('record', `Deleted certificate '${recordToDelete.trainingTitle}' for ${recordToDelete.employee.firstName} ${recordToDelete.employee.surname}.`, { before: recordToDelete });
             }
-        } catch (error) { 
-            console.error("Failed to delete record:", error); 
+        } catch (error) {
+            console.error("Failed to delete record:", error);
         } finally {
             fetchAllData();
         }
     };
-    
+
     const handleSetExpiryThreshold = async (days) => {
         const oldThreshold = expiryThreshold;
         setExpiryThreshold(days);
@@ -135,7 +201,7 @@ const useTrainingApi = () => {
             console.error("Failed to update settings:", error);
         }
     };
-    
+
     const settingsHandlers = {
         onAddProvince: createSettingsHandler(api.addProvince, (name) => ({ details: `Added new province: '${name}'.`, payload: { after: { name } } })),
         onUpdateProvince: createSettingsHandler(api.updateProvince, (originalName, newName) => ({ details: `Updated province from '${originalName || 'N/A'}' to '${newName || 'N/A'}'.`, payload: { before: { name: originalName }, after: { name: newName } } })),
@@ -158,12 +224,64 @@ const useTrainingApi = () => {
     return {
         // State
         records, provinces, sites, certificateTypes, expiryThreshold, activities,
-        // Processed Data
-        processedRecords, uniqueEmployees,
+        // Processed & Modeled Data
+        processedRecords, uniqueEmployees, dashboardModelData,
         // Handlers
-        logActivity, fetchAllData, handleAddOrUpdateRecord, handleUpdateEmployee, 
+        logActivity, fetchAllData, handleAddOrUpdateRecord, handleUpdateEmployee,
         handleDeleteRecord, handleSetExpiryThreshold, settingsHandlers,
     };
 };
+
+/**
+ * Adapter function to transform the new dashboard model data into the
+ * simplified format expected by the Home Hub's chart components (`App.jsx`).
+ * @param {object} dashboardModel - The dashboard data model instance.
+ * @returns {object} An object containing metrics, charts, and updates for the hub.
+ */
+export const adaptDashboardDataForHub = (dashboardModel) => {
+    if (!dashboardModel) {
+        return { metrics: [], charts: [], updates: [] };
+    }
+
+    const { stats, recentActivity, drillDownData, charts: modelCharts } = dashboardModel;
+
+    const metrics = [
+        { label: "Total Records", value: stats.total },
+        { label: "Valid", value: stats.valid },
+        { label: "Expiring", value: stats.expiringSoon },
+        { label: "Expired", value: stats.expired },
+    ];
+
+    const statusChart = modelCharts.find(c => c.title.includes("Status Breakdown"));
+
+    const pieChart = {
+        type: 'pie',
+        title: 'Overall Training Status',
+        data: statusChart ? statusChart.labels.map((label, index) => ({
+            name: label,
+            value: statusChart.datasets[0].data[index],
+        })) : [],
+    };
+    
+    // FIX: Using the correct title and the generic 'value' key.
+    const barChart = {
+        type: 'bar',
+        title: 'Total Certificates by Site',
+        data: Object.entries(drillDownData.totalBySite).map(([siteName, count]) => ({
+            name: siteName,
+            value: count, 
+        })),
+    };
+
+
+    const updates = recentActivity.map(activity => ({
+        user: activity.user_name || 'System',
+        action: activity.details,
+        time: new Date(activity.timestamp).toLocaleDateString(),
+    }));
+
+    return { metrics, charts: [pieChart, barChart], updates };
+};
+
 
 export default useTrainingApi;

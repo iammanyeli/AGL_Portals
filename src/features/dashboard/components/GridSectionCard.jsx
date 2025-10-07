@@ -16,13 +16,15 @@ const ChartRenderer = ({ chart, sectionId }) => {
         case 'line':
             return <LineChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} label="Value" sectionId={sectionId} />;
         case 'bar':
-            return <BarChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.bugs)} title={chart.title} label="Bugs" sectionId={sectionId} />;
+             // FIX: Now uses a generic 'value' key instead of 'bugs' and passes the correct label.
+            return <BarChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} label="Certificates" sectionId={sectionId} />;
         case 'area':
             return <AreaChart labels={chart.data.map(d => d.month)} data={chart.data.map(d => d.completed)} title={chart.title} label="Completed" sectionId={sectionId} />;
         case 'radar':
             return <RadarChart labels={chart.data.map(d => d.subject)} data={chart.data.map(d => d.A)} title={chart.title} label={chart.title} sectionId={sectionId} />;
         case 'pie':
-            return <PieChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} sectionId={sectionId} />;
+            // FIX: Now correctly uses useStatusColors for consistency.
+            return <PieChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} sectionId={sectionId} useStatusColors={true} />;
         default:
             return null;
     }

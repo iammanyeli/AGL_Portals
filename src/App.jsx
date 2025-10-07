@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -31,14 +31,10 @@ import { maintenancePortalNavLinks } from './features/portals/maintenance/routes
 
 // --- Hooks ---
 import useAuth from './hooks/useAuth.js';
+import useTrainingApi, { adaptDashboardDataForHub } from './features/portals/training/api/useTrainingApi.js';
+
 
 // --- Mock Data ---
-const trainingLine = [
-  { name: "Wk1", value: 60 },
-  { name: "Wk2", value: 72 },
-  { name: "Wk3", value: 78 },
-  { name: "Wk4", value: 85 },
-];
 const defectsBar = [
   { name: "Mon", bugs: 12 },
   { name: "Tue", bugs: 8 },
@@ -76,6 +72,11 @@ export default function App() {
   const [portalSubPage, setPortalSubPage] = useState('training-dashboard');
   const [theme, setTheme] = useState('dark');
   const [defaultView, setDefaultView] = useState('grid');
+  
+  // --- Data Hooks ---
+  // Fetch and model training data using the centralized hook
+  const { dashboardModelData } = useTrainingApi();
+
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -90,12 +91,26 @@ export default function App() {
     setPage('hub-home'); // Reset to default page on logout
   };
 
-  const sections = [
-    { id: "portal-training", title: "Training Portal", accent: "from-indigo-500 to-violet-500", Icon: BookOpen, metrics: [{ label: "Courses", value: 320 }, { label: "Active", value: 124 }, { label: "Avg Score", value: "87%" }, { label: "Completion", value: "72%" }], charts: [{ type: "line", data: trainingLine, title: "Weekly Score Improvement" }, { type: "pie", data: defectsPie, title: "Overall Defect Status" }], updates: [{ user: "Alex Doe", action: "completed the 'Advanced Safety' module.", time: "3h ago" }, { user: "Samantha Bee", action: "achieved a 95% score on the final exam.", time: "Yesterday" }, { user: "John Carter", action: "enrolled in 2 new courses.", time: "2 days ago" }, { user: "Maria Garcia", action: "updated the training manual.", time: "3 days ago" }] },
-    { id: "portal-defects", title: "Defects Portal", accent: "from-rose-500 to-red-500", Icon: Bug, metrics: [{ label: "Open", value: 58 }, { label: "Critical", value: 12 }, { label: "MTTR", value: "48h" }, { label: "Total", value: 400 }], charts: [{ type: "bar", data: defectsBar, title: "Daily Bug Reports" }, { type: "pie", data: defectsPie, title: "Open vs. Resolved" }], updates: [{ user: "Maria Garcia", action: "resolved critical bug #7812.", time: "5m ago" }, { user: "Ken Watanabe", action: "reported a new UI issue.", time: "1h ago" }, { user: "Alex Doe", action: "commented on bug #7801.", time: "4h ago" }] },
-    { id: "portal-maintenance", title: "Maintenance Portal", accent: "from-amber-400 to-orange-500", Icon: Wrench, metrics: [{ label: "Scheduled", value: 120 }, { label: "Overdue", value: 8 }, { label: "MTTR", value: "5.2h" }, { label: "Completed", value: 110 }], charts: [{ type: "area", data: maintenanceArea, title: "Monthly Work Orders" }, { type: "pie", data: maintenanceDonut, title: "Maintenance Type Distribution" }], updates: [{ user: "Peter Jones", action: "completed work order #223.", time: "22m ago" }, { user: "Samantha Bee", action: "scheduled preventive maintenance for Unit B.", time: "6h ago" }, { user: "Maria Garcia", action: "updated asset status for the main generator.", time: "Yesterday" }] },
-    { id: "portal-inspections", title: "Inspections Portal", accent: "from-emerald-400 to-green-600", Icon: CheckSquare, metrics: [{ label: "This Month", value: 84 }, { label: "Pass Rate", value: "91%" }, { label: "Nonconformities", value: 9 }, { label: "Avg Time", value: "12m" }], charts: [{ type: "radar", data: inspectionsRadar, title: "Performance Areas" }, { type: "pie", data: inspectionsPie, title: "Pass / Fail Rate" }], updates: [{ user: "Li Wei", action: "passed the monthly safety inspection.", time: "45m ago" }, { user: "John Carter", action: "raised a non-conformity for fire-exit blockage.", time: "2h ago" }, { user: "Ken Watanabe", action: "submitted the weekly quality report.", time: "1 day ago" }] },
-  ];
+    const sections = useMemo(() => {
+        // Adapt the live training data for the hub view
+        const trainingHubData = adaptDashboardDataForHub(dashboardModelData);
+
+        return [
+            {
+                id: "portal-training",
+                title: "Training Portal",
+                accent: "from-indigo-500 to-violet-500",
+                Icon: BookOpen,
+                metrics: trainingHubData.metrics,
+                charts: trainingHubData.charts,
+                updates: trainingHubData.updates,
+            },
+            { id: "portal-defects", title: "Defects Portal", accent: "from-rose-500 to-red-500", Icon: Bug, metrics: [{ label: "Open", value: 58 }, { label: "Critical", value: 12 }, { label: "MTTR", value: "48h" }, { label: "Total", value: 400 }], charts: [{ type: "bar", data: defectsBar, title: "Daily Bug Reports" }, { type: "pie", data: defectsPie, title: "Open vs. Resolved" }], updates: [{ user: "Maria Garcia", action: "resolved critical bug #7812.", time: "5m ago" }, { user: "Ken Watanabe", action: "reported a new UI issue.", time: "1h ago" }, { user: "Alex Doe", action: "commented on bug #7801.", time: "4h ago" }] },
+            { id: "portal-maintenance", title: "Maintenance Portal", accent: "from-amber-400 to-orange-500", Icon: Wrench, metrics: [{ label: "Scheduled", value: 120 }, { label: "Overdue", value: 8 }, { label: "MTTR", value: "5.2h" }, { label: "Completed", value: 110 }], charts: [{ type: "area", data: maintenanceArea, title: "Monthly Work Orders" }, { type: "pie", data: maintenanceDonut, title: "Maintenance Type Distribution" }], updates: [{ user: "Peter Jones", action: "completed work order #223.", time: "22m ago" }, { user: "Samantha Bee", action: "scheduled preventive maintenance for Unit B.", time: "6h ago" }, { user: "Maria Garcia", action: "updated asset status for the main generator.", time: "Yesterday" }] },
+            { id: "portal-inspections", title: "Inspections Portal", accent: "from-emerald-400 to-green-600", Icon: CheckSquare, metrics: [{ label: "This Month", value: 84 }, { label: "Pass Rate", value: "91%" }, { label: "Nonconformities", value: 9 }, { label: "Avg Time", value: "12m" }], charts: [{ type: "radar", data: inspectionsRadar, title: "Performance Areas" }, { type: "pie", data: inspectionsPie, title: "Pass / Fail Rate" }], updates: [{ user: "Li Wei", action: "passed the monthly safety inspection.", time: "45m ago" }, { user: "John Carter", action: "raised a non-conformity for fire-exit blockage.", time: "2h ago" }, { user: "Ken Watanabe", action: "submitted the weekly quality report.", time: "1 day ago" }] },
+        ];
+    }, [dashboardModelData]);
+
 
   const goToPortal = (portalId) => {
     setPage(portalId);
