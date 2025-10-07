@@ -1,29 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Chart } from 'chart.js/auto';
 import { Card, CardHeader, CardContent, CardTitle } from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 
-const PIE_COLORS = {
-    'portal-defects': ['#ef4444', '#22c55e'],
-    'portal-training': ['#8b5cf6', '#a78bfa'],
-    'portal-maintenance': ['#f97316', '#fb923c'],
-    'portal-inspections': ['#16a34a', '#f43f5e'],
+// Import modular chart components
+import AreaChart from '../../../components/charts/AreaChart';
+import BarChart from '../../../components/charts/BarChart';
+import LineChart from '../../../components/charts/LineChart';
+import PieChart from '../../../components/charts/PieChart';
+import RadarChart from '../../../components/charts/RadarChart';
+
+
+const ChartRenderer = ({ chart, sectionId }) => {
+    switch (chart.type) {
+        case 'line':
+            return <LineChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} label="Value" sectionId={sectionId} />;
+        case 'bar':
+            return <BarChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.bugs)} title={chart.title} label="Bugs" sectionId={sectionId} />;
+        case 'area':
+            return <AreaChart labels={chart.data.map(d => d.month)} data={chart.data.map(d => d.completed)} title={chart.title} label="Completed" sectionId={sectionId} />;
+        case 'radar':
+            return <RadarChart labels={chart.data.map(d => d.subject)} data={chart.data.map(d => d.A)} title={chart.title} label={chart.title} sectionId={sectionId} />;
+        case 'pie':
+            return <PieChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} sectionId={sectionId} />;
+        default:
+            return null;
+    }
 };
 
-const ChartComponent = ({ config }) => {
-    const chartRef = useRef(null);
-
-    useEffect(() => {
-        if (!chartRef.current) return;
-        const chartInstance = new Chart(chartRef.current, config);
-        return () => {
-            chartInstance.destroy();
-        };
-    }, [config]);
-
-    return <canvas ref={chartRef} />;
-};
 
 const GridSectionCard = ({ section, goToPortal }) => {
     const [[viewIndex, direction], setView] = useState([0, 0]);
@@ -47,103 +51,6 @@ const GridSectionCard = ({ section, goToPortal }) => {
         else if (newIndex >= views.length) { newIndex = 0; }
         setView([newIndex, newDirection]);
     };
-
-    const getChartConfig = (chart) => {
-        const sharedOptions = {
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                padding: 20
-            },
-            plugins: {
-                legend: {
-                    display: chart.type === 'pie' || chart.type === 'doughnut',
-                    position: 'bottom',
-                },
-                tooltip: {
-                    bodyFont: {
-                        size: 14,
-                    },
-                    padding: 10,
-                },
-            },
-        };
-
-        switch (chart.type) {
-            case 'line':
-                return {
-                    type: 'line',
-                    data: {
-                        labels: chart.data.map(d => d.name),
-                        datasets: [{
-                            label: 'Value',
-                            data: chart.data.map(d => d.value),
-                            borderColor: '#4f46e5',
-                            tension: 0.1
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'bar':
-                return {
-                    type: 'bar',
-                    data: {
-                        labels: chart.data.map(d => d.name),
-                        datasets: [{
-                            label: 'Bugs',
-                            data: chart.data.map(d => d.bugs),
-                            backgroundColor: '#ef4444',
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'area':
-                return {
-                    type: 'line',
-                    data: {
-                        labels: chart.data.map(d => d.month),
-                        datasets: [{
-                            label: 'Completed',
-                            data: chart.data.map(d => d.completed),
-                            fill: true,
-                            backgroundColor: '#fed7aa',
-                            borderColor: '#f97316',
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'radar':
-                return {
-                    type: 'radar',
-                    data: {
-                        labels: chart.data.map(d => d.subject),
-                        datasets: [{
-                            label: section.title,
-                            data: chart.data.map(d => d.A),
-                            backgroundColor: 'rgba(134, 239, 172, 0.2)',
-                            borderColor: '#16a34a',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'pie':
-                return {
-                    type: 'pie',
-                    data: {
-                        labels: chart.data.map(d => d.name),
-                        datasets: [{
-                            data: chart.data.map(d => d.value),
-                            backgroundColor: PIE_COLORS[section.id],
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            default:
-                return {};
-        }
-    };
-
 
     return (
         <Card className="w-full rounded-2xl overflow-hidden shadow-xl h-[560px] flex flex-col">
@@ -175,8 +82,8 @@ const GridSectionCard = ({ section, goToPortal }) => {
                             }}
                         >
                             {viewIndex === 0 && (<div className="grid grid-cols-2 gap-4 h-full">{section.metrics.map((m, idx) => (<div key={idx} className="rounded-xl p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm flex flex-col justify-center"><div className="text-sm text-slate-500 dark:text-slate-400">{m.label}</div><div className="mt-1 text-3xl font-semibold text-[#1B365F] dark:text-slate-100">{m.value}</div></div>))}</div>)}
-                            {viewIndex === 1 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col"><ChartComponent config={getChartConfig(section.charts[0])} /></div>)}
-                            {viewIndex === 2 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center"><ChartComponent config={getChartConfig(section.charts[1])} /></div>)}
+                            {viewIndex === 1 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col"><ChartRenderer chart={section.charts[0]} sectionId={section.id} /></div>)}
+                            {viewIndex === 2 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center"><ChartRenderer chart={section.charts[1]} sectionId={section.id} /></div>)}
                             {viewIndex === 3 && (<div className="space-y-4 h-full overflow-y-auto pr-2">{section.updates.map((update, index) => (<div key={index} className="flex items-start gap-3"><img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-white shadow-sm" /><div><p className="text-sm text-slate-800 dark:text-slate-200 leading-snug"><span className="font-semibold">{update.user}</span> {update.action}</p><p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{update.time}</p></div></div>))}</div>)}
                         </motion.div>
                     </AnimatePresence>

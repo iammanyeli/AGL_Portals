@@ -1,30 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Chart } from 'chart.js/auto';
 
 import { Card, CardHeader, CardContent, CardTitle } from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import { LayoutGrid, MessageCircle } from '../../../components/icons';
 
-const PIE_COLORS = {
-    'portal-defects': ['#ef4444', '#22c55e'],
-    'portal-training': ['#8b5cf6', '#a78bfa'],
-    'portal-maintenance': ['#f97316', '#fb923c'],
-    'portal-inspections': ['#16a34a', '#f43f5e'],
-};
+// Import modular chart components
+import AreaChart from '../../../components/charts/AreaChart';
+import BarChart from '../../../components/charts/BarChart';
+import LineChart from '../../../components/charts/LineChart';
+import PieChart from '../../../components/charts/PieChart';
+import RadarChart from '../../../components/charts/RadarChart';
 
-const ChartComponent = ({ config }) => {
-    const chartRef = useRef(null);
 
-    useEffect(() => {
-        if (!chartRef.current) return;
-        const chartInstance = new Chart(chartRef.current, config);
-        return () => {
-            chartInstance.destroy();
-        };
-    }, [config]);
-
-    return <canvas ref={chartRef} />;
+const ChartRenderer = ({ chart, sectionId }) => {
+    switch (chart.type) {
+        case 'line':
+            return <LineChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} label="Value" sectionId={sectionId} />;
+        case 'bar':
+            return <BarChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.bugs)} title={chart.title} label="Bugs" sectionId={sectionId} />;
+        case 'area':
+            return <AreaChart labels={chart.data.map(d => d.month)} data={chart.data.map(d => d.completed)} title={chart.title} label="Completed" sectionId={sectionId} />;
+        case 'radar':
+            return <RadarChart labels={chart.data.map(d => d.subject)} data={chart.data.map(d => d.A)} title={chart.title} label={chart.title} sectionId={sectionId} />;
+        case 'pie':
+            return <PieChart labels={chart.data.map(d => d.name)} data={chart.data.map(d => d.value)} title={chart.title} sectionId={sectionId} />;
+        default:
+            return null;
+    }
 };
 
 
@@ -35,125 +38,6 @@ const DashboardList = ({ sections, goToPortal }) => {
 
     const handleTabChange = (sectionId, tab) => {
         setActiveTabs(prev => ({ ...prev, [sectionId]: tab }));
-    };
-
-    const getChartConfig = (chart, section) => {
-        const sharedOptions = {
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                padding: 20
-            },
-            plugins: {
-                legend: {
-                    display: chart.type === 'pie' || chart.type === 'doughnut',
-                    position: 'bottom',
-                },
-                tooltip: {
-                    bodyFont: {
-                        size: 14,
-                    },
-                    padding: 10,
-                },
-            },
-        };
-
-        switch (chart.type) {
-            case 'line':
-                return {
-                    type: 'line',
-                    data: {
-                        labels: chart.data.map(d => d.name),
-                        datasets: [{
-                            label: 'Value',
-                            data: chart.data.map(d => d.value),
-                            borderColor: '#4f46e5',
-                            tension: 0.1
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'bar':
-                return {
-                    type: 'bar',
-                    data: {
-                        labels: chart.data.map(d => d.name),
-                        datasets: [{
-                            label: 'Bugs',
-                            data: chart.data.map(d => d.bugs),
-                            backgroundColor: '#ef4444',
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'area':
-                return {
-                    type: 'line',
-                    data: {
-                        labels: chart.data.map(d => d.month),
-                        datasets: [{
-                            label: 'Completed',
-                            data: chart.data.map(d => d.completed),
-                            fill: true,
-                            backgroundColor: '#fed7aa',
-                            borderColor: '#f97316',
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'radar':
-                return {
-                    type: 'radar',
-                    data: {
-                        labels: chart.data.map(d => d.subject),
-                        datasets: [{
-                            label: section.title,
-                            data: chart.data.map(d => d.A),
-                            backgroundColor: 'rgba(134, 239, 172, 0.2)',
-                            borderColor: '#16a34a',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: sharedOptions,
-                };
-            case 'pie':
-                 return {
-                    type: 'pie',
-                    data: {
-                        labels: chart.data.map(d => d.name),
-                        datasets: [{
-                            data: chart.data.map(d => d.value),
-                            backgroundColor: PIE_COLORS[section.id],
-                        }]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                        layout: {
-                           padding: {
-                               top: 20,
-                               left: 20,
-                               right: 20,
-                               bottom: 40
-                           }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'bottom',
-                            },
-                            tooltip: {
-                                bodyFont: {
-                                    size: 14,
-                                },
-                                padding: 10,
-                            },
-                        },
-                    },
-                };
-            default:
-                return {};
-        }
     };
 
     return (
@@ -183,16 +67,10 @@ const DashboardList = ({ sections, goToPortal }) => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-start">
                       <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="h-80 bg-slate-50 dark:bg-black/20 rounded-xl p-4 shadow-inner border border-slate-200 dark:border-white/10 flex flex-col">
-                          <h4 className="font-semibold text-[#1B365F] dark:text-slate-200 mb-2">{s.charts[0].title}</h4>
-                          <div className="flex-grow relative">
-                            <ChartComponent config={getChartConfig(s.charts[0], s)} />
-                          </div>
+                           <ChartRenderer chart={s.charts[0]} sectionId={s.id} />
                         </div>
                         <div className="h-80 bg-slate-50 dark:bg-black/20 rounded-xl p-4 shadow-inner border border-slate-200 dark:border-white/10 flex flex-col">
-                          <h4 className="font-semibold text-[#1B365F] dark:text-slate-200 mb-2">{s.charts[1].title}</h4>
-                          <div className="flex-grow relative">
-                            <ChartComponent config={getChartConfig(s.charts[1], s)} />
-                          </div>
+                           <ChartRenderer chart={s.charts[1]} sectionId={s.id} />
                         </div>
                       </div>
                       <div className="lg:col-span-1 flex flex-col gap-4 h-80">

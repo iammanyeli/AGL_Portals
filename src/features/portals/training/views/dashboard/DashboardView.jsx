@@ -1,22 +1,13 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import DashboardCard from './components/DashboardCard.jsx';
-import ChartComponent from '../../components/ui/ChartComponent.jsx';
+import DoughnutChart from '/src/components/charts/DoughnutChart.jsx';
+import BarChart from '/src/components/charts/BarChart.jsx';
 import DrillDownChart from './components/DrillDownChart.jsx';
 import ExpiringSoon from './components/ExpiringSoon.jsx';
 import RecentActivity from './components/RecentActivity.jsx';
 
 const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboard, setSelectedSiteDashboard, activities, expiringCerts, activeFilter, setActiveFilter, resetFilters, showActivityPage, showDetailedView, processedRecords }) => {
-    const statusChartRef = useRef(null);
-    const provinceChartRef = useRef(null);
-    const siteChartRef = useRef(null);
-    const topicColors = ['#3b82f6', '#10b981', '#f97316', '#ec4899', '#8b5cf6', '#f59e0b', '#ef4444', '#6366f1'];
 
-    const statusColors = {
-        'Valid': '#4ade80',
-        'Expiring Soon': '#fbbf24',
-        'Expired': '#f87171'
-    };
-    
     const NoDataComponent = () => (
       <div className="flex flex-col justify-center items-center h-full text-gray-500">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-4"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
@@ -24,38 +15,9 @@ const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboar
         <p className="text-sm">There are no records matching the current filters.</p>
       </div>
     );
-
-    const statusChartConfig = {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(dashboardData.statusBreakdown),
-            datasets: [{
-                data: Object.values(dashboardData.statusBreakdown),
-                backgroundColor: Object.keys(dashboardData.statusBreakdown).map(status => statusColors[status] || '#cccccc')
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' }, title: {display: true, text: 'Training Status Breakdown'} } }
-    };
-
-    const provinceChartConfig = {
-        type: 'bar',
-        data: { labels: Object.keys(dashboardData.provinceBreakdown), datasets: [{ label: 'Certificates', data: Object.values(dashboardData.provinceBreakdown), backgroundColor: '#60a5fa' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: {display: true, text: 'Training by Province'} }, scales: { y: { beginAtZero: true } } }
-    };
-
-    const siteInitialConfig = useCallback((data) => ({
-        type: 'bar',
-        data: { labels: Object.keys(data.totalBySite), datasets: [{ label: 'Total Certificates', data: Object.values(data.totalBySite), backgroundColor: Object.keys(data.totalBySite).map((_, i) => topicColors[i % topicColors.length]) }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Total Certificates by Site (Click for details)' } }, scales: { y: { beginAtZero: true } } }
-    }), []);
-
+    
     const siteDrillDownConfig = useCallback((site) => {
-        const siteData = dashboardData.trainingBySiteBreakdown[site] || {};
-        return {
-            type: 'bar',
-            data: { labels: Object.keys(siteData), datasets: [{ label: 'Certificates', data: Object.values(siteData), backgroundColor: Object.keys(siteData).map((_, i) => topicColors[i % topicColors.length]) }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: `Topic Breakdown for ${site}` } }, scales: { y: { beginAtZero: true } } }
-        };
+        return dashboardData.trainingBySiteBreakdown[site] || {};
     }, [dashboardData.trainingBySiteBreakdown]);
 
     const handlePdfExport = () => {
@@ -130,10 +92,25 @@ const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboar
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-gray-50 p-6 rounded-xl shadow-md flex flex-col" style={{height: '400px'}}>
-                    {noStatusData ? <NoDataComponent /> : <div className="relative flex-grow"><ChartComponent chartRef={statusChartRef} config={statusChartConfig} /></div>}
+                    {noStatusData ? <NoDataComponent /> : 
+                        <DoughnutChart 
+                            data={Object.values(dashboardData.statusBreakdown)}
+                            labels={Object.keys(dashboardData.statusBreakdown)}
+                            title="Training Status Breakdown"
+                            useStatusColors={true}
+                        />
+                    }
                 </div>
                 <div className="bg-gray-50 p-6 rounded-xl shadow-md flex flex-col" style={{height: '400px'}}>
-                    {noProvinceData ? <NoDataComponent /> : <div className="relative flex-grow"><ChartComponent chartRef={provinceChartRef} config={provinceChartConfig} /></div>}
+                    {noProvinceData ? <NoDataComponent /> : 
+                        <BarChart 
+                            data={Object.values(dashboardData.provinceBreakdown)}
+                            labels={Object.keys(dashboardData.provinceBreakdown)}
+                            title="Training by Province"
+                            label="Certificates"
+                            sectionId="default"
+                        />
+                    }
                 </div>
                 <div className="lg:col-span-2">
                     {noSiteData ? (
@@ -141,7 +118,7 @@ const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboar
                             <NoDataComponent />
                         </div>
                     ) : (
-                        <DrillDownChart chartRef={siteChartRef} data={dashboardData} initialConfig={siteInitialConfig} drillDownConfigFn={siteDrillDownConfig} />
+                        <DrillDownChart data={dashboardData} drillDownConfigFn={siteDrillDownConfig} />
                     )}
                 </div>
                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:col-span-2">
@@ -154,3 +131,4 @@ const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboar
 };
 
 export default DashboardPage;
+
