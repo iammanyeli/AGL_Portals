@@ -138,25 +138,31 @@ export default function App() {
         return hydrateLinks(homeLink ? [homeLink] : []);
     }
   };
-
+  
   const activePortal = useMemo(() => sections.find(s => s.id === page), [page, sections]);
 
-  // Determine the title for the current view inside a portal
-  const viewTitle = useMemo(() => {
-    if (!activePortal) return '';
-    const navLink = getNavLinks().find(link => link.id === portalSubPage);
-    return navLink ? navLink.tooltip.toUpperCase() : '';
+  // Determine the title and icon for the current view inside a portal
+  const { viewTitle, viewIcon } = useMemo(() => {
+    if (!activePortal) return { viewTitle: '', viewIcon: null };
+    
+    const navLinks = getNavLinks();
+    const navLink = navLinks.find(link => link.id === portalSubPage);
+    
+    return {
+      viewTitle: navLink ? navLink.tooltip.toUpperCase() : '',
+      viewIcon: navLink ? navLink.Icon : null
+    };
   }, [portalSubPage, activePortal]);
 
 
   const renderPage = () => {
     if (activePortal) {
-      const commonProps = { section: activePortal, setPage, portalSubPage, viewTitle };
+      const commonProps = { section: activePortal, setPage, portalSubPage, viewTitle, viewIcon };
       switch (page) {
         case 'portal-training': return <TrainingPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
-        case 'portal-defects': return <DefectsPortal {...commonProps} />;
-        case 'portal-maintenance': return <MaintenancePortal {...commonProps} />;
-        case 'portal-inspections': return <InspectionsPortal {...commonProps} />;
+        case 'portal-defects': return <DefectsPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
+        case 'portal-maintenance': return <MaintenancePortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
+        case 'portal-inspections': return <InspectionsPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
         default: break;
       }
     }
@@ -180,7 +186,7 @@ export default function App() {
 
   return (
     <div className={`transition-colors duration-500 bg-[var(--color-bg)] min-h-screen font-sans text-[var(--color-text-primary)]`}>
-      <AppBar user={user} portalTitle={activePortal ? activePortal.title : 'SAFETY HUB'} />
+      <AppBar user={user} portalTitle={activePortal ? activePortal.title : 'Safety Hub'} />
       <main className="pt-24 pb-24">
         <AnimatePresence mode="wait">
           {renderPage()}

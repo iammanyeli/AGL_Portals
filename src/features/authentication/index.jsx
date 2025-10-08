@@ -17,7 +17,7 @@ const AuthPage = () => {
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--color-brand-gradient-from)] to-[var(--color-brand-gradient-to)] opacity-50 z-0"></div>
           <div className="relative z-10">
             <img src="/agl_white_logo.svg" alt="AGL Logo" className="max-w-xs w-full mx-auto mb-4" />
-            <h1 className="text-3xl font-bold tracking-wider mb-3 text-[var(--color-accent)]">SAFETY HUB</h1>
+            <h1 className="text-3xl font-bold tracking-wider mb-3 text-[var(--color-accent)]">Safety Hub</h1>
           </div>
         </div>
         <div className="w-full lg:w-7/12 p-8 lg:p-16 flex items-center justify-center">

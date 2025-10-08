@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PortalLayout from '../../../components/layout/PortalLayout.jsx';
 import TrainingPortalApp from './TrainingPortalApp.jsx';
 
-/**
- * Top-level page component for the Training Portal.
- * It uses the shared PortalLayout and renders the complete TrainingPortalApp,
- * which internally handles all its own views and logic.
- */
-const TrainingPortal = ({ section, setPage, portalSubPage, setPortalSubPage }) => {
+const TrainingPortal = ({ section, setPage, portalSubPage, setPortalSubPage, viewIcon }) => {
+    const [viewTitle, setViewTitle] = useState('');
+
     return (
         <PortalLayout
             section={section}
             setPage={setPage}
             portalSubPage={portalSubPage}
+            viewTitle={viewTitle}
+            viewIcon={viewIcon}
         >
             <TrainingPortalApp
                 portalSubPage={portalSubPage}
                 setPortalSubPage={setPortalSubPage}
+                setViewTitle={setViewTitle}
             />
         </PortalLayout>
     );

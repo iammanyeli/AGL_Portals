@@ -110,7 +110,7 @@ const SettingsPage = ({
 
     return (
         <div>
-            <h2 className="text-3xl font-bold text-[var(--color-header)] mb-6">Application Settings</h2>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <SettingsMenuItem title="Expiry Reminder" description="Set how many days before expiry a certificate is marked as 'expiring soon'." icon="⏱️" onClick={() => setSettingsView('expiry')} />
                 <SettingsMenuItem title="Manage Provinces" description="Add, edit, or remove provinces available for sites." icon="🌍" onClick={() => setSettingsView('provinces')} />

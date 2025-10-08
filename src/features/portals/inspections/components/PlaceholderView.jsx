@@ -2,13 +2,11 @@ import React from 'react';
 
 /**
  * A generic placeholder component for the Inspections feature.
- * @param {object} props - The component props.
- * @param {string} props.pageTitle - The title of the specific page being displayed.
  */
-const PlaceholderView = ({ pageTitle }) => (
+const PlaceholderView = () => (
     <div className="py-12 text-center">
-        <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Inspections - {pageTitle}</h2>
-        <p className="mt-2 text-[var(--color-text-secondary)]">Page content for {pageTitle.toLowerCase()} will be displayed here.</p>
+        <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Coming Soon</h2>
+        <p className="mt-2 text-[var(--color-text-secondary)]">This section is under construction.</p>
     </div>
 );
 

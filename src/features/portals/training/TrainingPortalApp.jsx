@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import useTrainingApi from './api/useTrainingApi.js';
+import { trainingPortalNavLinks } from './routes.js';
 
 // Import all views and components from the training feature
 import DashboardPage from './views/dashboard/DashboardView.jsx';
@@ -12,7 +13,7 @@ import ActivityDetailsPage from './views/activity/ActivityDetailsView.jsx';
 import CRUDModal from './components/modals/CRUDModal.jsx';
 import DeleteModal from './components/modals/DeleteModal.jsx';
 
-const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
+const TrainingPortalApp = ({ portalSubPage, setPortalSubPage, setViewTitle }) => {
     // --- Custom hook for all data logic and API interaction ---
     const {
         records, provinces, sites, certificateTypes, expiryThreshold,
@@ -32,13 +33,40 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
     const [deletingRecordId, setDeletingRecordId] = useState(null);
     const [viewingEmployee, setViewingEmployee] = useState(null);
 
+    // NEW LOGIC TO CONTROL THE HEADER TITLE
+    useEffect(() => {
+        if (viewingEmployee) {
+            const employee = processedRecords.find(r => r.employee.employeeNumber === viewingEmployee.employeeNumber)?.employee;
+            if (employee) {
+                setViewTitle(`Records of ${employee.firstName} ${employee.surname}`);
+            }
+        } else if (portalSubPage === 'training-settings') {
+            const titleMap = {
+                main: 'Application Settings',
+                expiry: 'Expiry Reminder Threshold',
+                provinces: 'Manage Provinces',
+                certs: 'Manage Certificate Types',
+                sites: 'Manage Sites',
+            };
+            setViewTitle(titleMap[settingsView] || 'Application Settings');
+        } else {
+            const titleMap = {
+                'training-dashboard': 'Dashboard Overview',
+                'training-records': 'Training Records',
+                'training-import': 'Import & Export Records',
+                'training-activity': 'Activity & Expiry Details',
+            };
+            const navLink = trainingPortalNavLinks.find(link => link.id === portalSubPage);
+            setViewTitle(titleMap[portalSubPage] || (navLink ? navLink.tooltip : ''));
+        }
+    }, [portalSubPage, viewingEmployee, settingsView, processedRecords, setViewTitle]);
+
+
     // --- UI Handlers ---
     const handleSort = (key) => setSortConfig(prev => ({ key, direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc' }));
     
     const showDetailedView = (record) => {
-         
         setViewingEmployee({ employeeNumber: record.employee.employeeNumber, initialRecordId: record.id });
-        setPortalSubPage('training-records');
     };
     
     const hideDetailedView = () => {
@@ -171,7 +199,7 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
             
             case 'training-records': 
                 if (viewingEmployee) {
-                    return <DetailedViewPage {...viewingEmployee} processedRecords={processedRecords} setCurrentPage={hideDetailedView} setModalState={setModalState} setDeletingRecordId={setDeletingRecordId} expiryThreshold={expiryThreshold} />;
+                    return <DetailedViewPage {...viewingEmployee} processedRecords={processedRecords} onBack={hideDetailedView} setModalState={setModalState} setDeletingRecordId={setDeletingRecordId} expiryThreshold={expiryThreshold} />;
                 }
                 return <RecordsPage logActivity={logActivity} filters={filters} setFilters={setFilters} certificateTypes={certificateTypes} sites={sites} filteredAndSortedRecords={filteredAndSortedRecords} sortConfig={sortConfig} handleSort={handleSort} setModalState={setModalState} showDetailedView={showDetailedView} />;
             
@@ -181,7 +209,7 @@ const TrainingPortalApp = ({ portalSubPage, setPortalSubPage }) => {
                 return <SettingsPage settingsView={settingsView} setSettingsView={setSettingsView} expiryThreshold={expiryThreshold} setExpiryThreshold={handleSetExpiryThreshold} provinces={provinces} certificateTypes={certificateTypes} sites={sites} {...settingsHandlers} />;
             
             case 'training-activity': 
-                return <ActivityDetailsPage setCurrentPage={setPortalSubPage} expiringCerts={expiringCertsForDashboard} activities={activities} initialTab={activityTab} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
+                return <ActivityDetailsPage onBack={() => setPortalSubPage('training-dashboard')} expiringCerts={expiringCertsForDashboard} activities={activities} initialTab={activityTab} showDetailedView={showDetailedView} processedRecords={processedRecords} />;
 
             default: 
                 return <DashboardPage logActivity={logActivity} dashboardData={dashboardData} sites={sites} selectedSiteDashboard={selectedSiteDashboard} setSelectedSiteDashboard={setSelectedSiteDashboard} activities={activities} expiringCerts={expiringCertsForDashboard.slice(0,5)} activeFilter={activeDashboardFilter} setActiveFilter={setActiveDashboardFilter} resetFilters={resetDashboardFilters} showActivityPage={showActivityPage} showDetailedView={showDetailedView} processedRecords={processedRecords} />;

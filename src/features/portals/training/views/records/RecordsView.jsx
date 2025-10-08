@@ -62,9 +62,9 @@ const RecordsPage = ({ logActivity, filters, setFilters, certificateTypes, sites
     };
 
     return (
-        <div className="bg-[var(--color-surface)] p-6 sm:p-8 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)]">
+        <div className="w-full">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 no-print">
-                <h2 className="text-3xl font-bold text-[var(--color-header)]">Training Records</h2>
+                <div></div>
                 <div className="flex items-center gap-4">
                     <button onClick={() => setShowFilters(f => !f)} className="flex items-center gap-2 px-4 py-2 text-[var(--color-text-primary)] bg-[var(--color-surface-alt)] border border-[var(--color-border)] rounded-lg hover:bg-opacity-80 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>

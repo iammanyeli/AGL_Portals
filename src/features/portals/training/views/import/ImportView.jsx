@@ -437,7 +437,7 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
 
     return (
         <div>
-            <h2 className="text-3xl font-bold text-[var(--color-header)] mb-6">Import & Export Records</h2>
+            
             {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert"><p>{error}</p></div>}
             {step < 4 && (
                 <ol className="flex items-center w-full text-sm font-medium text-center text-[var(--color-text-secondary)] mb-8 no-print">

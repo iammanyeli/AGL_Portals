@@ -29,7 +29,7 @@ const DashboardPage = ({ logActivity, dashboardData, sites, selectedSiteDashboar
     return (
         <div>
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-                <h2 className="text-3xl font-bold text-[var(--color-header)]">Dashboard Overview</h2>
+                <div></div>
                 <div className="flex items-center gap-2 md:gap-4 no-print">
                      {isFilterActive && (
                         <button onClick={resetFilters} className="flex items-center gap-2 px-4 py-2 text-[var(--color-button-subtle-destructive-text)] bg-[var(--color-button-subtle-destructive-bg)] border border-[var(--color-button-subtle-destructive-border)] rounded-lg hover:bg-[var(--color-button-subtle-destructive-hover-bg)] transition">

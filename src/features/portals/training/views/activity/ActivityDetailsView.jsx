@@ -9,10 +9,6 @@ const Header = ({ title, onBack }) => (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
                 Back to Dashboard
             </button>
-            <h1 className="text-3xl font-bold text-[var(--color-header)]">{title}</h1>
-        </div>
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-surface)] shadow-[var(--shadow-card)] no-print">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-text-secondary)]"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
         </div>
     </div>
 );
