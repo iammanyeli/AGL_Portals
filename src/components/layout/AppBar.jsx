@@ -1,7 +1,7 @@
 import React from 'react';
 import useTheme from '../../hooks/useTheme';
 
-const AppBar = ({ user }) => {
+const AppBar = ({ user, portalTitle }) => {
   const { theme } = useTheme();
   
   return (
@@ -13,7 +13,9 @@ const AppBar = ({ user }) => {
             alt="AGL Logo" 
             className="h-8 w-auto"
           />
-          <span className="text-xl font-bold text-[var(--color-text-primary)] tracking-wider">PORTAL SYSTEM</span>
+          <span className="text-xl font-bold text-[var(--color-text-primary)] tracking-wider">
+            {portalTitle ? portalTitle.toUpperCase() : 'PORTAL SYSTEM'}
+          </span>
         </div>
         <div className="flex items-center space-x-4">
           <span className="text-[var(--color-text-secondary)] font-medium hidden sm:block">{user?.fullName || 'User'}</span>

@@ -36,11 +36,11 @@ import useTrainingApi, { adaptDashboardDataForHub } from './features/portals/tra
 
 // --- Mock Data ---
 const defectsBar = [
-  { name: "Mon", bugs: 12 },
-  { name: "Tue", bugs: 8 },
-  { name: "Wed", bugs: 16 },
-  { name: "Thu", bugs: 10 },
-  { name: "Fri", bugs: 5 },
+  { name: "Mon", value: 12 },
+  { name: "Tue", value: 8 },
+  { name: "Wed", value: 16 },
+  { name: "Thu", value: 10 },
+  { name: "Fri", value: 5 },
 ];
 const defectsPie = [
   { name: "Open", value: 58 },
@@ -139,11 +139,19 @@ export default function App() {
     }
   };
 
-  const renderPage = () => {
-    const portalData = sections.find(s => s.id === page);
+  const activePortal = useMemo(() => sections.find(s => s.id === page), [page, sections]);
 
-    if (portalData) {
-      const commonProps = { section: portalData, setPage, portalSubPage };
+  // Determine the title for the current view inside a portal
+  const viewTitle = useMemo(() => {
+    if (!activePortal) return '';
+    const navLink = getNavLinks().find(link => link.id === portalSubPage);
+    return navLink ? navLink.tooltip.toUpperCase() : '';
+  }, [portalSubPage, activePortal]);
+
+
+  const renderPage = () => {
+    if (activePortal) {
+      const commonProps = { section: activePortal, setPage, portalSubPage, viewTitle };
       switch (page) {
         case 'portal-training': return <TrainingPortal {...commonProps} setPortalSubPage={setPortalSubPage} />;
         case 'portal-defects': return <DefectsPortal {...commonProps} />;
@@ -172,7 +180,7 @@ export default function App() {
 
   return (
     <div className={`transition-colors duration-500 bg-[var(--color-bg)] min-h-screen font-sans text-[var(--color-text-primary)]`}>
-      <AppBar user={user} />
+      <AppBar user={user} portalTitle={activePortal ? activePortal.title : 'SAFETY HUB'} />
       <main className="pt-24 pb-24">
         <AnimatePresence mode="wait">
           {renderPage()}
