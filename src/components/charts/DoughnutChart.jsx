@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
 import useChartConfig from '../../lib/hooks/useChartConfig';
-import { DATASET_COLORS, STATUS_COLORS } from '../../lib/constants/chart_colours';
 
 const DoughnutChart = ({ data, labels, title, sectionId, useStatusColors = false }) => {
     const chartRef = useRef(null);
@@ -20,12 +19,23 @@ const DoughnutChart = ({ data, labels, title, sectionId, useStatusColors = false
             chartInstanceRef.current.destroy();
         }
         
+        const styles = getComputedStyle(document.documentElement);
         let backgroundColors;
 
         if (useStatusColors) {
-            backgroundColors = labels.map(label => STATUS_COLORS[label] || '#cccccc');
+            const statusColorMap = {
+                'Valid': styles.getPropertyValue('--color-success').trim(),
+                'Expiring Soon': styles.getPropertyValue('--color-warning').trim(),
+                'Expired': styles.getPropertyValue('--color-danger').trim()
+            };
+            backgroundColors = labels.map(label => statusColorMap[label] || '#cccccc');
         } else {
-            backgroundColors = DATASET_COLORS[sectionId] || DATASET_COLORS.default;
+            backgroundColors = [
+                styles.getPropertyValue('--color-info').trim(),
+                styles.getPropertyValue('--color-success').trim(),
+                styles.getPropertyValue('--color-warning').trim(),
+                styles.getPropertyValue('--color-danger').trim(),
+            ];
         }
 
         const config = {

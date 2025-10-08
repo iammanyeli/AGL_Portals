@@ -53,7 +53,7 @@ const FloatingNav = ({ currentPage, portalSubPage, navLinks }) => {
             // Dynamically set the top position for the peel animation
             style={{ top: !isExpanded ? '50%' : `${8 + index * 56}px` }}
           >
-            <Icon className="nav-icon text-[#1B365F] dark:text-slate-300" />
+            <Icon className="nav-icon" />
             <span className="tooltip">{tooltip}</span>
           </button>
         ))}

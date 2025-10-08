@@ -55,15 +55,15 @@ const GridSectionCard = ({ section, goToPortal }) => {
     };
 
     return (
-        <Card className="w-full rounded-2xl overflow-hidden shadow-xl h-[560px] flex flex-col">
-            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-6 bg-white dark:bg-[#1B365F] border-b">
+        <Card className="w-full rounded-2xl overflow-hidden h-[560px] flex flex-col">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-6 bg-[var(--color-surface-alt)]">
                 <div className="flex items-center gap-4">
                     <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
                         <section.Icon className="h-7 w-7" />
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold tracking-tight">{section.title}</CardTitle>
-                        <div className="text-base text-slate-500 dark:text-slate-400 font-medium">{views[viewIndex].name}</div>
+                        <div className="text-base text-[var(--color-text-secondary)] font-medium">{views[viewIndex].name}</div>
                     </div>
                 </div>
                 <Button className="shrink-0 w-full sm:w-auto" onClick={() => goToPortal(section.id)}>
@@ -83,18 +83,18 @@ const GridSectionCard = ({ section, goToPortal }) => {
                                 else if (offset.x > 50) { paginate(-1); }
                             }}
                         >
-                            {viewIndex === 0 && (<div className="grid grid-cols-2 gap-4 h-full">{section.metrics.map((m, idx) => (<div key={idx} className="rounded-xl p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm flex flex-col justify-center"><div className="text-sm text-slate-500 dark:text-slate-400">{m.label}</div><div className="mt-1 text-3xl font-semibold text-[#1B365F] dark:text-slate-100">{m.value}</div></div>))}</div>)}
-                            {viewIndex === 1 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col"><ChartRenderer chart={section.charts[0]} sectionId={section.id} /></div>)}
-                            {viewIndex === 2 && (<div className="w-full h-full bg-slate-50 dark:bg-black/20 rounded-xl shadow-inner border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center"><ChartRenderer chart={section.charts[1]} sectionId={section.id} /></div>)}
-                            {viewIndex === 3 && (<div className="space-y-4 h-full overflow-y-auto pr-2">{section.updates.map((update, index) => (<div key={index} className="flex items-start gap-3"><img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-white shadow-sm" /><div><p className="text-sm text-slate-800 dark:text-slate-200 leading-snug"><span className="font-semibold">{update.user}</span> {update.action}</p><p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{update.time}</p></div></div>))}</div>)}
+                            {viewIndex === 0 && (<div className="grid grid-cols-2 gap-4 h-full">{section.metrics.map((m, idx) => (<div key={idx} className="rounded-xl p-4 bg-[var(--color-surface-contrast)] border border-[var(--color-border)] shadow-sm flex flex-col justify-center"><div className="text-sm text-[var(--color-text-secondary)]">{m.label}</div><div className="mt-1 text-3xl font-semibold text-[var(--color-text-primary)]">{m.value}</div></div>))}</div>)}
+                            {viewIndex === 1 && (<div className="w-full h-full bg-[var(--color-surface-contrast)] rounded-xl shadow-inner border border-[var(--color-border)] flex flex-col"><ChartRenderer chart={section.charts[0]} sectionId={section.id} /></div>)}
+                            {viewIndex === 2 && (<div className="w-full h-full bg-[var(--color-surface-contrast)] rounded-xl shadow-inner border border-[var(--color-border)] flex flex-col items-center justify-center"><ChartRenderer chart={section.charts[1]} sectionId={section.id} /></div>)}
+                            {viewIndex === 3 && (<div className="space-y-4 h-full overflow-y-auto pr-2">{section.updates.map((update, index) => (<div key={index} className="flex items-start gap-3"><img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-[var(--color-surface-alt)] shadow-sm" /><div><p className="text-sm text-[var(--color-text-primary)] leading-snug"><span className="font-semibold">{update.user}</span> {update.action}</p><p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{update.time}</p></div></div>))}</div>)}
                         </motion.div>
                     </AnimatePresence>
                 </div>
-                <div className="flex justify-center items-center py-3 px-4 border-t border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 space-x-2">
+                <div className="flex justify-center items-center py-3 px-4 border-t border-[var(--color-divider)] bg-[var(--color-surface)] bg-opacity-50 space-x-2">
                     {views.map((_, index) => (
                         <button key={index}
                             onClick={() => { if (index === viewIndex) return; setView([index, index > viewIndex ? 1 : -1]); }}
-                            className={`h-2 rounded-full transition-all ${viewIndex === index ? 'w-6 bg-[#EED58E]' : 'w-2 bg-slate-300 dark:bg-white/20 hover:bg-slate-400 dark:hover:bg-white/30'}`}
+                            className={`h-2 rounded-full transition-all ${viewIndex === index ? 'w-6 bg-[var(--color-accent)]' : 'w-2 bg-[var(--color-border)] hover:opacity-80'}`}
                         ></button>
                     ))}
                 </div>

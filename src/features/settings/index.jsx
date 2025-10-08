@@ -30,7 +30,7 @@ export default function SettingsPage({ defaultView, setDefaultView, setPage, han
     return (
          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
             <Card className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl">
-                <CardHeader className="flex items-center justify-between gap-4 bg-white dark:bg-white/5">
+                <CardHeader className="flex items-center justify-between gap-4 bg-[var(--color-card-header)]">
                     <div className="flex items-center gap-4">
                         <div className={`rounded-xl p-3 bg-gradient-to-br from-slate-500 to-gray-500 text-white shadow-md`}>
                            <Settings className="h-7 w-7" />
@@ -42,33 +42,33 @@ export default function SettingsPage({ defaultView, setDefaultView, setPage, han
                          Home
                      </Button>
                 </CardHeader>
-                <CardContent className="divide-y divide-slate-200 dark:divide-white/10 p-0">
+                <CardContent className="divide-y divide-[var(--color-divider)] p-0">
                     <div className="p-6 flex items-center justify-between">
                         <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Theme</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Switch between light and dark mode.</p>
+                            <h4 className="font-semibold text-[var(--color-text-primary)]">Theme</h4>
+                            <p className="text-sm text-[var(--color-text-secondary)]">Switch between light and dark mode.</p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Sun className={`w-6 h-6 ${theme === 'light' ? 'text-[#EED58E]' : 'text-slate-400'}`} />
+                            <Sun className={`w-6 h-6 ${theme === 'light' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}`} />
                             <Switch checked={theme === 'dark'} onChange={toggleTheme} />
-                            <Moon className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-300' : 'text-slate-400'}`} />
+                            <Moon className={`w-6 h-6 ${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}`} />
                         </div>
                     </div>
                     <div className="p-6 flex items-center justify-between">
                         <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Default View</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Choose the default layout for the dashboard.</p>
+                            <h4 className="font-semibold text-[var(--color-text-primary)]">Default View</h4>
+                            <p className="text-sm text-[var(--color-text-secondary)]">Choose the default layout for the dashboard.</p>
                         </div>
                          <div className="flex items-center gap-2">
-                            <List className={`w-6 h-6 ${defaultView === 'list' ? 'text-[#1B365F] dark:text-[#EED58E]' : 'text-slate-400'}`} />
+                            <List className={`w-6 h-6 ${defaultView === 'list' ? 'text-[var(--color-icon-toggle-active)]' : 'text-[var(--color-text-secondary)]'}`} />
                             <Switch checked={defaultView === 'grid'} onChange={(isGrid) => setDefaultView(isGrid ? 'grid' : 'list')} />
-                            <LayoutGrid className={`w-6 h-6 ${defaultView === 'grid' ? 'text-[#1B365F] dark:text-[#EED58E]' : 'text-slate-400'}`} />
+                            <LayoutGrid className={`w-6 h-6 ${defaultView === 'grid' ? 'text-[var(--color-icon-toggle-active)]' : 'text-[var(--color-text-secondary)]'}`} />
                         </div>
                     </div>
                     <div className="p-6 flex items-center justify-between">
                          <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Profile</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Manage your personal information.</p>
+                            <h4 className="font-semibold text-[var(--color-text-primary)]">Profile</h4>
+                            <p className="text-sm text-[var(--color-text-secondary)]">Manage your personal information.</p>
                         </div>
                         <Button className="flex items-center gap-2">
                             <User className="w-5 h-5"/>
@@ -77,10 +77,10 @@ export default function SettingsPage({ defaultView, setDefaultView, setPage, han
                     </div>
                     <div className="p-6 flex items-center justify-between">
                          <div>
-                            <h4 className="font-semibold text-[#1B365F] dark:text-slate-200">Account</h4>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Sign out of your current session.</p>
+                            <h4 className="font-semibold text-[var(--color-text-primary)]">Account</h4>
+                            <p className="text-sm text-[var(--color-text-secondary)]">Sign out of your current session.</p>
                         </div>
-                        <Button onClick={handleLogout} className="flex items-center gap-2 !bg-red-500/10 hover:!bg-red-500/20 !text-red-500 dark:!bg-red-500/10 dark:hover:!bg-red-500/20 dark:!text-red-400">
+                        <Button onClick={handleLogout} className="flex items-center gap-2 !bg-[var(--color-button-destructive-bg)] hover:!bg-[var(--color-button-destructive-hover-bg)] !text-[var(--color-button-destructive-text)]">
                             <LogOut className="w-5 h-5"/>
                             Logout
                         </Button>

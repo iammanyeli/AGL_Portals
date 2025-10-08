@@ -20,7 +20,7 @@ const PortalLayout = ({ section, setPage, portalSubPage, children }) => {
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
              <Card className="w-full rounded-2xl overflow-hidden shadow-xl">
-                 <CardHeader className="flex items-center justify-between gap-4 bg-white dark:bg-white/5">
+                 <CardHeader className="flex items-center justify-between gap-4 bg-[var(--color-card-header)]">
                      <div className="flex items-center gap-4">
                          <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
                            <section.Icon className="h-7 w-7" />

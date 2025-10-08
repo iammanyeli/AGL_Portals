@@ -7,8 +7,8 @@ const Switch = ({ checked, onChange }) => (
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={`${
-        checked ? 'bg-[#EED58E]' : 'bg-slate-300 dark:bg-white/20'
-      } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#EED58E] focus:ring-offset-2`}
+        checked ? 'bg-[var(--color-accent)]' : 'bg-slate-300 dark:bg-white/20'
+      } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2`}
     >
       <span
         aria-hidden="true"

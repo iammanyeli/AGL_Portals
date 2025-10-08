@@ -1,18 +1,33 @@
 /**
  * @file A custom hook to provide shared configuration for Chart.js instances.
- * This centralizes options like responsiveness, aspect ratio, plugins, and styling.
+ * This centralizes options like responsiveness, aspect ratio, plugins, and styling,
+ * dynamically sourcing colors from CSS variables to support theming.
  */
-import {
-    AXIS_LINE,
-    GRID_LINE,
-    LABEL_TEXT,
-    TOOLTIP_BG,
-    TOOLTIP_BORDER,
-    TOOLTIP_TEXT
-} from '../constants/chart_colours';
+import { useMemo } from 'react';
+import useTheme from '../../hooks/useTheme';
 
 const useChartConfig = (options = {}) => {
-    const baseConfig = {
+    // Rerun this calculation when the theme changes to ensure colors are updated
+    const { theme } = useTheme();
+
+    const chartColors = useMemo(() => {
+        // Guard against running in non-browser environments (e.g., SSR)
+        if (typeof window === 'undefined') {
+            return {};
+        }
+        const styles = getComputedStyle(document.documentElement);
+        return {
+            axisLine: styles.getPropertyValue('--chart-axis-line').trim(),
+            gridLine: styles.getPropertyValue('--chart-grid-line').trim(),
+            labelText: styles.getPropertyValue('--chart-label-text').trim(),
+            tooltipBg: styles.getPropertyValue('--chart-tooltip-bg').trim(),
+            tooltipText: styles.getPropertyValue('--chart-tooltip-text').trim(),
+            tooltipBorder: styles.getPropertyValue('--chart-tooltip-border').trim(),
+        };
+    }, [theme]); // Dependency on theme ensures this recalculates on light/dark mode switch
+
+    // useMemo prevents re-calculating the entire config on every render
+    const baseConfig = useMemo(() => ({
         maintainAspectRatio: false,
         responsive: true,
         layout: {
@@ -25,20 +40,20 @@ const useChartConfig = (options = {}) => {
         },
         plugins: {
             legend: {
-                display: false, // Default to false, can be overridden
+                display: false,
                 position: 'bottom',
                 labels: {
-                    color: LABEL_TEXT,
+                    color: chartColors.labelText,
                     boxWidth: 12,
                     padding: 20,
                 },
             },
             tooltip: {
                 enabled: true,
-                backgroundColor: TOOLTIP_BG,
-                titleColor: TOOLTIP_TEXT,
-                bodyColor: TOOLTIP_TEXT,
-                borderColor: TOOLTIP_BORDER,
+                backgroundColor: chartColors.tooltipBg,
+                titleColor: chartColors.tooltipText,
+                bodyColor: chartColors.tooltipText,
+                borderColor: chartColors.tooltipBorder,
                 borderWidth: 1,
                 padding: 10,
                 bodyFont: {
@@ -46,9 +61,9 @@ const useChartConfig = (options = {}) => {
                 },
             },
             title: {
-              display: false, // Default to false
+              display: false,
               text: '',
-              color: LABEL_TEXT,
+              color: chartColors.labelText,
               font: {
                 size: 16,
                 weight: '600'
@@ -65,19 +80,19 @@ const useChartConfig = (options = {}) => {
                     drawBorder: false,
                 },
                 ticks: {
-                    color: LABEL_TEXT,
+                    color: chartColors.labelText,
                 },
                 border: {
-                  color: AXIS_LINE
+                  color: chartColors.axisLine
                 }
             },
             y: {
                 grid: {
-                    color: GRID_LINE,
+                    color: chartColors.gridLine,
                     drawBorder: false,
                 },
                 ticks: {
-                    color: LABEL_TEXT,
+                    color: chartColors.labelText,
                 },
                  border: {
                   display: false
@@ -85,7 +100,7 @@ const useChartConfig = (options = {}) => {
             },
         },
         ...options,
-    };
+    }), [chartColors, options]);
 
     return baseConfig;
 };

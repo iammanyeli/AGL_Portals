@@ -1,25 +1,35 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import BarChart from '/src/components/charts/BarChart.jsx';
 
 const DrillDownChart = ({ data, drillDownConfigFn }) => {
     const [drillDownKey, setDrillDownKey] = useState(null);
 
+    // This callback is now passed down from the parent `DashboardView`
+    // to keep this component purely presentational.
+    const drillDown = useCallback((site) => {
+        if (data && data.trainingBySiteBreakdown) {
+            return data.trainingBySiteBreakdown[site] || {};
+        }
+        return {};
+    }, [data]);
+    
     const handleChartClick = (key) => {
         if (!drillDownKey) {
             setDrillDownKey(key);
         }
     }
     
-    const { labels, dataset, title } = useMemo(() => {
+    const { labels, dataset, title, subtitle } = useMemo(() => {
         if (drillDownKey) {
-            const drillDownData = drillDownConfigFn(drillDownKey);
+            const drillDownData = drillDown(drillDownKey);
             return {
                 labels: Object.keys(drillDownData),
                 dataset: {
                     label: 'Certificates',
                     data: Object.values(drillDownData)
                 },
-                title: `Topic Breakdown for ${drillDownKey}`
+                title: `Topic Breakdown for ${drillDownKey}`,
+                subtitle: null,
             };
         }
         return {
@@ -28,25 +38,27 @@ const DrillDownChart = ({ data, drillDownConfigFn }) => {
                 label: 'Total Certificates',
                 data: Object.values(data.totalBySite),
             },
-            title: 'Total Certificates by Site (Click for details)',
+            title: 'Total Certificates by Site',
+            subtitle: '(Click a bar for details)',
         };
-    }, [drillDownKey, data, drillDownConfigFn]);
+    }, [drillDownKey, data, drillDown]);
 
     return (
-        <div className="bg-gray-50 p-6 rounded-xl shadow-md flex flex-col" style={{height: '400px'}}>
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+        <div className="bg-[var(--color-surface-subtle)] p-6 rounded-2xl shadow-md flex flex-col h-[400px]">
+            <div className="relative flex justify-center items-center mb-4">
+                <div className="text-center">
+                    <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">{title}</h3>
+                    {subtitle && <p className="text-sm italic text-[var(--color-text-secondary)]">{subtitle}</p>}
+                </div>
                 {drillDownKey && (
-                    <button onClick={() => setDrillDownKey(null)} className="no-print px-4 py-1 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">&larr; Back to Overview</button>
+                    <button onClick={() => setDrillDownKey(null)} className="absolute right-0 no-print px-4 py-2 text-sm font-semibold rounded-lg transition-colors text-[var(--color-info)] bg-[var(--color-icon-container-info-bg)] hover:opacity-80">&larr; Back to Overview</button>
                 )}
             </div>
             <div className="relative flex-grow">
                 <BarChart 
                     labels={labels}
                     data={dataset.data}
-                    title="" // Title is handled outside
                     label={dataset.label}
-                    sectionId="portal-training"
                     onClick={!drillDownKey ? handleChartClick : undefined}
                 />
             </div>
@@ -55,4 +67,3 @@ const DrillDownChart = ({ data, drillDownConfigFn }) => {
 }
 
 export default DrillDownChart;
-

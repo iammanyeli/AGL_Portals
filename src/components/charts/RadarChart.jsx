@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
 import useChartConfig from '../../lib/hooks/useChartConfig';
-import { DATASET_COLORS, PRIMARY } from '../../lib/constants/chart_colours';
 
 const RadarChart = ({ data, labels, title, dataKey, label, sectionId }) => {
     const chartRef = useRef(null);
@@ -15,13 +14,13 @@ const RadarChart = ({ data, labels, title, dataKey, label, sectionId }) => {
         scales: {
             r: {
                 angleLines: {
-                    color: '#e2e8f0'
+                    color: 'var(--chart-grid-line)'
                 },
                 grid: {
-                    color: '#e2e8f0'
+                    color: 'var(--chart-grid-line)'
                 },
                 pointLabels: {
-                    color: '#64748b',
+                    color: 'var(--chart-label-text)',
                     font: {
                         size: 12
                     }
@@ -39,8 +38,8 @@ const RadarChart = ({ data, labels, title, dataKey, label, sectionId }) => {
             chartInstanceRef.current.destroy();
         }
         
-        const chartColors = DATASET_COLORS[sectionId] || DATASET_COLORS.default;
-        const mainColor = chartColors[0] || PRIMARY;
+        const styles = getComputedStyle(document.documentElement);
+        const mainColor = styles.getPropertyValue('--color-info').trim() || '#3b82f6';
 
         const config = {
             type: 'radar',

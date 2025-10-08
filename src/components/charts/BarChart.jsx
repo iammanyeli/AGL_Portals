@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
 import useChartConfig from '/src/lib/hooks/useChartConfig.js';
-import { DATASET_COLORS } from '/src/lib/constants/chart_colours.js';
 
 const BarChart = ({ data, labels, title, dataKey, label, sectionId, onClick }) => {
     const chartRef = useRef(null);
@@ -25,7 +24,13 @@ const BarChart = ({ data, labels, title, dataKey, label, sectionId, onClick }) =
             chartInstanceRef.current.destroy();
         }
         
-        const chartColors = DATASET_COLORS[sectionId] || DATASET_COLORS.default;
+        const styles = getComputedStyle(document.documentElement);
+        const chartColors = [
+            styles.getPropertyValue('--color-info').trim(),
+            styles.getPropertyValue('--color-success').trim(),
+            styles.getPropertyValue('--color-warning').trim(),
+            styles.getPropertyValue('--color-danger').trim(),
+        ];
 
         const config = {
             type: 'bar',

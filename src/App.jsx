@@ -31,7 +31,6 @@ import { maintenancePortalNavLinks } from './features/portals/maintenance/routes
 
 // --- Hooks ---
 import useAuth from './hooks/useAuth.js';
-import useTheme from './hooks/useTheme';
 import useTrainingApi, { adaptDashboardDataForHub } from './features/portals/training/api/useTrainingApi.js';
 
 
@@ -69,7 +68,6 @@ const inspectionsPie = [
 
 export default function App() {
   const { user, isAuthenticated, logout } = useAuth();
-  const { theme } = useTheme();
   const [page, setPage] = useState('hub-home');
   const [portalSubPage, setPortalSubPage] = useState('training-dashboard');
   const [defaultView, setDefaultView] = useState('grid');
@@ -166,14 +164,14 @@ export default function App() {
 
   if (!isAuthenticated) {
     return (
-      <div className="bg-slate-50 dark:bg-[#122442] transition-colors duration-500">
+      <div className="bg-[var(--color-bg)] transition-colors duration-500">
         <AuthPage />
       </div>
     );
   }
 
   return (
-    <div className={`transition-colors duration-500 bg-white dark:bg-[#1B365F] min-h-screen font-sans text-[#1B365F] dark:text-white`}>
+    <div className={`transition-colors duration-500 bg-[var(--color-bg)] min-h-screen font-sans text-[var(--color-text-primary)]`}>
       <AppBar user={user} />
       <main className="pt-24 pb-24">
         <AnimatePresence mode="wait">

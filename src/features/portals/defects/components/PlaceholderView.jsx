@@ -7,8 +7,8 @@ import React from 'react';
  */
 const PlaceholderView = ({ pageTitle }) => (
     <div className="py-12 text-center">
-        <h2 className="text-2xl font-bold text-[#1B365F] dark:text-slate-100">Defects - {pageTitle}</h2>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">Page content for {pageTitle.toLowerCase()} will be displayed here.</p>
+        <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Defects - {pageTitle}</h2>
+        <p className="mt-2 text-[var(--color-text-secondary)]">Page content for {pageTitle.toLowerCase()} will be displayed here.</p>
     </div>
 );
 
