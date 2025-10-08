@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
-import useChartConfig from '/src/lib/hooks/useChartConfig.js';
+import useChartConfig from '../../hooks/useChartConfig';
 
 const BarChart = ({ data, labels, title, dataKey, label, sectionId, onClick }) => {
     const chartRef = useRef(null);

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
-import useChartConfig from '../../lib/hooks/useChartConfig';
+import useChartConfig from '../../hooks/useChartConfig';
 
 const PieChart = ({ data, labels, title, sectionId, useStatusColors = false }) => {
     const chartRef = useRef(null);

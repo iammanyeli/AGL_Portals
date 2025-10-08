@@ -4,7 +4,7 @@
  * dynamically sourcing colors from CSS variables to support theming.
  */
 import { useMemo } from 'react';
-import useTheme from '../../hooks/useTheme';
+import useTheme from './useTheme';
 
 const useChartConfig = (options = {}) => {
     // Rerun this calculation when the theme changes to ensure colors are updated
