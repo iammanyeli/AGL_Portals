@@ -117,7 +117,7 @@ const CRUDModal = ({ onClose, onSave, onSaveEmployee, modalState, sites, certifi
                                 ) : (
                                     <div>
                                         <InputField label="Search Employee" name="employeeSearch" value={employeeSearch} onChange={(e) => setEmployeeSearch(e.target.value)} placeholder="Search by name or EMP#..." />
-                                        <div className="mt-2 border border-[var(--color-border)] rounded-lg max-h-48 overflow-y-auto bg-[var(--color-surface-alt)]">
+                                        <div className="mt-2 border border-[var(--color-border)] rounded-lg max-h-48 overflow-y-auto bg-[var(--color-surface-highlight)]">
                                             {filteredEmployees.map(emp => (
                                                 <div key={emp.employeeNumber} onClick={() => handleSelectEmployee(emp)} className="p-3 hover:bg-[var(--color-info)]/10 cursor-pointer border-b border-[var(--color-divider)]">
                                                     <p className="font-semibold text-[var(--color-text-primary)]">{emp.firstName} {emp.surname}</p>

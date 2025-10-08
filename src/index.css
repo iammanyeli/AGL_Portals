@@ -1,9 +1,6 @@
 /**
  * AGL Portals - Global Stylesheet & Theming Engine
  * ...
- * -- VARIABLE SEMANTICS --
- * (summary of additions)
- * - `--color-tab-container-bg`: Background for the container of a tab group (e.g., the Key Metrics/Activity switch).
  */
 
 @import "tailwindcss";
@@ -28,6 +25,7 @@
   --color-surface-subtle: #f8fafc;
   --color-surface-contrast: #f1f5f9; 
   --color-surface-hover: #e2e8f0; 
+  --color-surface-highlight: #e2e8f0; /* For modal list background */
   --color-input-bg: #f1f5f9; 
   --color-control-surface-bg: #e2e8f0;
   
@@ -42,6 +40,7 @@
   --color-accent: #EED58E;
   --color-accent-text: #1B365F;
   --color-ring: rgba(238, 213, 142, 0.8);
+  --color-highlight: #dbeafe;
 
   /* Buttons */
   --color-button-primary-bg: #1B365F;
@@ -63,7 +62,6 @@
   --color-button-subtle-destructive-text: #dc2626;
   --color-button-subtle-destructive-border: #fca5a5;
 
-
   /* Icon Containers */
   --color-icon-container-warning-bg: #ffedd5;
   --color-icon-container-warning-text: #f97316;
@@ -74,7 +72,12 @@
   --tab-active-bg: #ffffff;
   --tab-active-text: #1B365F;
   --color-icon-toggle-active: var(--color-text-primary);
-  --color-tab-container-bg: #f1f5f9; /* New */
+  --color-tab-container-bg: #f1f5f9;
+
+  /* Tables */
+  --color-table-header-bg: #f8fafc;
+  --color-table-row-hover-bg: #f1f5f9;
+  --color-table-row-active-bg: var(--color-highlight);
 
   /* Borders */
   --color-border: #e2e8f0;
@@ -91,11 +94,17 @@
   /* Shadows */
   --shadow-card: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
 
-  /* Status Colors */
+  /* Status & Badges */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-info: #3b82f6;
+  --color-badge-success-bg: #dcfce7;
+  --color-badge-success-text: #166534;
+  --color-badge-warning-bg: #fef3c7;
+  --color-badge-warning-text: #92400e;
+  --color-badge-danger-bg: #fee2e2;
+  --color-badge-danger-text: #991b1b;
 
   /* Chart Colors */
   --chart-axis-line: rgba(100, 116, 139, 0.6);
@@ -119,6 +128,7 @@
   --color-surface-subtle: rgba(255, 255, 255, 0.05);
   --color-surface-contrast: #324A6F;
   --color-surface-hover: rgba(255, 255, 255, 0.1);
+  --color-surface-highlight: var(--color-surface-contrast); /* New */
   --color-input-bg: rgba(255, 255, 255, 0.05); 
   --color-control-surface-bg: rgba(255, 255, 255, 0.05);
 
@@ -133,6 +143,7 @@
   --color-accent: #EED58E;
   --color-accent-text: #1B365F;
   --color-ring: #EED58E;
+  --color-highlight: rgba(59, 130, 246, 0.2);
 
   /* Buttons */
   --color-button-primary-bg: var(--color-accent);
@@ -164,7 +175,12 @@
   --tab-active-bg: var(--color-accent);
   --tab-active-text: var(--color-accent-text);
   --color-icon-toggle-active: var(--color-accent);
-  --color-tab-container-bg: var(--color-surface-contrast); /* New */
+  --color-tab-container-bg: var(--color-surface-contrast);
+
+  /* Tables */
+  --color-table-header-bg: rgba(255, 255, 255, 0.05);
+  --color-table-row-hover-bg: rgba(255, 255, 255, 0.1);
+  --color-table-row-active-bg: var(--color-highlight);
 
   /* Borders */
   --color-border: rgba(255, 255, 255, 0.1);
@@ -180,6 +196,18 @@
 
   /* Shadows */
   --shadow-card: 0 0 0 1px rgba(255,255,255,0.1), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Status & Badges */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+  --color-badge-success-bg: rgba(74, 222, 128, 0.2);
+  --color-badge-success-text: #86efac;
+  --color-badge-warning-bg: rgba(251, 191, 36, 0.2);
+  --color-badge-warning-text: #fcd34d;
+  --color-badge-danger-bg: rgba(248, 113, 113, 0.2);
+  --color-badge-danger-text: #fda4af;
 
   /* Chart Colors */
   --chart-axis-line: rgba(150, 166, 189, 0.6);
