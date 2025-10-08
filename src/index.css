@@ -25,9 +25,10 @@
   --color-surface-subtle: #f8fafc;
   --color-surface-contrast: #f1f5f9; 
   --color-surface-hover: #e2e8f0; 
-  --color-surface-highlight: #e2e8f0; /* For modal list background */
+  --color-surface-highlight: #e2e8f0;
   --color-input-bg: #f1f5f9; 
   --color-control-surface-bg: #e2e8f0;
+  --color-surface-destructive: #fee2e2; /* New */
   
   /* Text */
   --color-header: #1B365F;
@@ -73,6 +74,8 @@
   --tab-active-text: #1B365F;
   --color-icon-toggle-active: var(--color-text-primary);
   --color-tab-container-bg: #f1f5f9;
+  --color-tab-button-active-bg: var(--color-text-primary);
+  --color-tab-button-active-text: var(--color-text-inverted);
 
   /* Tables */
   --color-table-header-bg: #f8fafc;
@@ -82,6 +85,7 @@
   /* Borders */
   --color-border: #e2e8f0;
   --color-divider: rgba(0, 0, 0, 0.05);
+  --color-border-destructive: #fecaca; /* New */
   
   /* Navigation */
   --color-nav-bg: rgba(255, 255, 255, 0.7);
@@ -128,9 +132,10 @@
   --color-surface-subtle: rgba(255, 255, 255, 0.05);
   --color-surface-contrast: #324A6F;
   --color-surface-hover: rgba(255, 255, 255, 0.1);
-  --color-surface-highlight: var(--color-surface-contrast); /* New */
+  --color-surface-highlight: var(--color-surface-contrast);
   --color-input-bg: rgba(255, 255, 255, 0.05); 
   --color-control-surface-bg: rgba(255, 255, 255, 0.05);
+  --color-surface-destructive: rgba(220, 38, 38, 0.15); /* New */
 
   /* Text */
   --color-header: #EED58E;
@@ -176,6 +181,8 @@
   --tab-active-text: var(--color-accent-text);
   --color-icon-toggle-active: var(--color-accent);
   --color-tab-container-bg: var(--color-surface-contrast);
+  --color-tab-button-active-bg: var(--color-accent);
+  --color-tab-button-active-text: var(--color-accent-text);
 
   /* Tables */
   --color-table-header-bg: rgba(255, 255, 255, 0.05);
@@ -185,6 +192,7 @@
   /* Borders */
   --color-border: rgba(255, 255, 255, 0.1);
   --color-divider: rgba(255, 255, 255, 0.1);
+  --color-border-destructive: rgba(248, 113, 113, 0.2); /* New */
   
   /* Navigation */
   --color-nav-bg: rgba(27, 54, 95, 0.7);

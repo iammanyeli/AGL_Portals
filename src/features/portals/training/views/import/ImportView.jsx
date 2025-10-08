@@ -272,44 +272,44 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
     };
 
     const renderValidationStep = () => (
-        <div className="bg-white p-6 rounded-xl shadow-md">
-            <h3 className="text-xl font-semibold mb-4">New Items Detected</h3>
-            <p className="text-gray-600 mb-6">Your file contains sites or training titles not in the database. Please provide details for new sites and confirm creation of new training titles.</p>
+        <div className="bg-[var(--color-surface)] p-6 rounded-xl shadow-md">
+            <h3 className="text-xl font-semibold mb-4 text-[var(--color-text-primary)]">New Items Detected</h3>
+            <p className="text-[var(--color-text-secondary)] mb-6">Your file contains sites or training titles not in the database. Please provide details for new sites and confirm creation of new training titles.</p>
             
             {validationData.newSites.length > 0 && <Section title="New Sites to Create">{validationData.newSites.map(abbr => (
-                <div key={abbr} className="p-4 border rounded-md grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-4">
+                <div key={abbr} className="p-4 border border-[var(--color-border)] rounded-md grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-4">
                     <InputField label="Abbreviation" name={`${abbr}.abbr`} value={abbr} disabled />
                     <InputField label="Full Name" name={`${abbr}.fullName`} value={siteCreationData[abbr]?.fullName || ''} onChange={(e) => setSiteCreationData(p => ({...p, [abbr]: {...p[abbr], fullName: e.target.value}}))} required />
                     <div className="flex items-end gap-2">
                          <div className="flex-grow">
                             <SelectField label="Province" name={`${abbr}.province`} value={siteCreationData[abbr]?.province || ''} onChange={(e) => setSiteCreationData(p => ({...p, [abbr]: {...p[abbr], province: e.target.value}}))} options={allAvailableProvinces} required />
                          </div>
-                        <button type="button" onClick={() => setShowQuickAddModal(true)} className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">+</button>
+                        <button type="button" onClick={() => setShowQuickAddModal(true)} className="px-3 py-2 bg-[var(--color-control-surface-bg)] text-[var(--color-text-primary)] rounded-md hover:opacity-80">+</button>
                     </div>
                 </div>
             ))}</Section>}
 
             {validationData.newCertTypes.length > 0 && <Section title="New Training Titles to Add">{ (
-                <ul className="list-disc list-inside bg-gray-50 p-4 rounded-md">
-                    {validationData.newCertTypes.map(title => <li key={title}>{title}</li>)}
+                <ul className="list-disc list-inside bg-[var(--color-surface-contrast)] p-4 rounded-md text-[var(--color-text-secondary)]">
+                    {validationData.newCertTypes.map(title => <li key={title} className="text-[var(--color-text-primary)]">{title}</li>)}
                 </ul>
             )}</Section>}
 
              <div className="flex justify-end gap-4 mt-8">
-                <button onClick={() => setStep(2)} className="px-6 py-2 rounded-lg text-gray-700 bg-gray-100 border hover:bg-gray-200" disabled={isLoading}>Back to Mapping</button>
-                <button onClick={handleCreateNewItemsAndContinue} className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold flex items-center" disabled={isLoading}>
+                <button onClick={() => setStep(2)} className="px-6 py-2 rounded-lg text-[var(--color-text-primary)] bg-[var(--color-surface)] border border-[var(--color-border)] hover:bg-opacity-80" disabled={isLoading}>Back to Mapping</button>
+                <button onClick={handleCreateNewItemsAndContinue} className="px-6 py-2 rounded-lg bg-[var(--color-button-info-bg)] text-[var(--color-button-info-text)] font-semibold flex items-center" disabled={isLoading}>
                     {isLoading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>}
                     Create Items & Go to Preview
                 </button>
             </div>
             {showQuickAddModal && (
                  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-4 rounded-lg shadow-xl w-11/12 max-w-sm">
-                        <h4 className="font-semibold mb-2">Add New Province</h4>
+                    <div className="bg-[var(--color-surface-alt)] p-4 rounded-lg shadow-xl w-11/12 max-w-sm">
+                        <h4 className="font-semibold mb-2 text-[var(--color-text-primary)]">Add New Province</h4>
                         <InputField value={quickAddValue} onChange={(e) => setQuickAddValue(e.target.value)} placeholder="e.g. Gauteng" />
                         <div className="flex justify-end gap-2 mt-4">
-                            <button type="button" onClick={() => setShowQuickAddModal(false)} className="px-3 py-1 bg-gray-200 rounded">Cancel</button>
-                            <button type="button" onClick={handleQuickAddProvince} className="px-3 py-1 bg-blue-600 text-white rounded">Add</button>
+                            <button type="button" onClick={() => setShowQuickAddModal(false)} className="px-3 py-1 bg-[var(--color-control-surface-bg)] rounded text-[var(--color-text-primary)]">Cancel</button>
+                            <button type="button" onClick={handleQuickAddProvince} className="px-3 py-1 bg-[var(--color-button-info-bg)] text-[var(--color-button-info-text)] rounded">Add</button>
                         </div>
                     </div>
                 </div>
@@ -322,44 +322,44 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
             case 1:  return (
                 <div>
                     <div className="flex items-center justify-center w-full">
-                        <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${isLoading ? 'opacity-50' : ''}`}>
+                        <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-[var(--color-border)] rounded-lg cursor-pointer bg-[var(--color-surface)] hover:bg-[var(--color-surface-hover)] ${isLoading ? 'opacity-50' : ''}`}>
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                 {isLoading ? (
                                     <>
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-                                        <p className="text-sm text-gray-500">Processing file...</p>
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-info)] mb-4"></div>
+                                        <p className="text-sm text-[var(--color-text-secondary)]">Processing file...</p>
                                     </>
                                 ) : (
                                     <>
-                                        <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/></svg>
-                                        <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                        <p className="text-xs text-gray-500">XLSX or CSV files</p>
+                                        <svg className="w-8 h-8 mb-4 text-[var(--color-text-secondary)]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/></svg>
+                                        <p className="mb-2 text-sm text-[var(--color-text-secondary)]"><span className="font-semibold text-[var(--color-text-primary)]">Click to upload</span> or drag and drop</p>
+                                        <p className="text-xs text-[var(--color-text-secondary)]">XLSX or CSV files</p>
                                     </>
                                 )}
                             </div>
                             <input id="dropzone-file" type="file" className="hidden" onChange={handleFileSelect} accept=".xlsx, .xls, .csv, .txt" disabled={isLoading} />
                         </label>
                     </div>
-                    <div className="mt-8 p-4 border rounded-lg bg-gray-50">
-                        <h3 className="font-semibold text-gray-700 mb-3 text-center">Templates & Data Management</h3>
+                    <div className="mt-8 p-4 border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)]">
+                        <h3 className="font-semibold text-[var(--color-text-secondary)] mb-3 text-center">Templates & Data Management</h3>
                         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                            <button onClick={() => handleDownloadTemplate('csv')} className="w-full sm:w-auto px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">Download CSV Template</button>
-                            <button onClick={() => handleDownloadTemplate('xlsx')} className="w-full sm:w-auto px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">Download Excel Template</button>
-                            <button onClick={handleBackup} className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Share/Backup DB</button>
+                            <button onClick={() => handleDownloadTemplate('csv')} className="w-full sm:w-auto px-4 py-2 bg-[var(--color-surface-alt)] border border-[var(--color-border)] rounded-md text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] transition">Download CSV Template</button>
+                            <button onClick={() => handleDownloadTemplate('xlsx')} className="w-full sm:w-auto px-4 py-2 bg-[var(--color-surface-alt)] border border-[var(--color-border)] rounded-md text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] transition">Download Excel Template</button>
+                            <button onClick={handleBackup} className="w-full sm:w-auto px-4 py-2 bg-[var(--color-success)] text-white rounded-md hover:opacity-90 transition">Share/Backup DB</button>
                         </div>
                     </div>
                 </div>
             );
             case 2: return (
-                <div className="bg-white p-6 rounded-xl shadow-md">
-                    <h3 className="text-xl font-semibold mb-4">Map Your Columns</h3>
-                    <p className="text-gray-600 mb-6">Match columns from <span className="font-medium">{file.name}</span> to the required fields (*).</p>
+                <div className="bg-[var(--color-surface)] p-6 rounded-xl shadow-md">
+                    <h3 className="text-xl font-semibold mb-4 text-[var(--color-text-primary)]">Map Your Columns</h3>
+                    <p className="text-[var(--color-text-secondary)] mb-6">Match columns from <span className="font-medium">{file.name}</span> to the required fields (*).</p>
                     <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                         {appDataFields.map(field => {
                             const mappedHeader = Object.keys(mappings).find(h => mappings[h] === field.key);
                             return (
                                 <div key={field.key} className="grid grid-cols-2 gap-4 items-center">
-                                    <div className="font-medium text-gray-800">
+                                    <div className="font-medium text-[var(--color-text-primary)]">
                                         {field.label} {field.required && <span className="text-red-500">*</span>}
                                     </div>
                                     <SelectField
@@ -380,8 +380,8 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
                         })}
                     </div>
                     <div className="flex justify-end gap-4 mt-8">
-                        <button onClick={resetState} className="px-6 py-2 rounded-lg text-gray-700 bg-gray-100 border hover:bg-gray-200">Cancel</button>
-                        <button onClick={handleValidate} className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold flex items-center" disabled={isLoading}>
+                        <button onClick={resetState} className="px-6 py-2 rounded-lg text-[var(--color-text-primary)] bg-[var(--color-surface-alt)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)]">Cancel</button>
+                        <button onClick={handleValidate} className="px-6 py-2 rounded-lg bg-[var(--color-button-info-bg)] text-[var(--color-button-info-text)] font-semibold flex items-center" disabled={isLoading}>
                              {isLoading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>}
                             Validate & Continue
                         </button>
@@ -390,13 +390,13 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
             );
             case 2.5: return renderValidationStep();
             case 3: return (
-                <div className="bg-white p-6 rounded-xl shadow-md">
-                    <h3 className="text-xl font-semibold mb-4">Preview & Confirm Import</h3>
-                    <p className="text-gray-600 mb-6">Review the first 5 rows. If everything looks good, proceed to import all <span className="font-bold">{fileData.length}</span> records.</p>
+                <div className="bg-[var(--color-surface)] p-6 rounded-xl shadow-md">
+                    <h3 className="text-xl font-semibold mb-4 text-[var(--color-text-primary)]">Preview & Confirm Import</h3>
+                    <p className="text-[var(--color-text-secondary)] mb-6">Review the first 5 rows. If everything looks good, proceed to import all <span className="font-bold">{fileData.length}</span> records.</p>
                     <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200 text-sm">
-                            <thead className="bg-gray-50"><tr>{appDataFields.map(f => <th key={f.key} className="px-4 py-2 text-left font-medium text-gray-500 uppercase">{f.label}</th>)}</tr></thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                        <table className="min-w-full divide-y divide-[var(--color-border)] text-sm">
+                            <thead className="bg-[var(--color-table-header-bg)]"><tr>{appDataFields.map(f => <th key={f.key} className="px-4 py-2 text-left font-medium text-[var(--color-text-secondary)] uppercase">{f.label}</th>)}</tr></thead>
+                            <tbody className="bg-[var(--color-surface)] divide-y divide-[var(--color-border)]">
                                 {transformedData.slice(0, 5).map((record, idx) => (
                                     <tr key={idx}>
                                         {appDataFields.map(f => {
@@ -405,7 +405,7 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
                                                 const d = new Date(value);
                                                 value = d.toLocaleDateString('en-CA');
                                             }
-                                            return <td key={f.key} className="px-4 py-2 whitespace-nowrap">{value || '---'}</td>
+                                            return <td key={f.key} className="px-4 py-2 whitespace-nowrap text-[var(--color-text-secondary)]">{value || '---'}</td>
                                         })}
                                     </tr>
                                 ))}
@@ -413,8 +413,8 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
                         </table>
                     </div>
                     <div className="flex justify-end gap-4 mt-8">
-                        <button onClick={() => setStep(2)} className="px-6 py-2 rounded-lg text-gray-700 bg-gray-100 border hover:bg-gray-200" disabled={isLoading}>Back to Mapping</button>
-                        <button onClick={() => handleFinalImport()} className="px-6 py-2 rounded-lg bg-green-600 text-white font-semibold flex items-center" disabled={isLoading}>
+                        <button onClick={() => setStep(2)} className="px-6 py-2 rounded-lg text-[var(--color-text-primary)] bg-[var(--color-surface-alt)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)]" disabled={isLoading}>Back to Mapping</button>
+                        <button onClick={() => handleFinalImport()} className="px-6 py-2 rounded-lg bg-[var(--color-success)] text-white font-semibold flex items-center" disabled={isLoading}>
                             {isLoading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>}
                             Confirm and Import All Records
                         </button>
@@ -422,13 +422,13 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
                 </div>
             );
             case 4: return (
-                <div className="bg-white p-8 rounded-xl shadow-md text-center">
-                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                        <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                <div className="bg-[var(--color-surface)] p-8 rounded-xl shadow-md text-center">
+                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-[var(--color-badge-success-bg)] mb-4">
+                        <svg className="h-6 w-6 text-[var(--color-badge-success-text)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800">Import Complete</h3>
-                    <p className="text-gray-600 mt-2">Successfully added <span className="font-semibold text-green-700">{importResult?.count || 0}</span> new training records to the database.</p>
-                    <button onClick={resetState} className="mt-6 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold">Import Another File</button>
+                    <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">Import Complete</h3>
+                    <p className="text-[var(--color-text-secondary)] mt-2">Successfully added <span className="font-semibold text-[var(--color-success)]">{importResult?.count || 0}</span> new training records to the database.</p>
+                    <button onClick={resetState} className="mt-6 px-6 py-2 rounded-lg bg-[var(--color-button-info-bg)] text-[var(--color-button-info-text)] font-semibold">Import Another File</button>
                 </div>
             );
             default: return null;
@@ -437,10 +437,10 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
 
     return (
         <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Import / Export Records</h2>
+            <h2 className="text-3xl font-bold text-[var(--color-header)] mb-6">Import & Export Records</h2>
             {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert"><p>{error}</p></div>}
             {step < 4 && (
-                <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 mb-8 no-print">
+                <ol className="flex items-center w-full text-sm font-medium text-center text-[var(--color-text-secondary)] mb-8 no-print">
                     {['Upload', 'Map', 'Validate', 'Preview', 'Complete'].map((title, index) => {
                         let stepNumber = index + 1;
                         if (step === 2.5 && index === 2) stepNumber = 2.5;
@@ -449,8 +449,8 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
                         const isCurrent = step === stepNumber || (step === 2.5 && index === 2);
                         
                         return(
-                        <li key={title} className={`flex md:w-full items-center ${isCompleted ? 'text-blue-600' : ''} ${index < 4 ? "after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:inline-block" : ''}`}>
-                            <span className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 mr-2 text-xs border ${isCurrent || isCompleted ? 'border-blue-600 bg-blue-100' : 'border-gray-500'}`}>
+                        <li key={title} className={`flex md:w-full items-center ${isCompleted ? 'text-[var(--color-info)]' : ''} ${index < 4 ? "after:content-[''] after:w-full after:h-1 after:border-b after:border-[var(--color-border)] after:border-1 after:inline-block" : ''}`}>
+                            <span className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 mr-2 text-xs border ${isCurrent || isCompleted ? 'border-[var(--color-info)] bg-[var(--color-icon-container-info-bg)]' : 'border-[var(--color-border)]'}`}>
                                {index + 1}
                             </span>
                              <span className="hidden sm:inline-flex sm:ml-2">{title}</span>
