@@ -85,7 +85,6 @@ const SettingsPage = ({
                 <ChevronLeft className="w-5 h-5" />
                 <span>Back to Settings</span>
             </button>
-            <h2 className="text-3xl font-bold text-[var(--color-header)] mb-6">{title}</h2>
             {children}
         </div>
     );
