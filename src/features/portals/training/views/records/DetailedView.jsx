@@ -306,7 +306,12 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
                     {/* --- NEW, SEPARATE CONTAINER FOR UPLOAD SECTION (from Phase 3) --- */}
                     <div className="bg-[var(--color-surface)] p-6 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)]">
                         <h3 className="font-semibold text-[var(--color-text-primary)] mb-4">Uploaded Certificates</h3>
-                        <CertificateUpload certificates={certificates} onUpload={handleUpload} isUploading={isUploading} />
+                        <CertificateUpload 
+                            certificates={certificates} 
+                            onUpload={handleUpload} 
+                            isUploading={isUploading} 
+                            onPreview={openPreview} 
+                        />
                     </div>
                     {/* --- END NEW CONTAINER --- */}
 
@@ -336,4 +341,5 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
 
 
 export default DetailedViewPage;
+
 
