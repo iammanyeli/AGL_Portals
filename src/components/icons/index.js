@@ -18,3 +18,5 @@ export { default as Download } from './Download';
 export { default as LogOut } from './LogOut';
 export { default as Mail } from './Mail';
 export { default as Lock } from './Lock';
+export { default as Trash } from './Trash';
+

@@ -45,4 +45,11 @@ export const createRecordModel = (recordData) => ({
    * @type {{dateOfTraining: string, dateOfExpiry: string, daysLeft: number, status: 'Valid' | 'Expiring Soon' | 'Expired'}}
    */
   status: { ...recordData.status },
+
+  /**
+   * Array of certificate files associated with this record.
+   * This is a new addition for Phase 3.
+   * @type {Array<{id: string, url: string, name: string, uploadedAt: string}>}
+   */
+  certificates: recordData.certificates || [],
 });

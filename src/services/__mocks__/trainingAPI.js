@@ -1,6 +1,6 @@
-export const getRecords = async () => {
-  console.log("Mock API: Fetching records...");
-  return [
+// --- EXISTING MOCK DATA (slightly modified) ---
+
+let dbRecords = [
     {
       id: 1,
       employee: { employeeNumber: '1001', firstName: 'Sarah', surname: 'Johnson', gender: 'Female', jobTitle: 'Nurse' },
@@ -9,7 +9,11 @@ export const getRecords = async () => {
       location: { site: 'NYC', province: 'New York' },
       status: { dateOfTraining: '2025-09-15', dateOfExpiry: '2027-09-15' },
       certificateId: 'CPR-1001',
-      issuedBy: 'Red Cross'
+      issuedBy: 'Red Cross',
+      // New certificates array added
+      certificates: [
+          {id: 'cert-1-1', url: 'https://placehold.co/800x1100/pdf', name: 'cpr_sarah_j.pdf', uploadedAt: '2023-10-27T10:00:00Z'}
+      ]
     },
     {
       id: 2,
@@ -19,7 +23,8 @@ export const getRecords = async () => {
       location: { site: 'LA', province: 'California' },
       status: { dateOfTraining: '2025-08-12', dateOfExpiry: '2026-08-12' },
       certificateId: 'ES-1002',
-      issuedBy: 'SafeWork'
+      issuedBy: 'SafeWork',
+      certificates: []
     },
     {
       id: 3,
@@ -29,7 +34,8 @@ export const getRecords = async () => {
       location: { site: 'CHI', province: 'Illinois' },
       status: { dateOfTraining: '2025-07-10', dateOfExpiry: '2026-07-10' },
       certificateId: 'CH-1003',
-      issuedBy: 'BioTrain'
+      issuedBy: 'BioTrain',
+      certificates: []
     },
     {
       id: 4,
@@ -39,7 +45,8 @@ export const getRecords = async () => {
       location: { site: 'HOU', province: 'Texas' },
       status: { dateOfTraining: '2025-06-05', dateOfExpiry: '2026-06-05' },
       certificateId: 'CM-1004',
-      issuedBy: 'SecurePro'
+      issuedBy: 'SecurePro',
+      certificates: []
     },
     {
       id: 5,
@@ -49,7 +56,8 @@ export const getRecords = async () => {
       location: { site: 'SEA', province: 'Washington' },
       status: { dateOfTraining: '2025-05-20', dateOfExpiry: '2027-05-20' },
       certificateId: 'DT-1005',
-      issuedBy: 'InclusiveWorks'
+      issuedBy: 'InclusiveWorks',
+      certificates: []
     },
     {
       id: 6,
@@ -59,7 +67,8 @@ export const getRecords = async () => {
       location: { site: 'ATL', province: 'Georgia' },
       status: { dateOfTraining: '2025-04-18', dateOfExpiry: '2026-04-18' },
       certificateId: 'CB-1006',
-      issuedBy: 'TechSafe'
+      issuedBy: 'TechSafe',
+      certificates: []
     },
     {
       id: 7,
@@ -69,7 +78,8 @@ export const getRecords = async () => {
       location: { site: 'BOS', province: 'Massachusetts' },
       status: { dateOfTraining: '2025-03-10', dateOfExpiry: '2026-03-10' },
       certificateId: 'LE-1007',
-      issuedBy: 'LeadSmart'
+      issuedBy: 'LeadSmart',
+      certificates: []
     },
     {
       id: 8,
@@ -79,7 +89,8 @@ export const getRecords = async () => {
       location: { site: 'DEN', province: 'Colorado' },
       status: { dateOfTraining: '2025-02-14', dateOfExpiry: '2026-02-14' },
       certificateId: 'ES-1008',
-      issuedBy: 'MechTrain'
+      issuedBy: 'MechTrain',
+      certificates: []
     },
     {
       id: 9,
@@ -89,7 +100,8 @@ export const getRecords = async () => {
       location: { site: 'SF', province: 'California' },
       status: { dateOfTraining: '2025-01-25', dateOfExpiry: '2026-01-25' },
       certificateId: 'MH-1009',
-      issuedBy: 'MedEdu'
+      issuedBy: 'MedEdu',
+      certificates: []
     },
     {
       id: 10,
@@ -99,7 +111,8 @@ export const getRecords = async () => {
       location: { site: 'DAL', province: 'Texas' },
       status: { dateOfTraining: '2024-12-05', dateOfExpiry: '2025-12-05' },
       certificateId: 'MH-1010',
-      issuedBy: 'SafeLift'
+      issuedBy: 'SafeLift',
+      certificates: []
     },
     {
       id: 11,
@@ -109,7 +122,8 @@ export const getRecords = async () => {
       location: { site: 'DEN', province: 'Colorado' },
       status: { dateOfTraining: '2023-10-05', dateOfExpiry: '2025-10-05' },
       certificateId: 'FO-1013',
-      issuedBy: 'SafeLift'
+      issuedBy: 'SafeLift',
+      certificates: []
     },
     {
       id: 12,
@@ -119,7 +133,8 @@ export const getRecords = async () => {
       location: { site: 'ATL', province: 'Georgia' },
       status: { dateOfTraining: '2025-09-10', dateOfExpiry: '2026-09-10' },
       certificateId: 'DE-1006',
-      issuedBy: 'TechSafe'
+      issuedBy: 'TechSafe',
+      certificates: []
     },
     {
       id: 13,
@@ -129,7 +144,8 @@ export const getRecords = async () => {
       location: { site: 'HOU', province: 'Texas' },
       status: { dateOfTraining: '2023-05-10', dateOfExpiry: '2024-05-10' },
       certificateId: 'RA-1014',
-      issuedBy: 'SecurePro'
+      issuedBy: 'SecurePro',
+      certificates: []
     },
     {
       id: 14,
@@ -139,7 +155,8 @@ export const getRecords = async () => {
       location: { site: 'SF', province: 'California' },
       status: { dateOfTraining: '2025-01-15', dateOfExpiry: '2026-01-15' },
       certificateId: 'CCM-1009',
-      issuedBy: 'MedEdu'
+      issuedBy: 'MedEdu',
+      certificates: []
     },
     {
       id: 15,
@@ -149,7 +166,8 @@ export const getRecords = async () => {
       location: { site: 'CHI', province: 'Illinois' },
       status: { dateOfTraining: '2023-09-10', dateOfExpiry: '2025-09-10' },
       certificateId: 'LSE-1011',
-      issuedBy: 'BioTrain'
+      issuedBy: 'BioTrain',
+      certificates: []
     },
     {
       id: 16,
@@ -159,7 +177,8 @@ export const getRecords = async () => {
       location: { site: 'LA', province: 'California' },
       status: { dateOfTraining: '2024-10-01', dateOfExpiry: '2025-10-01' },
       certificateId: 'LT-1002',
-      issuedBy: 'SafeWork'
+      issuedBy: 'SafeWork',
+      certificates: []
     },
     {
       id: 17,
@@ -169,7 +188,8 @@ export const getRecords = async () => {
       location: { site: 'DAL', province: 'Texas' },
       status: { dateOfTraining: '2025-02-20', dateOfExpiry: '2026-02-20' },
       certificateId: 'FDP-1015',
-      issuedBy: 'FireSmart'
+      issuedBy: 'FireSmart',
+      certificates: []
     },
     {
       id: 18,
@@ -179,7 +199,8 @@ export const getRecords = async () => {
       location: { site: 'CHI', province: 'Illinois' },
       status: { dateOfTraining: '2023-03-11', dateOfExpiry: '2024-03-11' },
       certificateId: 'PPEC-1003',
-      issuedBy: 'BioTrain'
+      issuedBy: 'BioTrain',
+      certificates: []
     },
     {
       id: 19,
@@ -189,7 +210,8 @@ export const getRecords = async () => {
       location: { site: 'NYC', province: 'New York' },
       status: { dateOfTraining: '2024-09-22', dateOfExpiry: '2025-09-22' },
       certificateId: 'ISO-1016',
-      issuedBy: 'QualityFirst'
+      issuedBy: 'QualityFirst',
+      certificates: []
     },
     {
       id: 20,
@@ -199,7 +221,8 @@ export const getRecords = async () => {
       location: { site: 'NYC', province: 'New York' },
       status: { dateOfTraining: '2025-06-01', dateOfExpiry: '2026-06-01' },
       certificateId: 'PCE-1001',
-      issuedBy: 'Red Cross'
+      issuedBy: 'Red Cross',
+      certificates: []
     },
     {
       id: 21,
@@ -209,7 +232,8 @@ export const getRecords = async () => {
       location: { site: 'DEN', province: 'Colorado' },
       status: { dateOfTraining: '2025-01-15', dateOfExpiry: '2026-01-15' },
       certificateId: 'MLT-1013',
-      issuedBy: 'SafeLift'
+      issuedBy: 'SafeLift',
+      certificates: []
     },
     {
       id: 22,
@@ -219,7 +243,8 @@ export const getRecords = async () => {
       location: { site: 'HOU', province: 'Texas' },
       status: { dateOfTraining: '2025-07-12', dateOfExpiry: '2026-07-12' },
       certificateId: 'EE-1014',
-      issuedBy: 'SafeWork'
+      issuedBy: 'SafeWork',
+      certificates: []
     },
     {
       id: 23,
@@ -229,7 +254,8 @@ export const getRecords = async () => {
       location: { site: 'ATL', province: 'Georgia' },
       status: { dateOfTraining: '2023-10-01', dateOfExpiry: '2024-10-01' },
       certificateId: 'EPA-1006',
-      issuedBy: 'TechSafe'
+      issuedBy: 'TechSafe',
+      certificates: []
     },
     {
       id: 24,
@@ -239,7 +265,8 @@ export const getRecords = async () => {
       location: { site: 'DAL', province: 'Texas' },
       status: { dateOfTraining: '2024-09-22', dateOfExpiry: '2025-09-22' },
       certificateId: 'WAH-1015',
-      issuedBy: 'SafetyEdge'
+      issuedBy: 'SafetyEdge',
+      certificates: []
     },
     {
       id: 25,
@@ -249,14 +276,12 @@ export const getRecords = async () => {
       location: { site: 'LA', province: 'California' },
       status: { dateOfTraining: '2025-08-15', dateOfExpiry: '2026-08-15' },
       certificateId: 'WHP-1012',
-      issuedBy: 'InclusiveWorks'
+      issuedBy: 'InclusiveWorks',
+      certificates: []
     }
-  ];
-};
+];
 
-export const getAppSettings = async () => {
-  console.log("Mock API: Fetching app settings...");
-  return {
+let dbSettings = {
     provinces: ['Gauteng', 'Western Cape', 'Limpopo', 'KwaZulu-Natal', 'New York', 'California', 'Illinois', 'Texas', 'Washington', 'Massachusetts', 'Colorado'],
     sites: [
       { abbreviatedName: 'JHB-1', fullName: 'Johannesburg Central', province: 'Gauteng', certificates: ['First Aid', 'Fire Fighting'] },
@@ -284,18 +309,106 @@ export const getAppSettings = async () => {
     ],
     settings: { expiryThreshold: 30 }
   };
+
+let dbActivities = [
+      { id: 1, timestamp: new Date(Date.now() - 3600000).toISOString(), user_name: 'System', user_initials: 'SY', type: 'system', details: "Application initialized." },
+      { id: 2, timestamp: new Date(Date.now() - 1800000).toISOString(), user_name: 'Jane Doe', user_initials: 'JD', type: 'record', details: "Added certificate 'First Aid' for John Doe." },
+      { id: 3, timestamp: new Date(Date.now() - 900000).toISOString(), user_name: 'Admin', user_initials: 'AD', type: 'settings', details: "Updated expiry threshold to 30 days." }
+];
+
+// --- API FUNCTIONS ---
+
+export const getRecords = async () => {
+  console.log("Mock API: Fetching records...");
+  // Add empty certificates array to records that don't have it
+  dbRecords = dbRecords.map(r => ({ ...r, certificates: r.certificates || [] }));
+  return JSON.parse(JSON.stringify(dbRecords));
+};
+
+export const getAppSettings = async () => {
+  console.log("Mock API: Fetching app settings...");
+  return JSON.parse(JSON.stringify(dbSettings));
 };
 
 export const getActivities = async () => {
   console.log("Mock API: Fetching activities...");
-  return [
-      { id: 1, timestamp: new Date(Date.now() - 3600000).toISOString(), user_name: 'System', user_initials: 'SY', type: 'system', details: "Application initialized." },
-      { id: 2, timestamp: new Date(Date.now() - 1800000).toISOString(), user_name: 'Jane Doe', user_initials: 'JD', type: 'record', details: "Added certificate 'First Aid' for John Doe." },
-      { id: 3, timestamp: new Date(Date.now() - 900000).toISOString(), user_name: 'Admin', user_initials: 'AD', type: 'settings', details: "Updated expiry threshold to 30 days." }
-  ];
+  return JSON.parse(JSON.stringify(dbActivities));
 }
 
-// Mock functions for actions (they don't need to do anything but can log to the console)
+// ... (existing mock functions: addRecord, updateRecord, etc.)
+
+// --- NEW API METHODS FOR CERTIFICATE MANAGEMENT ---
+
+/**
+ * Simulates uploading a certificate file.
+ * @param {string} recordId - The ID of the training record.
+ * @param {File} file - The file to upload.
+ * @returns {Promise<object>} The new certificate object.
+ */
+export const uploadCertificate = async (recordId, file) => {
+    console.log(`Mock API: Uploading ${file.name} for record ${recordId}`);
+    // Simulate upload delay
+    await new Promise(res => setTimeout(res, 1500));
+
+    const newCertificate = {
+        id: `cert-${recordId}-${Date.now()}`,
+        url: URL.createObjectURL(file), // Use blob URL for local preview
+        name: file.name,
+        uploadedAt: new Date().toISOString(),
+    };
+
+    const recordIndex = dbRecords.findIndex(r => r.id === recordId);
+    if (recordIndex !== -1) {
+        if (!dbRecords[recordIndex].certificates) {
+            dbRecords[recordIndex].certificates = [];
+        }
+        dbRecords[recordIndex].certificates.push(newCertificate);
+        return newCertificate;
+    } else {
+        throw new Error("Record not found");
+    }
+};
+
+/**
+ * Simulates deleting a certificate file.
+ * @param {string} recordId - The ID of the training record.
+ * @param {string} certificateId - The ID of the certificate to delete.
+ * @returns {Promise<{success: boolean}>}
+ */
+export const deleteCertificate = async (recordId, certificateId) => {
+    console.log(`Mock API: Deleting certificate ${certificateId} from record ${recordId}`);
+    await new Promise(res => setTimeout(res, 500));
+
+    const recordIndex = dbRecords.findIndex(r => r.id === recordId);
+    if (recordIndex !== -1) {
+        const certIndex = dbRecords[recordIndex].certificates.findIndex(c => c.id === certificateId);
+        if (certIndex !== -1) {
+            // Revoke blob URL to prevent memory leaks in a real scenario
+            const cert = dbRecords[recordIndex].certificates[certIndex];
+            if (cert.url.startsWith('blob:')) {
+                URL.revokeObjectURL(cert.url);
+            }
+            dbRecords[recordIndex].certificates.splice(certIndex, 1);
+            return { success: true };
+        }
+    }
+    throw new Error("Certificate or record not found");
+};
+
+/**
+ * Simulates fetching existing certificates for a record.
+ * In this mock, it just returns them from the main record object.
+ * @param {string} recordId - The ID of the training record.
+ * @returns {Promise<Array<object>>} The array of certificate objects.
+ */
+export const getCertificates = async (recordId) => {
+    console.log(`Mock API: Getting certificates for record ${recordId}`);
+    const record = dbRecords.find(r => r.id === recordId);
+    return record ? record.certificates || [] : [];
+};
+
+
+// Keep other existing functions
 export const addRecord = async (data) => { console.log("Mock API: Adding record", data); return { success: true }; };
 export const updateRecord = async (data) => { console.log("Mock API: Updating record", data); return { success: true }; };
 export const deleteRecord = async (id) => { console.log("Mock API: Deleting record", id); return { success: true }; };

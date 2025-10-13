@@ -1,6 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react';
+// From Phase 3: Import new components for certificate management
+import CertificateUpload from '../../components/ui/CertificateUpload.jsx';
+import CertificatePreviewModal from '../../components/modals/CertificatePreviewModal.jsx';
+import ConfirmationModal from '../../components/modals/ConfirmationModal.jsx';
+import * as api from '../../../../../services/__mocks__/trainingAPI.js'; // Using mock API directly for certificate actions
 
-const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, setCurrentPage, setModalState, setDeletingRecordId, expiryThreshold }) => {
+const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, onBack, setModalState, setDeletingRecordId, expiryThreshold }) => {
     const allEmployeeRecords = useMemo(() =>
         processedRecords.filter(r => r.employee.employeeNumber === employeeNumber).sort((a,b) => new Date(b.status.dateOfExpiry) - new Date(a.status.dateOfExpiry)),
         [processedRecords, employeeNumber]
@@ -13,6 +18,13 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
     );
 
     const [certSearch, setCertSearch] = useState('');
+    
+    // --- NEW STATE FOR CERTIFICATE MANAGEMENT (from Phase 3) ---
+    const [certificates, setCertificates] = useState([]);
+    const [isUploading, setIsUploading] = useState(false);
+    const [previewCert, setPreviewCert] = useState(null);
+    const [deletingCertId, setDeletingCertId] = useState(null);
+    // --- END NEW STATE ---
 
     const filteredEmployeeRecords = useMemo(() =>
         allEmployeeRecords.filter(cert =>
@@ -21,11 +33,54 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
         [allEmployeeRecords, certSearch]
     );
 
+    // --- NEW EFFECT TO FETCH CERTIFICATES (from Phase 3) ---
+    useEffect(() => {
+        if (activeRecord) {
+            const fetchCerts = async () => {
+                // In a real app, this would be an API call. Here we get it from the record.
+                setCertificates(activeRecord.certificates || []);
+            };
+            fetchCerts();
+        }
+    }, [activeRecord]);
+    // --- END NEW EFFECT ---
+
     useEffect(() => {
         if (allEmployeeRecords.length > 0 && !allEmployeeRecords.some(r => r.id === activeRecord?.id)) {
             setActiveRecord(allEmployeeRecords[0]);
         }
     }, [allEmployeeRecords, activeRecord]);
+    
+    // --- NEW HANDLERS FOR CERTIFICATE ACTIONS (from Phase 3) ---
+    const handleUpload = async (file) => {
+        if (!activeRecord) return;
+        setIsUploading(true);
+        try {
+            const newCert = await api.uploadCertificate(activeRecord.id, file);
+            setCertificates(prev => [...prev, newCert]);
+            // Here you would typically also update the parent state or re-fetch records
+        } catch (error) {
+            console.error("Upload failed:", error);
+            // Show an error message to the user
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleDeleteCertificate = async () => {
+        if (!deletingCertId || !activeRecord) return;
+        try {
+            await api.deleteCertificate(activeRecord.id, deletingCertId);
+            setCertificates(prev => prev.filter(c => c.id !== deletingCertId));
+        } catch (error) {
+            console.error("Delete failed:", error);
+        } finally {
+            setDeletingCertId(null);
+            setPreviewCert(null);
+        }
+    };
+    // --- END NEW HANDLERS ---
+
 
     const getValidityStyles = (status) => {
         const styles = {
@@ -58,7 +113,7 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
         return (
             <div className="text-center p-10">
                 <p>Loading employee data...</p>
-                <button onClick={() => setCurrentPage()} className="mt-4 px-4 py-2 bg-[var(--color-control-surface-bg)] rounded-lg">
+                <button onClick={onBack} className="mt-4 px-4 py-2 bg-[var(--color-control-surface-bg)] rounded-lg">
                     Back to All Records
                 </button>
             </div>
@@ -103,6 +158,10 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
             </div>
         </div>
     );
+
+    const openPreview = (cert) => {
+        setPreviewCert(cert);
+    };
 
     return (
         <div className="flex flex-col lg:flex-row gap-6 animate-fade-in">
@@ -178,7 +237,7 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
                 <div className="p-0 lg:p-6 lg:pt-0">
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                             <button onClick={() => setCurrentPage()} className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-info)] flex items-center mb-4 no-print">
+                             <button onClick={onBack} className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-info)] flex items-center mb-4 no-print">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                                 Back to All Records
                             </button>
@@ -222,7 +281,7 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
                         </div>
                     </div>
 
-                    <div className="bg-[var(--color-surface)] p-6 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)]">
+                    <div className="bg-[var(--color-surface)] p-6 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)] mb-6">
                         <h3 className="font-semibold text-[var(--color-text-primary)] mb-4">Certificate Details</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                             <div>
@@ -237,17 +296,44 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, s
                                 <p className="text-sm font-medium text-[var(--color-text-secondary)]">Certificate ID</p>
                                 <p className="font-semibold text-[var(--color-text-primary)] mt-1">{activeRecord.certificateId || 'N/A'}</p>
                             </div>
-                            <div>
+                             <div>
                                 <p className="text-sm font-medium text-[var(--color-text-secondary)]">Issued By</p>
                                 <p className="font-semibold text-[var(--color-text-primary)] mt-1">{activeRecord.issuedBy || 'N/A'}</p>
                             </div>
                         </div>
                     </div>
+                    
+                    {/* --- NEW, SEPARATE CONTAINER FOR UPLOAD SECTION (from Phase 3) --- */}
+                    <div className="bg-[var(--color-surface)] p-6 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)]">
+                        <h3 className="font-semibold text-[var(--color-text-primary)] mb-4">Uploaded Certificates</h3>
+                        <CertificateUpload certificates={certificates} onUpload={handleUpload} isUploading={isUploading} />
+                    </div>
+                    {/* --- END NEW CONTAINER --- */}
+
                 </div>
             </main>
+            
+            {/* --- NEW MODALS FOR CERTIFICATE MANAGEMENT (from Phase 3) --- */}
+            {previewCert && (
+                <CertificatePreviewModal
+                    certificate={previewCert}
+                    onClose={() => setPreviewCert(null)}
+                    onDelete={() => setDeletingCertId(previewCert.id)}
+                />
+            )}
+            {deletingCertId && (
+                <ConfirmationModal
+                    title="Delete Certificate"
+                    message="Are you sure you want to permanently delete this certificate file? This action cannot be undone."
+                    onConfirm={handleDeleteCertificate}
+                    onClose={() => setDeletingCertId(null)}
+                />
+            )}
+             {/* --- END NEW MODALS --- */}
         </div>
     )
 };
 
 
 export default DetailedViewPage;
+
