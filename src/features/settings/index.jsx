@@ -47,28 +47,28 @@ const SettingsLayout = ({ setPage, children }) => (
     </motion.div>
 );
 
-// primitive: Header_Subtitle_Compact
-const Header_Subtitle_Compact = ({ title, description }) => (
+// primitive: Header_Subtitle
+const Header_Subtitle = ({ title, description }) => (
     <div>
         <h4 className="font-semibold text-[var(--color-text-primary)]">{title}</h4>
         <p className="text-sm text-[var(--color-text-secondary)]">{description}</p>
     </div>
 );
 
-// block: ListItem_Block
-const ListItem_Block = ({ content, action }) => (
+// block: ListItem
+const ListItem = ({ content, action }) => (
     <div className="p-6 flex items-center justify-between">
         <div>{content}</div>
         <div>{action}</div>
     </div>
 );
 
-// block: Toggle_Icon
-const Toggle_Icon = ({ LeftIcon, RightIcon, checked, onChange }) => (
+// primitive: Toggle_Icon
+const Toggle_Icon = ({ leftIcon, rightIcon, checked, onChange }) => (
     <div className="flex items-center gap-2">
-        {LeftIcon}
+        {React.cloneElement(leftIcon, { className: `w-6 h-6 ${leftIcon.props.className || ''}` })}
         <Switch checked={checked} onChange={onChange} />
-        {RightIcon}
+        {React.cloneElement(rightIcon, { className: `w-6 h-6 ${rightIcon.props.className || ''}` })}
     </div>
 );
 
@@ -80,52 +80,66 @@ const Button_Icon = ({ icon, children, className, ...props }) => (
     </Button>
 );
 
+// primitive: Button_Icon_Destructive
+const Button_Icon_Destructive = ({ icon, children, ...props }) => (
+    <Button_Icon
+        icon={icon}
+        {...props}
+        className="!bg-[var(--color-button-destructive-bg)] hover:!bg-[var(--color-button-destructive-hover-bg)] !text-[var(--color-button-destructive-text)]"
+    >
+        {children}
+    </Button_Icon>
+);
+
 
 export default function SettingsPage({ defaultView, setDefaultView, setPage, handleLogout }) {
     const { theme, toggleTheme } = useTheme();
 
+    const handleViewChange = (isGrid) => {
+        setDefaultView(isGrid ? 'grid' : 'list');
+    };
+
     return (
         <SettingsLayout setPage={setPage}>
-            <ListItem_Block
-                content={<Header_Subtitle_Compact title="Theme" description="Switch between light and dark mode." />}
+            <ListItem
+                content={<Header_Subtitle title="Theme" description="Switch between light and dark mode." />}
                 action={
                     <Toggle_Icon
                         checked={theme === 'dark'}
                         onChange={toggleTheme}
-                        LeftIcon={<Sun className={`w-6 h-6 ${theme === 'light' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}`} />}
-                        RightIcon={<Moon className={`w-6 h-6 ${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}`} />}
+                        leftIcon={<Sun className={`${theme === 'light' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}`} />}
+                        rightIcon={<Moon className={`${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}`} />}
                     />
                 }
             />
-            <ListItem_Block
-                content={<Header_Subtitle_Compact title="Default View" description="Choose the default layout for the dashboard." />}
+            <ListItem
+                content={<Header_Subtitle title="Default View" description="Choose the default layout for the dashboard." />}
                 action={
                     <Toggle_Icon
                         checked={defaultView === 'grid'}
-                        onChange={(isGrid) => setDefaultView(isGrid ? 'grid' : 'list')}
-                        LeftIcon={<List className={`w-6 h-6 ${defaultView === 'list' ? 'text-[var(--color-icon-toggle-active)]' : 'text-[var(--color-text-secondary)]'}`} />}
-                        RightIcon={<LayoutGrid className={`w-6 h-6 ${defaultView === 'grid' ? 'text-[var(--color-icon-toggle-active)]' : 'text-[var(--color-text-secondary)]'}`} />}
+                        onChange={handleViewChange}
+                        leftIcon={<List className={`${defaultView === 'list' ? 'text-[var(--color-icon-toggle-active)]' : 'text-[var(--color-text-secondary)]'}`} />}
+                        rightIcon={<LayoutGrid className={`${defaultView === 'grid' ? 'text-[var(--color-icon-toggle-active)]' : 'text-[var(--color-text-secondary)]'}`} />}
                     />
                 }
             />
-            <ListItem_Block
-                content={<Header_Subtitle_Compact title="Profile" description="Manage your personal information." />}
+            <ListItem
+                content={<Header_Subtitle title="Profile" description="Manage your personal information." />}
                 action={
                     <Button_Icon icon={<User className="w-5 h-5"/>}>
                         Edit Profile
                     </Button_Icon>
                 }
             />
-            <ListItem_Block
-                content={<Header_Subtitle_Compact title="Account" description="Sign out of your current session." />}
+            <ListItem
+                content={<Header_Subtitle title="Account" description="Sign out of your current session." />}
                 action={
-                    <Button_Icon 
+                    <Button_Icon_Destructive 
                         icon={<LogOut className="w-5 h-5"/>} 
-                        onClick={handleLogout} 
-                        className="!bg-[var(--color-button-destructive-bg)] hover:!bg-[var(--color-button-destructive-hover-bg)] !text-[var(--color-button-destructive-text)]"
+                        onClick={handleLogout}
                     >
                         Logout
-                    </Button_Icon>
+                    </Button_Icon_Destructive>
                 }
             />
         </SettingsLayout>
