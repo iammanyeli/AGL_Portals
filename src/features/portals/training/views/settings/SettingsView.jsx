@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-// Reusable UI Components from the project structure
-import { Card, CardHeader, CardContent, CardTitle } from '../../../../../components/ui/Card';
-import Button from '../../../../../components/ui/Button';
-import Switch from '../../../../../components/ui/Switch';
-import { Settings, ChevronLeft, Sun, Moon, BookOpen, Wrench } from '../../../../../components/icons';
-import ConfirmationModal from '../../components/modals/ConfirmationModal.jsx';
-import useTheme from '../../../../../hooks/useTheme';
+// Production Imports from existing repo
+import Button from '/src/components/ui/Button.jsx';
+import Switch from '/src/components/ui/Switch.jsx';
+import { Settings, ChevronLeft, Sun, Moon, BookOpen, Wrench } from '/src/components/icons';
+import ConfirmationModal from '/src/features/portals/training/components/modals/ConfirmationModal.jsx';
+import useTheme from '/src/hooks/useTheme.js';
 
-// Sub-components for specific settings pages (unchanged)
-import SettingsListManager from './components/SettingsListManager.jsx';
+// Import the new redesigned components
+import ManageProvinces from './components/ManageProvinces.jsx';
+import ManageCertificates from './components/ManageCertificates.jsx';
+
+// Production sub-components (unchanged, but paths are corrected)
 import SiteManager from './components/SiteManager.jsx';
 
-// --- Sub-component for Expiry Settings ---
+// Sub-component for Expiry Settings (remains the same as production)
 const ExpirySettingsView = ({ initialThreshold, onSaveThreshold }) => {
     const [localThreshold, setLocalThreshold] = useState(initialThreshold);
 
@@ -78,8 +80,8 @@ const SettingsPage = ({
         }
     };
 
-
-    const SettingsLayout = ({title, children}) => (
+    // Layout wrapper remains the same
+    const SettingsLayout = ({ children }) => (
         <div>
             <button onClick={() => setSettingsView('main')} className="flex items-center space-x-2 text-[var(--color-text-secondary)] hover:text-[var(--color-info)] transition-colors font-semibold mb-6">
                 <ChevronLeft className="w-5 h-5" />
@@ -89,38 +91,43 @@ const SettingsPage = ({
         </div>
     );
 
+    // --- Integrating new components based on settingsView ---
+    if (settingsView === 'provinces') {
+        return (
+            <SettingsLayout>
+                <ManageProvinces
+                    items={provinces}
+                    onAdd={onAddProvince}
+                    onUpdate={onUpdateProvince}
+                    onDelete={onDeleteProvince}
+                    placeholder="e.g. Gauteng"
+                />
+            </SettingsLayout>
+        );
+    }
+    if (settingsView === 'certs') {
+        return (
+            <SettingsLayout>
+                <ManageCertificates
+                    items={certificateTypes}
+                    onAdd={onAddCertificate}
+                    onUpdate={onUpdateCertificate}
+                    onDelete={onDeleteCertificate}
+                    placeholder="e.g. First Aid Training"
+                />
+            </SettingsLayout>
+        );
+    }
+    // Other views remain the same
     if (settingsView === 'expiry') {
         return (
-            <SettingsLayout title="Expiry Reminder Threshold">
+            <SettingsLayout>
                 <ExpirySettingsView initialThreshold={expiryThreshold} onSaveThreshold={setExpiryThreshold} />
             </SettingsLayout>
         );
     }
-
-    if (settingsView === 'provinces') {
-        return <SettingsLayout title="Manage Provinces">
-            <SettingsListManager
-                items={provinces}
-                onAdd={onAddProvince}
-                onUpdate={onUpdateProvince}
-                onDelete={onDeleteProvince}
-                placeholder="New Province Name"
-            />
-        </SettingsLayout>
-    }
-    if (settingsView === 'certs') {
-        return <SettingsLayout title="Manage Certificate Types">
-            <SettingsListManager
-                items={certificateTypes}
-                onAdd={onAddCertificate}
-                onUpdate={onUpdateCertificate}
-                onDelete={onDeleteCertificate}
-                placeholder="New Certificate Title"
-            />
-        </SettingsLayout>
-    }
     if (settingsView === 'sites') {
-        return <SettingsLayout title="Manage Sites">
+        return <SettingsLayout>
             <SiteManager
                 sites={sites}
                 provinces={provinces}
@@ -134,15 +141,15 @@ const SettingsPage = ({
         </SettingsLayout>
     }
 
-
+    // Main settings page remains the same
     return (
         <div style={{ minHeight: '100vh', padding: '0' }}>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                 <CardContent className="p-0">
+                 <div className="p-0">
                         {/* === GENERAL SETTINGS === */}
                         <div className="p-6">
                             <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider mb-4">General</h3>
-                            <div className="divide-y divide-[var(--color-divider)] border border-[var(--color-border)] rounded-lg overflow-hidden">
+                            <div className="divide-y divide-[var(--color-divider)] border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)]">
                                 <div className="p-4 flex items-center justify-between">
                                     <div>
                                         <h4 className="font-semibold text-[var(--color-text-primary)]">Theme</h4>
@@ -177,7 +184,7 @@ const SettingsPage = ({
                         {/* === MANAGEMENT SETTINGS === */}
                         <div className="p-6">
                              <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider mb-4">Management</h3>
-                             <div className="divide-y divide-[var(--color-divider)] border border-[var(--color-border)] rounded-lg overflow-hidden">
+                             <div className="divide-y divide-[var(--color-divider)] border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)]">
                                 <div className="p-4 flex items-center justify-between hover:bg-[var(--color-surface-hover)] transition-colors">
                                     <div className="flex items-center gap-4">
                                         <Settings className="w-5 h-5 text-[var(--color-text-secondary)]" />
@@ -220,26 +227,24 @@ const SettingsPage = ({
                                     <p className="text-sm text-[var(--color-danger)]/80">Permanently delete all records, sites, and settings in this portal.</p>
                                 </div>
                                 <Button onClick={() => setShowDeleteAllModal(true)} style={{backgroundColor: 'var(--color-button-destructive-solid-bg)', color: 'var(--color-button-destructive-solid-text)'}} className="flex items-center gap-2">
-                                    
                                     Delete All Data
                                 </Button>
                             </div>
                         </div>
-                    </CardContent>
+                    </div>
             </motion.div>
             
-            <AnimatePresence>
-                {showDeleteAllModal && (
-                     <ConfirmationModal 
-                        title="Confirm Permanent Deletion"
-                        message="Are you sure you want to delete ALL application data? This includes every record, employee, site, etc. This is irreversible."
-                        onConfirm={() => { onDeleteAllData(); setShowDeleteAllModal(false); }}
-                        onClose={() => setShowDeleteAllModal(false)}
-                     />
-                )}
-            </AnimatePresence>
+            {showDeleteAllModal && (
+                 <ConfirmationModal 
+                    title="Confirm Permanent Deletion"
+                    message="Are you sure you want to delete ALL application data? This includes every record, employee, site, etc. This is irreversible."
+                    onConfirm={() => { onDeleteAllData(); setShowDeleteAllModal(false); }}
+                    onClose={() => setShowDeleteAllModal(false)}
+                 />
+            )}
         </div>
     );
 }
 
 export default SettingsPage;
+
