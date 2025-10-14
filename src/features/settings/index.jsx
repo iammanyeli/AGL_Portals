@@ -7,9 +7,9 @@ import {
   CardHeader, 
   CardContent, 
   CardTitle 
-} from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import Switch from '../../components/ui/Switch';
+} from '../../components/primitives/Card';
+import Button from '../../components/primitives/Button';
+import Switch from '../../components/primitives/Switch';
 
 // Icons
 import { 

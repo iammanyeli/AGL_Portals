@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import ViewSwitcher from '../../components/ui/ViewSwitcher';
+import ViewSwitcher from '../../components/primitives/ViewSwitcher';
 import DashboardGrid from './components/DashboardGrid';
 import DashboardList from './components/DashboardList';
 

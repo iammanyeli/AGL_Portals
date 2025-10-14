@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useRef } from 'react';
 
 // Production Imports from existing repo
-import { Card, CardContent } from '/src/components/ui/Card.jsx';
-import Button from '/src/components/ui/Button.jsx';
+import { Card, CardContent } from '/src/components/primitives/Card.jsx';
+import Button from '/src/components/primitives/Button.jsx';
 import InputField from '/src/features/portals/training/components/ui/InputField.jsx';
 import ConfirmationModal from '/src/features/portals/training/components/modals/ConfirmationModal.jsx';
 import { Trash } from '/src/components/icons';

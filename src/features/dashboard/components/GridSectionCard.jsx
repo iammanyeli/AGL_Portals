@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardHeader, CardContent, CardTitle } from '../../../components/ui/Card';
-import Button from '../../../components/ui/Button';
+import { Card, CardHeader, CardContent, CardTitle } from '../../../components/primitives/Card';
+import Button from '../../../components/primitives/Button';
 
 // Import modular chart components
 import AreaChart from '../../../components/charts/AreaChart';

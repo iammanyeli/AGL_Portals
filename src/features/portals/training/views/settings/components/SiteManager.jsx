@@ -2,8 +2,8 @@ import React, { useState, useMemo, createContext, useContext, useEffect, useRef 
 import { motion, AnimatePresence } from 'framer-motion';
 // import { ThemeProvider, useTheme } from 'src/providers/ThemeProvider';
 import { useTheme } from '../../../../../../providers/ThemeProvider';
-import { Card, CardHeader, CardContent, CardTitle } from '../../../../../../components/ui/Card';
-import Button from '../../../../../../components/ui/Button';
+import { Card, CardHeader, CardContent, CardTitle } from '../../../../../../components/primitives/Card';
+import Button from '../../../../../../components/primitives/Button';
 import InputField from '../../../../training/components/ui/InputField';
 import SelectField from '../../../../training/components/ui/SelectField';
 

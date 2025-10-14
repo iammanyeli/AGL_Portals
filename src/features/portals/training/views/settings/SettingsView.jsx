@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 
 // Production Imports from existing repo
-import Button from '/src/components/ui/Button.jsx';
-import Switch from '/src/components/ui/Switch.jsx';
+import Button from '/src/components/primitives/Button.jsx';
+import Switch from '/src/components/primitives/Switch.jsx';
 import { Settings, ChevronLeft, Sun, Moon, BookOpen, Wrench } from '/src/components/icons';
 import ConfirmationModal from '/src/features/portals/training/components/modals/ConfirmationModal.jsx';
 import useTheme from '/src/hooks/useTheme.js';

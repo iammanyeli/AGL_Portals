@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardHeader, CardContent, CardTitle } from '../ui/Card';
-import Button from '../ui/Button';
+import { Card, CardHeader, CardContent, CardTitle } from '../primitives/Card';
+import Button from '../primitives/Button';
 import { ChevronLeft } from '../icons';
 
 const PortalLayout = ({ section, setPage, portalSubPage, children, viewTitle, viewIcon: ViewIcon }) => {
