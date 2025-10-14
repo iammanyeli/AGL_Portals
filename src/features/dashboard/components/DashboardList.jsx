@@ -13,6 +13,7 @@ import PieChart from '../../../components/charts/PieChart';
 import RadarChart from '../../../components/charts/RadarChart';
 
 
+// block: ChartRenderer
 const ChartRenderer = ({ chart, sectionId }) => {
     switch (chart.type) {
         case 'line':
@@ -32,6 +33,138 @@ const ChartRenderer = ({ chart, sectionId }) => {
     }
 };
 
+// block: Header_Subtitle
+const Header_Subtitle = ({ title, subtitle }) => (
+    <div>
+        <CardTitle className="text-2xl font-bold tracking-tight">{title}</CardTitle>
+        <div className="text-base text-[var(--color-text-secondary)] font-medium">{subtitle}</div>
+    </div>
+);
+
+// block: SectionHeader
+const SectionHeader = ({ section, goToPortal }) => (
+    <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-6 bg-[var(--color-surface-alt)] border-b-0">
+        <div className="flex items-center gap-4">
+            <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
+                <section.Icon className="h-7 w-7" />
+            </div>
+            <Header_Subtitle title={section.title} subtitle="Latest performance & trends" />
+        </div>
+        <Button size="lg" className="shrink-0 w-full sm:w-auto" onClick={() => goToPortal(section.id)}>
+            Open Portal
+        </Button>
+    </CardHeader>
+);
+
+// block: MetricCard
+const MetricCard = ({ metric }) => (
+    <div className="rounded-xl p-4 bg-[var(--color-surface-alt)] border border-[var(--color-border)] shadow-sm hover:bg-[var(--color-surface-hover)] transition-colors h-28">
+        <div className="text-sm text-[var(--color-text-secondary)]">{metric.label}</div>
+        <div className="mt-1 text-3xl font-semibold text-[var(--color-text-primary)]">{metric.value}</div>
+    </div>
+);
+
+// block: ActivityItem
+const ActivityItem = ({ update }) => (
+    <div className="flex items-start gap-3">
+        <img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-[var(--color-surface-alt)] shadow-sm" />
+        <div>
+            <p className="text-sm text-[var(--color-text-primary)] leading-snug">
+                <span className="font-semibold">{update.user}</span> {update.action}
+            </p>
+            <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{update.time}</p>
+        </div>
+    </div>
+);
+
+// primitive: Tab
+const Tab = ({ isActive, onClick, children }) => (
+    <button
+        onClick={onClick}
+        className={`w-full p-2 text-center text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
+            isActive
+                ? 'bg-[var(--tab-active-bg)] shadow text-[var(--tab-active-text)]'
+                : 'text-[var(--color-text-secondary)]'
+        }`}
+    >
+        {children}
+    </button>
+);
+
+// block: TabContent
+const TabContent = ({ activeTab, section }) => (
+    <AnimatePresence mode="wait">
+        {activeTab === 'metrics' && (
+            <motion.div
+                key="metrics"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="grid grid-cols-2 gap-4"
+            >
+                {section.metrics.map((m, idx) => (
+                    <MetricCard key={idx} metric={m} />
+                ))}
+            </motion.div>
+        )}
+        {activeTab === 'activity' && (
+            <motion.div
+                key="activity"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-4 h-full overflow-y-auto pr-2"
+            >
+                {section.updates.map((update, index) => (
+                    <ActivityItem key={index} update={update} />
+                ))}
+            </motion.div>
+        )}
+    </AnimatePresence>
+);
+
+// block: ListItem
+const ListItem = ({ section, goToPortal, activeTabs, handleTabChange }) => (
+    <motion.div
+        id={section.id}
+        key={section.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
+    >
+        <Card className="w-full rounded-2xl overflow-hidden">
+            <SectionHeader section={section} goToPortal={goToPortal} />
+            <CardContent className="px-6 pb-6 bg-[var(--color-surface-alt)]">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-start">
+                    <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="h-80 bg-[var(--color-surface-contrast)] rounded-xl p-4 shadow-inner border border-[var(--color-border)] flex flex-col">
+                            <ChartRenderer chart={section.charts[0]} sectionId={section.id} />
+                        </div>
+                        <div className="h-80 bg-[var(--color-surface-contrast)] rounded-xl p-4 shadow-inner border border-[var(--color-border)] flex flex-col">
+                            <ChartRenderer chart={section.charts[1]} sectionId={section.id} />
+                        </div>
+                    </div>
+                    <div className="lg:col-span-1 flex flex-col gap-4 h-80">
+                        <div className="flex p-1 bg-[var(--color-tab-container-bg)] rounded-xl">
+                            <Tab isActive={activeTabs[section.id] === 'metrics'} onClick={() => handleTabChange(section.id, 'metrics')}>
+                                <LayoutGrid className="h-4 w-4" />Key Metrics
+                            </Tab>
+                            <Tab isActive={activeTabs[section.id] === 'activity'} onClick={() => handleTabChange(section.id, 'activity')}>
+                                <MessageCircle className="h-4 w-4" />Recent Activity
+                            </Tab>
+                        </div>
+                        <div className="flex-grow relative flex flex-col justify-end">
+                            <TabContent activeTab={activeTabs[section.id]} section={section} />
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    </motion.div>
+);
 
 const DashboardList = ({ sections, goToPortal }) => {
     const [activeTabs, setActiveTabs] = useState(
@@ -45,52 +178,13 @@ const DashboardList = ({ sections, goToPortal }) => {
     return (
         <div className="space-y-6">
             {sections.map((s) => (
-              <motion.div
-                id={s.id} key={s.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }} whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
-              >
-                <Card className="w-full rounded-2xl overflow-hidden">
-                  <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-6 bg-[var(--color-surface-alt)] border-b-0">
-                    <div className="flex items-center gap-4">
-                      <div className={`rounded-xl p-3 bg-gradient-to-br ${s.accent} text-white shadow-md`}>
-                        <s.Icon className="h-7 w-7" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl font-bold tracking-tight">{s.title}</CardTitle>
-                        <div className="text-base text-[var(--color-text-secondary)] font-medium">Latest performance & trends</div>
-                      </div>
-                    </div>
-                    <Button size="lg" className="shrink-0 w-full sm:w-auto" onClick={() => goToPortal(s.id)}>
-                      Open Portal
-                    </Button>
-                  </CardHeader>
-
-                  <CardContent className="px-6 pb-6 bg-[var(--color-surface-alt)]">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-start">
-                      <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="h-80 bg-[var(--color-surface-contrast)] rounded-xl p-4 shadow-inner border border-[var(--color-border)] flex flex-col">
-                           <ChartRenderer chart={s.charts[0]} sectionId={s.id} />
-                        </div>
-                        <div className="h-80 bg-[var(--color-surface-contrast)] rounded-xl p-4 shadow-inner border border-[var(--color-border)] flex flex-col">
-                           <ChartRenderer chart={s.charts[1]} sectionId={s.id} />
-                        </div>
-                      </div>
-                      <div className="lg:col-span-1 flex flex-col gap-4 h-80">
-                         <div className="flex p-1 bg-[var(--color-tab-container-bg)] rounded-xl">
-                            <button onClick={() => handleTabChange(s.id, 'metrics')} className={`w-full p-2 text-center text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTabs[s.id] === 'metrics' ? 'bg-[var(--tab-active-bg)] shadow text-[var(--tab-active-text)]' : 'text-[var(--color-text-secondary)]'}`}><LayoutGrid className="h-4 w-4" />Key Metrics</button>
-                            <button onClick={() => handleTabChange(s.id, 'activity')} className={`w-full p-2 text-center text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTabs[s.id] === 'activity' ? 'bg-[var(--tab-active-bg)] shadow text-[var(--tab-active-text)]' : 'text-[var(--color-text-secondary)]'}`}><MessageCircle className="h-4 w-4" />Recent Activity</button>
-                         </div>
-                         <div className="flex-grow relative flex flex-col justify-end">
-                          <AnimatePresence mode="wait">
-                            {activeTabs[s.id] === 'metrics' && (<motion.div key="metrics" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="grid grid-cols-2 gap-4">{s.metrics.map((m, idx) => (<div key={idx} className="rounded-xl p-4 bg-[var(--color-surface-alt)] border border-[var(--color-border)] shadow-sm hover:bg-[var(--color-surface-hover)] transition-colors h-28"><div className="text-sm text-[var(--color-text-secondary)]">{m.label}</div><div className="mt-1 text-3xl font-semibold text-[var(--color-text-primary)]">{m.value}</div></div>))}</motion.div>)}
-                            {activeTabs[s.id] === 'activity' && (<motion.div key="activity" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="space-y-4 h-full overflow-y-auto pr-2">{s.updates.map((update, index) => (<div key={index} className="flex items-start gap-3"><img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-[var(--color-surface-alt)] shadow-sm" /><div><p className="text-sm text-[var(--color-text-primary)] leading-snug"><span className="font-semibold">{update.user}</span> {update.action}</p><p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{update.time}</p></div></div>))}</motion.div>)}
-                          </AnimatePresence>
-                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                <ListItem
+                    key={s.id}
+                    section={s}
+                    goToPortal={goToPortal}
+                    activeTabs={activeTabs}
+                    handleTabChange={handleTabChange}
+                />
             ))}
         </div>
     );

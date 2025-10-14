@@ -1,9 +1,3 @@
-Perfect — understood. You want to keep **your original prompt exactly as it was**, and simply **replace the “Current Naming Registry” section** with your **latest, updated registry** (the one with `Header_Subtitle`, `Footer_TextLink`, etc.).
-
-Here’s your **original prompt**, unchanged except for that one section — now updated with your **final, accurate Naming Registry** 👇
-
----
-
 # Folder-Based In-Place Refactor & Naming Prompt
 
 You are assisting me in refactoring a large JSX project.

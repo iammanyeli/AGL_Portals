@@ -11,6 +11,7 @@ import PieChart from '../../../components/charts/PieChart';
 import RadarChart from '../../../components/charts/RadarChart';
 
 
+// block: ChartRenderer
 const ChartRenderer = ({ chart, sectionId }) => {
     switch (chart.type) {
         case 'line':
@@ -28,6 +29,105 @@ const ChartRenderer = ({ chart, sectionId }) => {
         default:
             return null;
     }
+};
+
+// block: Header_Subtitle
+const Header_Subtitle = ({ title, subtitle }) => (
+    <div>
+        <CardTitle className="text-2xl font-bold tracking-tight">{title}</CardTitle>
+        <div className="text-base text-[var(--color-text-secondary)] font-medium">{subtitle}</div>
+    </div>
+);
+
+// block: SectionHeader
+const SectionHeader = ({ section, goToPortal, viewName }) => (
+    <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-6 bg-[var(--color-surface-alt)]">
+        <div className="flex items-center gap-4">
+            <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
+                <section.Icon className="h-7 w-7" />
+            </div>
+            <Header_Subtitle title={section.title} subtitle={viewName} />
+        </div>
+        <Button className="shrink-0 w-full sm:w-auto" onClick={() => goToPortal(section.id)}>
+            Open Portal
+        </Button>
+    </CardHeader>
+);
+
+// block: MetricCard
+const MetricCard = ({ metric }) => (
+    <div className="rounded-xl p-4 bg-[var(--color-surface-contrast)] border border-[var(--color-border)] shadow-sm flex flex-col justify-center">
+        <div className="text-sm text-[var(--color-text-secondary)]">{metric.label}</div>
+        <div className="mt-1 text-3xl font-semibold text-[var(--color-text-primary)]">{metric.value}</div>
+    </div>
+);
+
+// block: ActivityItem
+const ActivityItem = ({ update }) => (
+    <div className="flex items-start gap-3">
+        <img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-[var(--color-surface-alt)] shadow-sm" />
+        <div>
+            <p className="text-sm text-[var(--color-text-primary)] leading-snug">
+                <span className="font-semibold">{update.user}</span> {update.action}
+            </p>
+            <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{update.time}</p>
+        </div>
+    </div>
+);
+
+// primitive: CarouselIndicator
+const CarouselIndicator = ({ views, viewIndex, setView }) => (
+    <div className="flex justify-center items-center py-3 px-4 border-t border-[var(--color-divider)] bg-[var(--color-surface)] bg-opacity-50 space-x-2">
+        {views.map((_, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (index === viewIndex) return;
+                    setView([index, index > viewIndex ? 1 : -1]);
+                }}
+                className={`h-2 rounded-full transition-all ${
+                    viewIndex === index ? 'w-6 bg-[var(--color-accent)]' : 'w-2 bg-[var(--color-border)] hover:opacity-80'
+                }`}
+            ></button>
+        ))}
+    </div>
+);
+
+// block: CarouselContent
+const CarouselContent = ({ viewIndex, section }) => {
+    if (viewIndex === 0) {
+        return (
+            <div className="grid grid-cols-2 gap-4 h-full">
+                {section.metrics.map((m, idx) => (
+                    <MetricCard key={idx} metric={m} />
+                ))}
+            </div>
+        );
+    }
+    if (viewIndex === 1) {
+        return (
+            <div className="w-full h-full bg-[var(--color-surface-contrast)] rounded-xl shadow-inner border border-[var(--color-border)] flex flex-col">
+                <ChartRenderer chart={section.charts[0]} sectionId={section.id} />
+            </div>
+        );
+    }
+    if (viewIndex === 2) {
+        return (
+            <div className="w-full h-full bg-[var(--color-surface-contrast)] rounded-xl shadow-inner border border-[var(--color-border)] flex flex-col items-center justify-center">
+                <ChartRenderer chart={section.charts[1]} sectionId={section.id} />
+            </div>
+        );
+    }
+    if (viewIndex === 3) {
+        return (
+            <div className="space-y-4 h-full overflow-y-auto pr-2">
+                {section.updates.map((update, index) => (
+                    <ActivityItem key={index} update={update} />
+                ))}
+            </div>
+        );
+    }
+    return null;
 };
 
 
@@ -56,20 +156,7 @@ const GridSectionCard = ({ section, goToPortal }) => {
 
     return (
         <Card className="w-full rounded-2xl overflow-hidden h-[560px] flex flex-col">
-            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-6 bg-[var(--color-surface-alt)]">
-                <div className="flex items-center gap-4">
-                    <div className={`rounded-xl p-3 bg-gradient-to-br ${section.accent} text-white shadow-md`}>
-                        <section.Icon className="h-7 w-7" />
-                    </div>
-                    <div>
-                        <CardTitle className="text-2xl font-bold tracking-tight">{section.title}</CardTitle>
-                        <div className="text-base text-[var(--color-text-secondary)] font-medium">{views[viewIndex].name}</div>
-                    </div>
-                </div>
-                <Button className="shrink-0 w-full sm:w-auto" onClick={() => goToPortal(section.id)}>
-                    Open Portal
-                </Button>
-            </CardHeader>
+            <SectionHeader section={section} goToPortal={goToPortal} viewName={views[viewIndex].name} />
             <CardContent className="flex-grow flex flex-col p-0">
                 <div className="flex-grow relative overflow-hidden">
                     <AnimatePresence initial={false} custom={direction}>
@@ -83,21 +170,11 @@ const GridSectionCard = ({ section, goToPortal }) => {
                                 else if (offset.x > 50) { paginate(-1); }
                             }}
                         >
-                            {viewIndex === 0 && (<div className="grid grid-cols-2 gap-4 h-full">{section.metrics.map((m, idx) => (<div key={idx} className="rounded-xl p-4 bg-[var(--color-surface-contrast)] border border-[var(--color-border)] shadow-sm flex flex-col justify-center"><div className="text-sm text-[var(--color-text-secondary)]">{m.label}</div><div className="mt-1 text-3xl font-semibold text-[var(--color-text-primary)]">{m.value}</div></div>))}</div>)}
-                            {viewIndex === 1 && (<div className="w-full h-full bg-[var(--color-surface-contrast)] rounded-xl shadow-inner border border-[var(--color-border)] flex flex-col"><ChartRenderer chart={section.charts[0]} sectionId={section.id} /></div>)}
-                            {viewIndex === 2 && (<div className="w-full h-full bg-[var(--color-surface-contrast)] rounded-xl shadow-inner border border-[var(--color-border)] flex flex-col items-center justify-center"><ChartRenderer chart={section.charts[1]} sectionId={section.id} /></div>)}
-                            {viewIndex === 3 && (<div className="space-y-4 h-full overflow-y-auto pr-2">{section.updates.map((update, index) => (<div key={index} className="flex items-start gap-3"><img src={`https://placehold.co/40x40/E2E8F0/4A5568?text=${update.user.split(' ').map(n => n[0]).join('')}`} alt={update.user} className="w-9 h-9 rounded-full border-2 border-[var(--color-surface-alt)] shadow-sm" /><div><p className="text-sm text-[var(--color-text-primary)] leading-snug"><span className="font-semibold">{update.user}</span> {update.action}</p><p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{update.time}</p></div></div>))}</div>)}
+                           <CarouselContent viewIndex={viewIndex} section={section} />
                         </motion.div>
                     </AnimatePresence>
                 </div>
-                <div className="flex justify-center items-center py-3 px-4 border-t border-[var(--color-divider)] bg-[var(--color-surface)] bg-opacity-50 space-x-2">
-                    {views.map((_, index) => (
-                        <button key={index}
-                            onClick={() => { if (index === viewIndex) return; setView([index, index > viewIndex ? 1 : -1]); }}
-                            className={`h-2 rounded-full transition-all ${viewIndex === index ? 'w-6 bg-[var(--color-accent)]' : 'w-2 bg-[var(--color-border)] hover:opacity-80'}`}
-                        ></button>
-                    ))}
-                </div>
+                <CarouselIndicator views={views} viewIndex={viewIndex} setView={setView} />
             </CardContent>
         </Card>
     );
