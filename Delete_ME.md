@@ -118,9 +118,12 @@ Output a full updated generic naming registry, including for each name:
 ## 7️⃣ Folder to Process
 
 ```
-src/features/dashboard
+src/features/settings
 ```
 
 You should strictly focus on this folder.
 
 ---
+
+## 8️⃣ Use Existing Naming Registry as a Guide:
+Look at the current naming registry, which lists all components we’ve already extracted from other folders. Use this as a reference to identify components in the new folder that should also be decoupled. Only create new generic names for components that aren’t already in the registry. This keeps names consistent and avoids unnecessary duplicates.
