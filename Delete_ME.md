@@ -67,8 +67,8 @@ Use existing names from this list whenever possible.
 Only propose a new name if there is no suitable match.
 
 ### ✅ **Current Naming Registry**
-| Component Name              | File Paths                                                                                                                                                                                                                                  |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Component Name**          | **File Paths**       |
+| --------------------------- | -------------------- |
 | `TextField`                 | `src/features/portals/training/components/modals/CRUDModal.jsx`                                                                                                                                                                             |
 | `TextField_Icon`            | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`                                                                                                                                                 |
 | `TextField_Password`        | *(Existing generic primitive — not yet used)*                                                                                                                                                                                               |
@@ -76,6 +76,7 @@ Only propose a new name if there is no suitable match.
 | `SelectField`               | `src/features/portals/training/components/modals/CRUDModal.jsx`                                                                                                                                                                             |
 | `Button`                    | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`<br>`src/features/portals/training/components/modals/ConfirmationModal.jsx`<br>`src/features/portals/training/components/modals/DeleteModal.jsx` |
 | `Button_Icon`               | `src/features/settings/index.jsx`                                                                                                                                                                                                           |
+| `Button_Toggle`             | `src/features/portals/training/components/ui/ExportDropdown.jsx`                                                                                                                                                                            |
 | `Button_Icon_Destructive`   | `src/features/settings/index.jsx`<br>`src/features/portals/training/components/modals/CertificatePreviewModal.jsx`                                                                                                                          |
 | `Button_Destructive`        | `src/features/portals/training/components/modals/ConfirmationModal.jsx`<br>`src/features/portals/training/components/modals/DeleteModal.jsx`                                                                                                |
 | `Button_Subtle`             | `src/features/portals/training/components/modals/ConfirmationModal.jsx`<br>`src/features/portals/training/components/modals/DeleteModal.jsx`                                                                                                |
@@ -100,6 +101,11 @@ Only propose a new name if there is no suitable match.
 | `CloseIcon`                 | `src/features/portals/training/components/modals/CRUDModal.jsx`<br>`src/features/portals/training/components/modals/CertificatePreviewModal.jsx`                                                                                            |
 | `TrashIcon`                 | `src/features/portals/training/components/modals/CertificatePreviewModal.jsx`                                                                                                                                                               |
 | `WarningIcon`               | `src/features/portals/training/components/modals/ConfirmationModal.jsx`<br>`src/features/portals/training/components/modals/DeleteModal.jsx`                                                                                                |
+| `LoadingIndicator`          | `src/features/portals/training/components/ui/CertificateUpload.jsx`                                                                                                                                                                         |
+| `FileDetails`               | `src/features/portals/training/components/ui/CertificateUpload.jsx`                                                                                                                                                                         |
+| `DropDownItem`              | `src/features/portals/training/components/ui/ExportDropdown.jsx`                                                                                                                                                                            |
+| `DropDownBlock`             | `src/features/portals/training/components/ui/ExportDropdown.jsx`                                                                                                                                                                            |
+| `FileThumbnail`             | `src/features/portals/training/components/ui/CertificateUpload.jsx`                                                                                                                                                                         |
 
 ---
 
@@ -138,7 +144,7 @@ Output a full updated generic naming registry, including for each name:
 ## 7️⃣ Folder to Process
 
 ```
-src/features/portals/training/components/ui
+src/features/portals/training/views/activity
 ```
 
 You should strictly focus on this folder.
@@ -147,4 +153,3 @@ You should strictly focus on this folder.
 
 ## 8️⃣ Use Existing Naming Registry as a Guide:
 Look at the current naming registry, which lists all components we’ve already extracted from other folders. Use this as a reference to identify components in the new folder that should also be decoupled. Only create new generic names for components that aren’t already in the registry. This keeps names consistent and avoids unnecessary duplicates.
-You must have a look at src/features/portals/training/components/modals/CRUDModal.jsx for inpiration; I want nothing less that it.
