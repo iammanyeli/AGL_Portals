@@ -1,6 +1,22 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Pagination from '../Pagination.jsx';
 
+// primitive: TextField_Icon
+const TextField_Icon = ({ icon, ...props }) => (
+    <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>
+        <input
+            {...props}
+            className="w-full pl-10 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-info)]"
+        />
+    </div>
+);
+
+// icon: SearchIcon
+const SearchIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--color-text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+);
+
 const ExpiringSoonView = ({ data, showDetailedView, processedRecords }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -38,14 +54,13 @@ const ExpiringSoonView = ({ data, showDetailedView, processedRecords }) => {
     return (
         <div className="animate-fade-in">
              <div className="relative mb-6 no-print">
-                <input
+                <TextField_Icon
+                    icon={<SearchIcon />}
                     type="text"
                     placeholder="Search by name, certificate, or site..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-info)]"
                 />
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </div>
             {paginatedData.length > 0 ? (
                 <>
@@ -101,4 +116,3 @@ const ExpiringSoonView = ({ data, showDetailedView, processedRecords }) => {
 };
 
 export default ExpiringSoonView;
-

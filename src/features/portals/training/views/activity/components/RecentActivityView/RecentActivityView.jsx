@@ -1,22 +1,48 @@
 import React, { useState, useMemo } from 'react';
 import Pagination from '../Pagination';
 
-const flattenObject = (obj, parent = '', res = {}) => {
-    for(let key in obj){
-        let propName = parent ? parent + '.' + key : key;
-        if(typeof obj[key] == 'object' && obj[key] !== null && !Array.isArray(obj[key])){
-            flattenObject(obj[key], propName, res);
-        } else {
-            res[propName] = obj[key];
-        }
-    }
-    return res;
-};
+// icon: SettingsIcon
+const SettingsIcon = (props) => (
+    <svg title="Settings Change" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l-.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+);
 
-const ChangeDetail = ({ title, variant }) => {
+// icon: ImportIcon
+const ImportIcon = (props) => (
+    <svg title="Import Activity" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+);
+
+// icon: ExportIcon
+const ExportIcon = (props) => (
+    <svg title="Export Activity" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+);
+
+// icon: RecordIcon
+const RecordIcon = (props) => (
+    <svg title="Record Change" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+);
+
+// icon: ActivityIcon
+const ActivityIcon = (props) => (
+    <svg title="General Activity" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+);
+
+// block: DetailsBlock
+const DetailsBlock = ({ title, variant }) => {
     if (!variant.data || typeof variant.data !== 'object' || Object.keys(variant.data).length === 0) {
         return null;
     }
+    
+    const flattenObject = (obj, parent = '', res = {}) => {
+        for(let key in obj){
+            let propName = parent ? parent + '.' + key : key;
+            if(typeof obj[key] == 'object' && obj[key] !== null && !Array.isArray(obj[key])){
+                flattenObject(obj[key], propName, res);
+            } else {
+                res[propName] = obj[key];
+            }
+        }
+        return res;
+    };
 
     const flatData = flattenObject(variant.data);
     
@@ -45,13 +71,14 @@ const ChangeDetail = ({ title, variant }) => {
     );
 };
 
-const ActivityItem = ({ activity, expanded, onToggle }) => {
+// block: ListItem
+const ListItem = ({ activity, expanded, onToggle }) => {
     const iconMap = {
-        settings: <svg title="Settings Change" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l-.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
-        import: <svg title="Import Activity" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
-        export: <svg title="Export Activity" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-        record: <svg title="Record Change" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
-        default: <svg title="General Activity" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+        settings: <SettingsIcon />,
+        import: <ImportIcon />,
+        export: <ExportIcon />,
+        record: <RecordIcon />,
+        default: <ActivityIcon />
     };
     
     const payload = activity.payload ? JSON.parse(activity.payload) : null;
@@ -79,8 +106,8 @@ const ActivityItem = ({ activity, expanded, onToggle }) => {
             {expanded && hasDetails && (
                 <div className="mt-4 ml-14 pl-4 border-l-2 border-[var(--color-border)] animate-fade-in">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <ChangeDetail title="Before" variant={{ type: 'danger', data: payload.before }} />
-                        <ChangeDetail title="After" variant={{ type: 'success', data: payload.after }} />
+                        <DetailsBlock title="Before" variant={{ type: 'danger', data: payload.before }} />
+                        <DetailsBlock title="After" variant={{ type: 'success', data: payload.after }} />
                     </div>
                 </div>
             )}
@@ -109,7 +136,7 @@ const RecentActivityView = ({ data }) => {
                 <>
                 <div className="space-y-6">
                     {paginatedData.map((activity) => (
-                        <ActivityItem 
+                        <ListItem 
                             key={activity.id} 
                             activity={activity}
                             expanded={expandedId === activity.id}
@@ -130,4 +157,3 @@ const RecentActivityView = ({ data }) => {
 
 
 export default RecentActivityView;
-
