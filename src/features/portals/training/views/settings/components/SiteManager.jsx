@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../../../../../providers/ThemeProvider';
 import { Card, CardHeader, CardContent, CardTitle } from '../../../../../../components/primitives/Card';
 import Button from '../../../../../../components/primitives/Button';
-import InputField from '../../../../training/components/ui/InputField';
+import TextField from '../../../../training/components/ui/TextField';
 import SelectField from '../../../../training/components/ui/SelectField';
 
 /* NEW COMPONENT / LOGIC */
@@ -135,8 +135,8 @@ const SlideForm = ({ open, onClose, onSubmit, initial = {}, provinces = [], cert
                 </div>
   
                 <form onSubmit={submit} className="p-4 overflow-auto flex-1 bg-[var(--color-surface)]">
-                  <InputField label="Abbreviated Name" name="abbreviatedName" value={form.abbreviatedName} onChange={change} required placeholder="e.g., JHB-1" disabled={!!initial.abbreviatedName} />
-                  <InputField label="Full Name" name="fullName" value={form.fullName} onChange={change} required placeholder="e.g., Johannesburg Central" />
+                  <TextField label="Abbreviated Name" name="abbreviatedName" value={form.abbreviatedName} onChange={change} required placeholder="e.g., JHB-1" disabled={!!initial.abbreviatedName} />
+                  <TextField label="Full Name" name="fullName" value={form.fullName} onChange={change} required placeholder="e.g., Johannesburg Central" />
                   <SelectField label="Province" name="province" value={form.province} onChange={change} options={provinces} required />
   
                   <div className="mt-2">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputField from '../../components/ui/InputField.jsx';
+import TextField from '../../components/ui/TextField.jsx';
 import SelectField from '../../components/ui/SelectField.jsx';
 import ExportDropdown from '../../components/ui/ExportDropdown.jsx';
 import AppliedFilters from './components/AppliedFilters.jsx';
@@ -81,7 +81,7 @@ const RecordsPage = ({ logActivity, filters, setFilters, certificateTypes, sites
                 <div className="p-4 bg-[var(--color-surface-contrast)] rounded-lg mb-6 shadow-sm no-print">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                         <div className="lg:col-span-2">
-                            <InputField label="Search" name="searchTerm" value={filters.searchTerm} onChange={handleFilterChange} placeholder="Search by name, EMP#, title..."/>
+                            <TextField label="Search" name="searchTerm" value={filters.searchTerm} onChange={handleFilterChange} placeholder="Search by name, EMP#, title..."/>
                         </div>
                         <SelectField label="Status" name="status" value={filters.status} onChange={handleFilterChange} options={['Valid', 'Expiring Soon', 'Expired']} />
                         <SelectField label="Training" name="trainingTitle" value={filters.trainingTitle} onChange={handleFilterChange} options={certificateTypes} />

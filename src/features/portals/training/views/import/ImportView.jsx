@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import InputField from '../../components/ui/InputField.jsx';
+import TextField from '../../components/ui/TextField.jsx';
 import SelectField from '../../components/ui/SelectField.jsx';
 import Section from '../../components/ui/Section.jsx';
 
@@ -278,8 +278,8 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
             
             {validationData.newSites.length > 0 && <Section title="New Sites to Create">{validationData.newSites.map(abbr => (
                 <div key={abbr} className="p-4 border border-[var(--color-border)] rounded-md grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-4">
-                    <InputField label="Abbreviation" name={`${abbr}.abbr`} value={abbr} disabled />
-                    <InputField label="Full Name" name={`${abbr}.fullName`} value={siteCreationData[abbr]?.fullName || ''} onChange={(e) => setSiteCreationData(p => ({...p, [abbr]: {...p[abbr], fullName: e.target.value}}))} required />
+                    <TextField label="Abbreviation" name={`${abbr}.abbr`} value={abbr} disabled />
+                    <TextField label="Full Name" name={`${abbr}.fullName`} value={siteCreationData[abbr]?.fullName || ''} onChange={(e) => setSiteCreationData(p => ({...p, [abbr]: {...p[abbr], fullName: e.target.value}}))} required />
                     <div className="flex items-end gap-2">
                          <div className="flex-grow">
                             <SelectField label="Province" name={`${abbr}.province`} value={siteCreationData[abbr]?.province || ''} onChange={(e) => setSiteCreationData(p => ({...p, [abbr]: {...p[abbr], province: e.target.value}}))} options={allAvailableProvinces} required />
@@ -306,7 +306,7 @@ const ImportPage = ({ logActivity, sites, provinces, certificateTypes, onImportS
                  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-[var(--color-surface-alt)] p-4 rounded-lg shadow-xl w-11/12 max-w-sm">
                         <h4 className="font-semibold mb-2 text-[var(--color-text-primary)]">Add New Province</h4>
-                        <InputField value={quickAddValue} onChange={(e) => setQuickAddValue(e.target.value)} placeholder="e.g. Gauteng" />
+                        <TextField value={quickAddValue} onChange={(e) => setQuickAddValue(e.target.value)} placeholder="e.g. Gauteng" />
                         <div className="flex justify-end gap-2 mt-4">
                             <button type="button" onClick={() => setShowQuickAddModal(false)} className="px-3 py-1 bg-[var(--color-control-surface-bg)] rounded text-[var(--color-text-primary)]">Cancel</button>
                             <button type="button" onClick={handleQuickAddProvince} className="px-3 py-1 bg-[var(--color-button-info-bg)] text-[var(--color-button-info-text)] rounded">Add</button>

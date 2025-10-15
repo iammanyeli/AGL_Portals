@@ -3,7 +3,7 @@ import React, { useState, useMemo, useRef } from 'react';
 // Production Imports from existing repo
 import { Card, CardContent } from '/src/components/primitives/Card.jsx';
 import Button from '/src/components/primitives/Button.jsx';
-import InputField from '/src/features/portals/training/components/ui/InputField.jsx';
+import TextField from '/src/features/portals/training/components/ui/TextField.jsx';
 import ConfirmationModal from '/src/features/portals/training/components/modals/ConfirmationModal.jsx';
 import { Trash } from '/src/components/icons';
 // New UI enhancement: Importing the dedicated search input component.
@@ -98,7 +98,7 @@ const ManageProvinces = ({ items, onAdd, onDelete, onUpdate, placeholder }) => {
                             {filteredItems.map(item => (
                                 <li key={item} className="group flex justify-between items-center bg-[var(--color-surface-subtle)] hover:bg-[var(--color-surface-hover)] p-3 rounded-lg transition-all duration-200">
                                     {editingItem?.originalValue === item ? (
-                                        <InputField type="text" value={editingItem.currentValue} onChange={(e) => setEditingItem(p => ({ ...p, currentValue: e.target.value }))} className="!p-0 !border-0 !bg-transparent !ring-0 !shadow-none" autoFocus onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') handleCancelEdit(); }} />
+                                        <TextField type="text" value={editingItem.currentValue} onChange={(e) => setEditingItem(p => ({ ...p, currentValue: e.target.value }))} className="!p-0 !border-0 !bg-transparent !ring-0 !shadow-none" autoFocus onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') handleCancelEdit(); }} />
                                     ) : ( <span className="text-[var(--color-text-primary)] font-medium">{item}</span> )}
                                     <div className="flex gap-1 flex-shrink-0 transition-opacity duration-200 lg:opacity-0 group-hover:opacity-100 focus-within:opacity-100">
                                         {editingItem?.originalValue === item ? (
@@ -122,7 +122,7 @@ const ManageProvinces = ({ items, onAdd, onDelete, onUpdate, placeholder }) => {
                     <CardContent className="p-0">
                         <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">Add New Province</h3>
                         <form onSubmit={(e) => { e.preventDefault(); handleAdd(); }} className="flex flex-col gap-3">
-                            <InputField value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder={placeholder} />
+                            <TextField value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder={placeholder} />
                             <Button type="submit">Add Province</Button>
                         </form>
                     </CardContent>

@@ -1,4 +1,5 @@
-const InputField = ({ label, name, type = 'text', value, onChange, required = false, disabled = false, placeholder='' }) => (
+// primitive: TextField
+const TextField = ({ label, name, type = 'text', value, onChange, required = false, disabled = false, placeholder='' }) => (
     <div>
         <label htmlFor={name} className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-1">{label}</label>
         <input type={type} id={name} name={name} value={value || ''} onChange={onChange} required={required} disabled={disabled} placeholder={placeholder} 
@@ -6,4 +7,4 @@ const InputField = ({ label, name, type = 'text', value, onChange, required = fa
     </div>
 );
 
-export default InputField;
+export default TextField;
