@@ -68,18 +68,23 @@ Only propose a new name if there is no suitable match.
 
 ### ✅ **Current Naming Registry**
 
-| **Component Name**        | **File Paths**                                                                              |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| `TextField`               | *(Existing generic primitive — no new paths yet)*                                           |
-| `TextField_Icon`          | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx` |
-| `TextField_Password`      | *(Existing generic primitive — not yet used)*                                               |
-| `TextField_Icon_Password` | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx` |
-| `Button`                  | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx` |
-| `Button_Icon`             | *(Existing generic variant — not yet used)*                                                 |
-| `Header_Subtitle`         | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx` |
-| `Footer_TextLink`         | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx` |
-| `AuthLayout`              | `src/features/authentication/index.jsx`                                                     |
-| `BrandBlock`              | `src/features/authentication/index.jsx`                                                     |
+| **Component Name**        | **File Paths**                                                                                                                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `TextField`               | *(Existing generic primitive — no new paths yet)*                                                                                |
+| `TextField_Icon`          | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`                                      |
+| `TextField_Password`      | *(Existing generic primitive — not yet used)*                                                                                    |
+| `TextField_Icon_Password` | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`                                      |
+| `Button`                  | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`                                      |
+| `Button_Icon`             | `src/features/settings/index.jsx`                                                                                                |
+| `Button_Icon_Destructive` | `src/features/settings/index.jsx`                                                                                                |
+| `Header_Subtitle`         | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`<br>`src/features/settings/index.jsx` |
+| `Footer_TextLink`         | `src/features/authentication/LoginPage.jsx`<br>`src/features/authentication/SignupPage.jsx`                                      |
+| `AuthLayout`              | `src/features/authentication/index.jsx`                                                                                          |
+| `BrandBlock`              | `src/features/authentication/index.jsx`                                                                                          |
+| `SettingsLayout`          | `src/features/settings/index.jsx`                                                                                                |
+| `ListItem`                | `src/features/settings/index.jsx`                                                                                                |
+| `Toggle_Icon`             | `src/features/settings/index.jsx`                                                                                                |
+
 
 ---
 
@@ -118,7 +123,7 @@ Output a full updated generic naming registry, including for each name:
 ## 7️⃣ Folder to Process
 
 ```
-src/features/settings
+src/features/portals/training/components/modals
 ```
 
 You should strictly focus on this folder.
