@@ -1,3 +1,4 @@
+// block: DashboardCard
 const DashboardCard = ({ title, count, icon, variant, isActive, onClick }) => {
     const variantClasses = {
         info: 'bg-[var(--color-info)]',

@@ -25,8 +25,8 @@ const DropDownItem = ({ onClick, children }) => (
   </li>
 );
 
-// block: DropDownBlock
-const DropDownBlock = ({ children }) => (
+// block: DropDownLayout
+const DropDownLayout = ({ children }) => (
   <div className="absolute right-0 mt-2 w-48 bg-[var(--color-surface-alt)] rounded-md shadow-lg z-10 border border-[var(--color-border)]">
     <ul className="py-1">
       {children}
@@ -57,10 +57,10 @@ const ExportDropdown = ({ onPdf, onExcel }) => {
       </Button_Toggle>
 
       {isOpen && (
-        <DropDownBlock>
+        <DropDownLayout>
           <DropDownItem onClick={() => { onPdf(); setIsOpen(false); }}>Export as PDF</DropDownItem>
           <DropDownItem onClick={() => { onExcel(); setIsOpen(false); }}>Export as Excel</DropDownItem>
-        </DropDownBlock>
+        </DropDownLayout>
       )}
     </div>
   );
