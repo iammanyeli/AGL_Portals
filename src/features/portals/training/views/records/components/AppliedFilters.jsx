@@ -1,3 +1,4 @@
+// block: AppliedFilters
 const AppliedFilters = ({ filters, sites }) => {
     const activeFilters = Object.entries(filters).filter(([key, value]) => value !== '');
     if (activeFilters.length === 0) return null;
