@@ -6,7 +6,6 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal.jsx';
 import * as api from '../../../../../services/__mocks__/trainingAPI.js'; // Using mock API directly for certificate actions
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────────
-
 const getValidityStyles = (status) => {
     const styles = {
         'Valid': {
@@ -33,7 +32,6 @@ const getValidityStyles = (status) => {
 
 
 // ─── ICONS ─────────────────────────────────────────────────────────────────────
-
 // icon: EditIcon
 const EditIcon = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" {...props}><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>
@@ -84,6 +82,60 @@ const ExpiredIcon_Stats = (props) => (
     <svg className="w-6 h-6 text-[var(--color-badge-danger-text)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" {...props}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z" /></svg>
 );
 
+
+// ─── PRIMITIVES ────────────────────────────────────────────────────────────────
+
+// primitive: Button_Icon
+const Button_Icon = ({ onClick, variant = 'default', size = 'md', children, ...props }) => {
+    const sizeClasses = size === 'sm' ? 'h-8 w-8' : 'h-10 w-10';
+    const variantClasses = {
+        default: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]',
+        danger: 'text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] hover:bg-[var(--color-badge-danger-bg)]'
+    };
+    return (
+        <button onClick={onClick} className={`${sizeClasses} ${variantClasses[variant]} flex items-center justify-center rounded-full transition-colors no-print`} {...props}>
+            {children}
+        </button>
+    );
+};
+
+// primitive: Button_Primary
+const Button_Primary = ({ onClick, children, ...props }) => (
+    <button onClick={onClick} className="bg-[var(--color-button-info-bg)] hover:bg-[var(--color-button-info-hover-bg)] text-[var(--color-button-info-text)] font-semibold text-sm py-2 px-3 rounded-lg flex items-center transition-all duration-200 ease-in-out hover:scale-105 no-print" {...props}>
+        {children}
+    </button>
+);
+
+// primitive: TextField_Icon
+const TextField_Icon = ({ icon, ...props }) => (
+    <div className="relative no-print">
+        {icon}
+        <input type="text" {...props} className="w-full bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-info)]"/>
+    </div>
+);
+
+// primitive: StatusBadge
+const StatusBadge = ({ status, size = 'sm' }) => {
+    const styles = getValidityStyles(status);
+    const sizeClasses = size === 'sm' 
+        ? 'text-xs font-medium px-2 py-1' 
+        : 'text-sm font-bold px-3 py-1';
+    
+    return (
+        <span className={`${sizeClasses} rounded-full ${styles.badge}`}>
+            {status}
+        </span>
+    );
+};
+
+// primitive: Avatar_Initials
+const Avatar_Initials = ({ firstName, surname }) => (
+    <div className="w-12 h-12 rounded-full bg-[var(--color-icon-container-info-bg)] text-[var(--color-icon-container-info-text)] flex items-center justify-center font-bold text-xl">
+        {firstName.charAt(0)}{surname.charAt(0)}
+    </div>
+);
+
+
 // ─── COMPONENTS ────────────────────────────────────────────────────────────────
 
 // block: EmployeeDossierCard
@@ -91,15 +143,13 @@ const EmployeeDossierCard = ({ employeeDetails, onEdit }) => (
     <div className="bg-[var(--color-surface)] p-6 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-[var(--color-text-primary)]">Employee Dossier</h3>
-            <button onClick={onEdit} className="h-8 w-8 flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] rounded-full transition-colors no-print">
+            <Button_Icon onClick={onEdit} size="sm">
                 <EditIcon />
-            </button>
+            </Button_Icon>
         </div>
         <div className="bg-[var(--color-surface-contrast)] p-4 rounded-xl border border-[var(--color-border)]">
             <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-full bg-[var(--color-icon-container-info-bg)] text-[var(--color-icon-container-info-text)] flex items-center justify-center font-bold text-xl">
-                    {employeeDetails.firstName.charAt(0)}{employeeDetails.surname.charAt(0)}
-                </div>
+                <Avatar_Initials firstName={employeeDetails.firstName} surname={employeeDetails.surname} />
                 <div>
                     <h2 className="font-bold text-lg text-[var(--color-text-primary)]">{employeeDetails.firstName} {employeeDetails.surname}</h2>
                     <p className="text-sm text-[var(--color-text-secondary)]">{employeeDetails.jobTitle}</p>
@@ -138,13 +188,17 @@ const CertificatesList = ({ employeeDetails, records, activeRecord, onSelect, on
     <div className="flex flex-col flex-1 p-6 overflow-hidden bg-[var(--color-surface)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-border)]" style={{minHeight: '300px'}}>
         <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-[var(--color-text-primary)]">All Certificates</h3>
-            <button onClick={() => onAddNew({employee: employeeDetails})} className="bg-[var(--color-button-info-bg)] hover:bg-[var(--color-button-info-hover-bg)] text-[var(--color-button-info-text)] font-semibold text-sm py-2 px-3 rounded-lg flex items-center transition-all duration-200 ease-in-out hover:scale-105 no-print">
-               <AddIcon /> Add New
-            </button>
+            <Button_Primary onClick={() => onAddNew({employee: employeeDetails})}>
+                <AddIcon /> Add New
+            </Button_Primary>
         </div>
-        <div className="relative mb-4 no-print">
-            <SearchIcon />
-            <input type="text" value={certSearch} onChange={onSearchChange} placeholder="Search certificates..." className="w-full bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-info)]"/>
+        <div className="mb-4">
+            <TextField_Icon
+                icon={<SearchIcon />}
+                value={certSearch}
+                onChange={onSearchChange}
+                placeholder="Search certificates..."
+            />
         </div>
         <div className="flex-1 overflow-y-auto cert-list-scrollbar -mr-4 pr-4">
             <nav className="space-y-2">
@@ -154,7 +208,7 @@ const CertificatesList = ({ employeeDetails, records, activeRecord, onSelect, on
                         <a href="#" key={cert.id} onClick={(e) => { e.preventDefault(); onSelect(cert); }} className={`block p-3 rounded-lg transition-colors ${activeRecord.id === cert.id ? 'bg-[var(--color-highlight)] border border-[var(--color-info)]/20' : 'hover:bg-[var(--color-surface-hover)]'}`}>
                             <div className="flex justify-between items-center">
                                 <p className={`font-semibold text-sm ${activeRecord.id === cert.id ? 'text-[var(--color-info)]' : 'text-[var(--color-text-primary)]'}`}>{cert.trainingTitle}</p>
-                                <span className={`text-xs font-medium px-2 py-1 rounded-full ${certStyles.badge}`}>{cert.status.status}</span>
+                                <StatusBadge status={cert.status.status} />
                             </div>
                             <p className={`text-xs mt-1 ${activeRecord.id === cert.id ? 'text-[var(--color-info)]/80' : 'text-[var(--color-text-secondary)]'}`}>
                                 {cert.status.daysLeft < 0 ? 'Expired' : 'Expires'}: {new Date(cert.status.dateOfExpiry).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -250,12 +304,10 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
 
     const [certSearch, setCertSearch] = useState('');
     
-    // --- NEW STATE FOR CERTIFICATE MANAGEMENT (from Phase 3) ---
     const [certificates, setCertificates] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
     const [previewCert, setPreviewCert] = useState(null);
     const [deletingCertId, setDeletingCertId] = useState(null);
-    // --- END NEW STATE ---
 
     const filteredEmployeeRecords = useMemo(() =>
         allEmployeeRecords.filter(cert =>
@@ -264,7 +316,6 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
         [allEmployeeRecords, certSearch]
     );
 
-    // --- NEW EFFECT TO FETCH CERTIFICATES (from Phase 3) ---
     useEffect(() => {
         if (activeRecord) {
             const fetchCerts = async () => {
@@ -273,7 +324,6 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
             fetchCerts();
         }
     }, [activeRecord]);
-    // --- END NEW EFFECT ---
 
     useEffect(() => {
         if (allEmployeeRecords.length > 0 && !allEmployeeRecords.some(r => r.id === activeRecord?.id)) {
@@ -281,7 +331,6 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
         }
     }, [allEmployeeRecords, activeRecord]);
     
-    // --- NEW HANDLERS FOR CERTIFICATE ACTIONS (from Phase 3) ---
     const handleUpload = async (file) => {
         if (!activeRecord) return;
         setIsUploading(true);
@@ -307,7 +356,6 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
             setPreviewCert(null);
         }
     };
-    // --- END NEW HANDLERS ---
 
     if (!activeRecord || !employeeDetails) {
         return (
@@ -378,16 +426,16 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
                             </button>
                             <div className="flex items-center gap-4">
                                 <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{activeRecord.trainingTitle}</h1>
-                                 <span className={`text-sm font-bold px-3 py-1 rounded-full ${validityStyles.badge}`}>{status}</span>
+                                 <StatusBadge status={status} size="lg" />
                             </div>
                         </div>
-                        <div className="flex items-center space-x-2 no-print">
-                             <button onClick={() => setModalState({isOpen: true, type: 'editRecord', data: activeRecord})} className="h-10 w-10 flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] rounded-full transition-colors">
+                        <div className="flex items-center space-x-2">
+                             <Button_Icon onClick={() => setModalState({isOpen: true, type: 'editRecord', data: activeRecord})}>
                                 <EditIcon_Large />
-                            </button>
-                            <button onClick={() => setDeletingRecordId(activeRecord.id)} className="h-10 w-10 flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] hover:bg-[var(--color-badge-danger-bg)] rounded-full transition-colors">
+                            </Button_Icon>
+                            <Button_Icon onClick={() => setDeletingRecordId(activeRecord.id)} variant="danger">
                                 <TrashIcon_Large />
-                            </button>
+                            </Button_Icon>
                         </div>
                     </div>
 
@@ -426,6 +474,5 @@ const DetailedViewPage = ({ employeeNumber, initialRecordId, processedRecords, o
         </div>
     )
 };
-
 
 export default DetailedViewPage;
