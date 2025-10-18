@@ -182,7 +182,7 @@ Output a full updated generic naming registry, including for each name:
 ## 7️⃣ Folder to Process
 
 ```
-src/features/portals/training/views/dashboard
+src/features/portals/training/views/import
 ```
 
 You should strictly focus on this folder.
